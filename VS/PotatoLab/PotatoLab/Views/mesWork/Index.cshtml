@@ -1,0 +1,109 @@
+﻿<!--for X.PagedList Start-->
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    var pagedList = (IPagedList)ViewBag.PageList;
+}
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+<script src="~/js/popoLib.js" type="text/javascript"></script>
+<!--for X.PagedList Edn-->
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<script>
+    function showEdit(workId) {
+        $('#showLoadingForEdit').show();
+
+        if (workId != "") {
+
+            //===修改===先藏起來等載完資料再顯示
+            $('#editUI').hide();
+            CallServerFunction("mesWork/GetWorkData?workID=002", null, loadEditDataComplete);
+        }
+        else {
+            //===新增===清空TextBox
+            $('#lblWorkID').val('');
+            $('#txtWorkName').val('');
+            $('#txtSRNo').val('');
+            $('#txtSRTitle').val('');
+            //顯示
+            $('#showLoadingForEdit').hide();
+            $('#editUI').show();
+        }
+
+        $('#editPanel').modal('show');
+    }
+
+    function loadEditDataComplete(workData) {
+        //alert(workData);
+        alert(workData.workName);   //注意大小寫有差
+
+        $('#showLoadingForEdit').hide();
+        $('#editUI').show();
+    }
+</script>
+
+
+
+<input type="button" class="btn btn-primary" value="Create" onclick="showEdit('001'); " />
+
+
+<table>
+    <tr>
+        <td>ID</td>
+        <td>NAME</td>
+    </tr>
+
+    @foreach (MESWork item in ViewBag.PageList)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkName)</td>
+        </tr>
+    }
+
+</table>
+<!--for X.PagedList Start-->
+@Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+<!--for X.PagedList End-->
+
+
+
+<div id="editPanel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="padding:20px;">
+            <div id="showLoadingForEdit">Loading...</div>
+            <form method="post" action="mesWork/Create">
+                <table id="editUI">
+                    <tr>
+                        <th>WorkID</th>
+                        <td><span id="lblWorkID"></span></td>
+                    </tr>
+                    <tr>
+                        <th>WorkName</th>
+                        <td><input type="text" value="" name="txtWorkName" /></td>
+                    </tr>
+                    <tr>
+                        <th>SR No</th>
+                        <td><input type="text" value="" name="txtSRNo" /></td>
+                    </tr>
+                    <tr>
+                        <th>SR Title</th>
+                        <td><input type="text" value="" name="txtSRTitle" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="Save" class="btn btn-success" />
+                            <input type="button" value="Cancel" class="btn btn-warning" onclick="$('#editPanel').modal('hide');" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
