@@ -38,7 +38,7 @@
 
     function loadEditDataComplete(workData) {
         //alert(workData);
-        alert(workData.workName);   //注意大小寫有差
+        //alert(workData.workName);   //注意大小寫有差
 
         $('#showLoadingForEdit').hide();
         $('#editUI').show();
@@ -69,7 +69,9 @@
 @Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
 <!--for X.PagedList End-->
 
-
+<input type="file" class="multi" accept="gif|jpg" />
+<input type="file" multiple
+       class="multi maxsize-15120 with-preview" accept="xlsx" />
 
 <div id="editPanel" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -80,6 +82,10 @@
                     <tr>
                         <th>WorkID</th>
                         <td><span id="lblWorkID"></span></td>
+                    </tr>
+                    <tr>
+                        <th>Owner</th>
+                        <td><input type="text" value="" name="txtOwner" /></td>
                     </tr>
                     <tr>
                         <th>WorkName</th>
