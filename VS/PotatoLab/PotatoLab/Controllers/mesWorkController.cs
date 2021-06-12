@@ -16,12 +16,12 @@ namespace PotatoLab.Controllers
         public ActionResult Index(int page=1)
         {
             int currentPage = page < 1 ? 1 : page;
-            var XD = GetSampleData().OrderBy(m => m.WorkID).ToList();
-            //var result = XD.ToPagedList(currentPage, 10);
+            var resultList = GetSampleData().OrderBy(m => m.WorkID).ToList();
 
-            ViewBag.PageList = XD.ToPagedList(currentPage, 3);
+            ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
             return View();
         }
+        //var result = resultList.ToPagedList(currentPage, 10);
 
         // GET: mesWorkController/Details/5
         public ActionResult Details(int id)
