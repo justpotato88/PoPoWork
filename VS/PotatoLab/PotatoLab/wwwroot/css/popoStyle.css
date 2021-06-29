@@ -13,12 +13,12 @@
     .table1 th {
         background-color: #666;
         padding: 4px;
-        border: 1px solid #AAA;
+        border: 1px solid #CCC;
         color: #fff;
     }
 
     .table1 td {
-        border: 1px solid #AAA;
+        border: 1px solid #CCC;
         padding: 4px;
         text-align: left;
     } 

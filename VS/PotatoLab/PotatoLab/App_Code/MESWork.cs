@@ -39,11 +39,11 @@ namespace PotatoLab
         public string Cust3 { get; set; }
         
         /// <summary>
-        /// 程式、設定、資料
+        /// 程式、設定、資料、RMS
         /// </summary>
         public string Type1 { get; set; }
         /// <summary>
-        /// PE、EE、MFG、RMS、QA、CE
+        /// CAB、PE、EE、MFG、QA、PC、GMO-IE
         /// </summary>
         public string Type2 { get; set; }
         public string Score { get; set; }

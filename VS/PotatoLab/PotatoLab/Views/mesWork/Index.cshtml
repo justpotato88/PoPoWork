@@ -61,6 +61,7 @@
         <th>Detail</th>
         <th>IT</th>
         <th>Due</th>
+        <th>Status</th>
         <th>Modify</th>
         <th>ID</th>
     </tr>
@@ -74,6 +75,7 @@
     <td>@Html.DisplayFor(modelItem2 => item.WorkDetail)</td>
     <td>@Html.DisplayFor(modelItem2 => item.OwnerIT)</td>
     <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
+    <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
     <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
     <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
 </tr>
