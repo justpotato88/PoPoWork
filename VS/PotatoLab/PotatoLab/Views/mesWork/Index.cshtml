@@ -7,12 +7,24 @@
 <link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 <link href="~/css/popoStyle.css" rel="stylesheet" type="text/css" />
 <script src="~/js/popoLib.js" type="text/javascript"></script>
+
+
+<link href="~/lib/magicsearch/jquery.magicsearch.css" rel="stylesheet" type="text/css" />
+<script src="~/lib/magicsearch/jquery-2.2.3.min.js" type="text/javascript"></script>
+<script src="~/lib/magicsearch/jquery.magicsearch.js" type="text/javascript"></script>
+
+
+
 <!--for X.PagedList Edn-->
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+
+
+
+
 <script>
     //開啟編輯畫面
     function showEdit(workId) {
@@ -49,9 +61,11 @@
 </script>
 
 
+
+
+
 <!-- Create Buttom -->
 <input type="button" class="btn btn-primary" value="Create" onclick="showEdit('001'); " />
-
 
 <!-- Grid Table Start -->
 <table class="table1">
@@ -68,17 +82,17 @@
 
     @foreach (MESWork item in ViewBag.PageList)
     {
-<tr>
+        <tr>
 
-    <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.WorkName)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.WorkDetail)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.OwnerIT)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
-    <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
-    <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
-</tr>
+            <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkName)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkDetail)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.OwnerIT)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
+            <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+        </tr>
     }
 
 </table>
@@ -90,6 +104,7 @@
 <input type="file" class="multi" accept="gif|jpg" />
 <input type="file" multiple
        class="multi maxsize-15120 with-preview" accept="xlsx" />
+
 
 
 <div id="editPanel" class="modal fade" role="dialog">
@@ -104,20 +119,22 @@
                     </tr>
                     <tr>
                         <th>Owner</th>
-                        <td><input type="text" value="" name="txtOwner" /></td>
+                        <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="basicXX" placeholder="search..."></td>
                     </tr>
                     <tr>
                         <th>WorkName</th>
-                        <td><input type="text" value="" name="txtWorkName" /></td>
+                        <td><input type="text" value="" style="height:25px !important;" name="txtWorkName" /></td>
                     </tr>
                     <tr>
                         <th>SR No</th>
-                        <td><input type="text" value="" name="txtSRNo" /></td>
+                        <td><input type="text" value="" style="height:25px !important;" name="txtSRNo" /></td>
                     </tr>
                     <tr>
                         <th>SR Title</th>
-                        <td><input type="text" value="" name="txtSRTitle" /></td>
+                        <td><input type="text" value="" style="height:25px !important;" name="txtSRTitle" /></td>
                     </tr>
+
+
                     <tr>
                         <td colspan="2">
                             <input type="submit" value="Save" class="btn btn-success" />
@@ -129,6 +146,33 @@
         </div>
     </div>
 </div>
+
+
+<!-- magicsearch -->
+<script>
+    var dataSource = [
+        { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
+        { id: '2', notesID: 'Eric', cName: 'Baker' },
+        { id: '3', notesID: 'Victor', cName: 'Brown' },
+        { id: '4', notesID: 'Lisa', cName: 'White' },
+        { id: '5', notesID: 'Oliver', cName: 'Bull' },
+        { id: '6', notesID: 'Zade', cName: 'Stock' },
+        { id: '7', notesID: 'David', cName: 'Reed' },
+        { id: '8', notesID: 'George', cName: 'Hand' },
+        { id: '9', notesID: 'Tony', cName: 'Well' },
+        { id: '10', notesID: 'Bruce', cName: 'Wayne' },
+    ];
+    $('#basicXX').magicsearch({
+        dataSource: dataSource,
+        fields: ['id', 'notesID', 'cName'],
+        id: 'id',
+        format: ' %notesID% (%cName%)',
+        dropdownBtn: true,
+        focusShow: true
+    });
+</script>
+
+
 
 
 

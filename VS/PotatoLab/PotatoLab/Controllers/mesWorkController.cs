@@ -107,6 +107,14 @@ namespace PotatoLab.Controllers
             return tmpWork;
         }
 
+        [HttpGet]
+        public string SearchAccountContact(string key)
+        {	//參數key為使用者輸入在input的資訊
+            var data = "[{id: 1, firstName: 'Tim', lastName: 'Cook'},{id: 2, firstName: 'jp', lastName: 'Coodsk'}]";
+            return data;
+            //id: 1, firstName: 'Tim', lastName: 'Cook'
+        }
+
         private List<PotatoLab.MESWork> GetSampleData()
         {
             List<PotatoLab.MESWork> xx = new List<MESWork>();
