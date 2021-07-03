@@ -4,9 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+//-------------------------
+using System.Text.Json;
+using System.Text.Json.Serialization;
 //-------------------------
 using X.PagedList;
+//-------------------------
 
 namespace PotatoLab.Controllers
 {
@@ -50,19 +53,21 @@ namespace PotatoLab.Controllers
             }
         }
 
-        // GET: mesWorkController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
+        //// GET: mesWorkController/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
+        //public ActionResult Edit(string txtWorkID, IFormCollection collection)
         // POST: mesWorkController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Edit(IFormCollection collection)
         {
             try
             {
+                
+                //string a = txtWorkID;
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -92,28 +97,27 @@ namespace PotatoLab.Controllers
             }
         }
 
-        // GET:
-        public string GetWorkData2(string workID)
+        public string GetWorkData(string workID)
         {
             PotatoLab.MESWork tmpWork = new MESWork();
-            return "aaaa";
-        }
-
-        public PotatoLab.MESWork GetWorkData(string workID)
-        {
-            PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WorkID = "999";
+            tmpWork.WorkID = workID;
             tmpWork.WorkName = "hk4g4";
-            return tmpWork;
+            tmpWork.OwnerIT = "C2043";
+            tmpWork.DateDue = "2019-01-02";
+
+
+            string jsonString = JsonSerializer.Serialize(tmpWork);
+
+            return jsonString;
+
+            //Date = DateTime.Parse("2019-08-01"),
+            //反序略化
+            /*
+             WeatherForecast weatherForecast = 
+                JsonSerializer.Deserialize<WeatherForecast>(jsonString);
+             */
         }
 
-        [HttpGet]
-        public string SearchAccountContact(string key)
-        {	//參數key為使用者輸入在input的資訊
-            var data = "[{id: 1, firstName: 'Tim', lastName: 'Cook'},{id: 2, firstName: 'jp', lastName: 'Coodsk'}]";
-            return data;
-            //id: 1, firstName: 'Tim', lastName: 'Cook'
-        }
 
         private List<PotatoLab.MESWork> GetSampleData()
         {

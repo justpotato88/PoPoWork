@@ -4,9 +4,11 @@
 @{
     var pagedList = (IPagedList)ViewBag.PageList;
 }
-<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/lib/x.paged-list/PagedList.css" rel="stylesheet" type="text/css" />
+
 <link href="~/css/popoStyle.css" rel="stylesheet" type="text/css" />
 <script src="~/js/popoLib.js" type="text/javascript"></script>
+
 
 
 <link href="~/lib/magicsearch/jquery.magicsearch.css" rel="stylesheet" type="text/css" />
@@ -14,6 +16,8 @@
 <script src="~/lib/magicsearch/jquery.magicsearch.js" type="text/javascript"></script>
 
 
+<link rel="stylesheet" href="~/lib//jquery-ui-1.12.1/jquery-ui.css">
+<script src="~/lib//jquery-ui-1.12.1/jquery-ui.js"></script>
 
 <!--for X.PagedList Edn-->
 @{
@@ -23,23 +27,21 @@
 <h1>Index</h1>
 
 
-
-
 <script>
     //開啟編輯畫面
     function showEdit(workId) {
-        alert(workId);
+        //alert(workId);
         $('#showLoadingForEdit').show();
 
         if (workId != "") {
 
             //===修改===先藏起來等載完資料再顯示
             $('#editUI').hide();
-            CallServerFunction("mesWork/GetWorkData?workID=002", null, loadEditDataComplete);
+            CallServerFunction("mesWork/GetWorkData?workID=" + workId, null, loadEditDataComplete);
         }
         else {
             //===新增===清空TextBox
-            $('#lblWorkID').val('');
+            $('#txtWorkID').val('');
             $('#txtWorkName').val('');
             $('#txtSRNo').val('');
             $('#txtSRTitle').val('');
@@ -51,16 +53,34 @@
         $('#editPanel').modal('show');
     }
 
-    function loadEditDataComplete(workData) {
+    function loadEditDataComplete(jsonStr) {
         //alert(workData);
-        //alert(workData.workName);   //注意大小寫有差
+        //alert(workData.WorkName);   //注意大小寫有差
 
+        var workData = JSON.parse(jsonStr);
+        //注意!! workData 物件成員的大小寫要跟C#物件相符!!
+        $('#txtWorkID').val(workData.WorkID);
+        $('#txtWorkName').val(workData.WorkName);
+        $('#txtDueDate').val(workData.DateDue);
+
+        //alert(workData.OwnerIT);
+        //$('#txtOwnerID').trigger('set', { id: '3,4' });
+
+        for (var i = 0; i < dataSource.length; i++) {
+            if (dataSource[i].id == "C2043") {
+                $("#txtOwnerID").val(dataSource[i].id + ' ' + dataSource[i].notesID);
+                break;
+            }
+        }
+        
         $('#showLoadingForEdit').hide();
         $('#editUI').show();
+
+        //$('#txtOwnerID').trigger('set', { id: '3' }); 無效
     }
+
+    
 </script>
-
-
 
 
 
@@ -106,34 +126,61 @@
        class="multi maxsize-15120 with-preview" accept="xlsx" />
 
 
+<!-- 編輯畫面 Start -->
+<div id="editPanel" class="modal fade" role="dialog" >
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;" >
+        <div class="modal-content" style="padding:30px;">
 
-<div id="editPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content" style="padding:20px;">
             <div id="showLoadingForEdit">Loading...</div>
-            <form method="post" action="mesWork/Create">
+            <button id="set-btn" type="button">set a value</button>
+            <form method="post" action="mesWork/Edit">
                 <table id="editUI">
                     <tr>
-                        <th>WorkID</th>
-                        <td><span id="lblWorkID"></span></td>
+                        <th style="padding-right:5px;">WorkID</th>
+                        <td><input type="text" value="" style="width:400px; height:25px !important;" id="txtWorkID" readonly /></td>
                     </tr>
                     <tr>
-                        <th>Owner</th>
-                        <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="basicXX" placeholder="search..."></td>
+                        <th style="padding-right:5px;">Owner</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="txtOwnerID" placeholder="search..."></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">CIM</th>
+                                    <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="txtCIM" placeholder="search..."></td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                     <tr>
-                        <th>WorkName</th>
-                        <td><input type="text" value="" style="height:25px !important;" name="txtWorkName" /></td>
+                        <th style="padding-right:5px;">WorkName</th>
+                        <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" /></td>
+                    </tr>
+                    <tr>
+                        <th>WorkDetail</th>
+                        <td><textarea id="txtWorkDetail" cols="85" rows="6"></textarea></td>
                     </tr>
                     <tr>
                         <th>SR No</th>
-                        <td><input type="text" value="" style="height:25px !important;" name="txtSRNo" /></td>
+                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" /></td>
                     </tr>
                     <tr>
                         <th>SR Title</th>
-                        <td><input type="text" value="" style="height:25px !important;" name="txtSRTitle" /></td>
+                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" /></td>
                     </tr>
-
+                    <tr>
+                        <th>Due Date</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:100px; height:25px !important;" id="txtDueDate" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">開始</th>
+                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtStartDate" /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">結束</th>
+                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtEndDate" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
                     <tr>
                         <td colspan="2">
@@ -146,10 +193,14 @@
         </div>
     </div>
 </div>
-
-
+<!-- 編輯畫面 End -->
 <!-- magicsearch -->
 <script>
+    $.datepicker.setDefaults($.datepicker.regional[""]);
+    $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    
     var dataSource = [
         { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
         { id: '2', notesID: 'Eric', cName: 'Baker' },
@@ -162,13 +213,38 @@
         { id: '9', notesID: 'Tony', cName: 'Well' },
         { id: '10', notesID: 'Bruce', cName: 'Wayne' },
     ];
-    $('#basicXX').magicsearch({
+    $('#txtOwnerID').magicsearch({
         dataSource: dataSource,
         fields: ['id', 'notesID', 'cName'],
         id: 'id',
-        format: ' %notesID% (%cName%)',
+        format: ' %id% %notesID% (%cName%)',
         dropdownBtn: true,
         focusShow: true
+    });
+
+    $('#set-btn').click(function () {
+        //alert('ss');
+        //.val("val2").change();
+        //$("#txtOwnerID").val('C2043').trigger("liszt:updated");
+
+        for (var i = 0; i< dataSource.length; i++)
+        {
+            if (dataSource[i].id == "C2043") {
+                $("#txtOwnerID").val(dataSource[i].id + ' ' + dataSource[i].notesID);
+                break;
+            }
+        }
+
+        //$("#txtOwnerID option[value='C2043']").prop('selected', true);
+        //$("#txtOwnerID").val('C2043').change();
+        //$('#txtOwnerID').trigger('set', { id: '3' });
+        //alert($("#txtOwnerID").val());
+        //$("#txtOwnerID option").each(function () {
+        //    alert($(this).text());
+        //    if ("C2043" === $(this).text()) {
+        //        value = $(this).val();
+        //    }
+        //});
     });
 </script>
 
