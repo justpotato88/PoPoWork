@@ -72,14 +72,14 @@
                 break;
             }
         }
-        
+
         $('#showLoadingForEdit').hide();
         $('#editUI').show();
 
         //$('#txtOwnerID').trigger('set', { id: '3' }); 無效
     }
 
-    
+
 </script>
 
 
@@ -127,8 +127,8 @@
 
 
 <!-- 編輯畫面 Start -->
-<div id="editPanel" class="modal fade" role="dialog" >
-    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;" >
+<div id="editPanel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
         <div class="modal-content" style="padding:30px;">
 
             <div id="showLoadingForEdit">Loading...</div>
@@ -145,8 +145,8 @@
                             <table style="padding:0;margin:0;">
                                 <tr>
                                     <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="txtOwnerID" placeholder="search..."></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">CIM</th>
-                                    <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="txtCIM" placeholder="search..."></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">User</th>
+                                    <td><input type="text" style="width:150px !important; height:25px !important;" id="txtOwnerUser" placeholder="search..."></td>
                                 </tr>
                             </table>
                         </td>
@@ -193,14 +193,57 @@
         </div>
     </div>
 </div>
+
+
+<input type="text" id="queryname" name="queryname" />
+<input type="text" id="queryid" name="queryid" />
+<input type="text" style="width:150px !important; height:25px !important;" id="txtOwnerUser2" placeholder="search...">
+<style>
+    /*AutoComplete 必加*/
+    .ui-autocomplete {
+        z-index: 9999 !important;
+    }
+</style>
 <!-- 編輯畫面 End -->
+<script>
+
+
+    $("#txtOwnerUser").autocomplete({
+        source: function (request, response) {
+            jQuery.get("mesWork/GetMatchUser", {
+                query: request.term
+            }, function (data) {
+
+                //response(workData);
+                //alert(data);
+                var data2 = JSON.parse(data);
+                //alert(data2);
+                response(data2);
+                //response($.map(data2, function (item) { // 此處是將返回資料轉換為 JSON物件
+                //    //alert(item.label);
+                //    return {
+                //        label: item.label, // 下拉項顯示內容
+                //        value: item.value  // 下拉項對應數值
+                //        //另外可以自定義其它引數
+                //    }
+                //}));
+            });
+        },
+        select: function (event, ui) { //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+            $("#queryname").val(ui.item.label);
+            $("#queryid").val(ui.item.value);
+            return false;
+        },
+        minLength: 2
+    });
+</script>
 <!-- magicsearch -->
 <script>
     $.datepicker.setDefaults($.datepicker.regional[""]);
     $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
-    
+
     var dataSource = [
         { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
         { id: '2', notesID: 'Eric', cName: 'Baker' },
@@ -227,8 +270,7 @@
         //.val("val2").change();
         //$("#txtOwnerID").val('C2043').trigger("liszt:updated");
 
-        for (var i = 0; i< dataSource.length; i++)
-        {
+        for (var i = 0; i < dataSource.length; i++) {
             if (dataSource[i].id == "C2043") {
                 $("#txtOwnerID").val(dataSource[i].id + ' ' + dataSource[i].notesID);
                 break;
