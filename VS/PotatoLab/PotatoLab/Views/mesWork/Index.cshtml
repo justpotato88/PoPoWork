@@ -28,6 +28,14 @@
 
 
 <script>
+    function getTodayDate() {
+        var fullDate = new Date();
+        var yyyy = fullDate.getFullYear();
+        var MM = (fullDate.getMonth() + 1) >= 10 ? (fullDate.getMonth() + 1) : ("0" + (fullDate.getMonth() + 1));
+        var dd = fullDate.getDate() < 10 ? ("0" + fullDate.getDate()) : fullDate.getDate();
+        var today = yyyy + "-" + MM + "-" + dd;
+        return today;
+    }
     //開啟編輯畫面
     function showEdit(workId) {
         //alert(workId);
@@ -41,7 +49,15 @@
         }
         else {
             //===新增===清空TextBox
+
+            var Today = new Date();
+            //var todayStr = Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate();
+            //var todayStr = $.datepicker.formatDate('dd M yy', new Date());
+            var todayStr = getTodayDate();
+            $('#txtIssueDate').val(todayStr);
+
             $('#txtWorkID').val('');
+            $('#txtWorkName').val('');
             $('#txtWorkName').val('');
             $('#txtSRNo').val('');
             $('#txtSRTitle').val('');
@@ -85,7 +101,7 @@
 
 
 <!-- Create Buttom -->
-<input type="button" class="btn btn-primary" value="Create" onclick="showEdit('001'); " />
+<input type="button" class="btn btn-primary" value="Create" onclick="showEdit(''); " />
 
 <!-- Grid Table Start -->
 <table class="table1">
@@ -129,54 +145,140 @@
 <!-- 編輯畫面 Start -->
 <div id="editPanel" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
-        <div class="modal-content" style="padding:30px;">
+        <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
 
             <div id="showLoadingForEdit">Loading...</div>
-            <button id="set-btn" type="button">set a value</button>
-            <form method="post" action="mesWork/Edit">
+            <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
+            <form method="post" action="mesWork/Edit" onkeypress="return event.keyCode != 13;">
                 <table id="editUI">
                     <tr>
-                        <th style="padding-right:5px;">WorkID</th>
-                        <td><input type="text" value="" style="width:400px; height:25px !important;" id="txtWorkID" readonly /></td>
-                    </tr>
-                    <tr>
-                        <th style="padding-right:5px;">Owner</th>
+                        <th style="padding:5px;">WorkID</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" class="magicsearch" style="width:150px !important; height:25px !important;" id="txtOwnerID" placeholder="search..."></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">User</th>
-                                    <td><input type="text" style="width:150px !important; height:25px !important;" id="txtOwnerUser" placeholder="search..."></td>
+                                    <td><input type="text" value="" style="width:200px; height:25px !important;" id="txtWorkID" readonly /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">Issue</th>
+                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtIssueDate" /></td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Owner</th>
+                        <td>
+                            <input type="text" class="magicsearch" style="width:200px !important; height:25px !important;" id="txtITOwner" placeholder="search...">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">User1</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" style="width:60px !important; height:25px !important;" id="txtUser1" placeholder="窗口"></td>
+                                    <td><div id="lblUserName1" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">User2</th>
+                                    <td><input type="text" style="width:60px !important; height:25px !important;" id="txtUser2" placeholder="需求者"></td>
+                                    <td><div id="lblUserName2" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
-                        <th style="padding-right:5px;">WorkName</th>
+                        <th style="padding:5px;">WorkName</th>
                         <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" /></td>
                     </tr>
                     <tr>
-                        <th>WorkDetail</th>
-                        <td><textarea id="txtWorkDetail" cols="85" rows="6"></textarea></td>
+                        <th style="padding:5px;">WorkDetail</th>
+                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" cols="85" rows="6"></textarea></td>
                     </tr>
                     <tr>
-                        <th>SR No</th>
-                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" /></td>
-                    </tr>
-                    <tr>
-                        <th>SR Title</th>
-                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" /></td>
-                    </tr>
-                    <tr>
-                        <th>Due Date</th>
+                        <th style="padding:5px;">Type1</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width:100px; height:25px !important;" id="txtDueDate" /></td>
+                                    <td>
+                                        <select id="ddlType1">
+                                            <option>議題討論</option>
+                                            <option>程式修改</option>
+                                            <option>資料設定</option>
+                                            <option>資料修改</option>
+                                            <option>資料提供</option>
+                                            <option>盤點工作</option>
+                                            <option>專案任務</option>
+                                            <option>課程參加</option>
+                                            <option>異常排除</option>
+                                            <option>其他</option>
+                                            <option>指導協助</option>
+                                            <option>特殊業務</option>
+                                            <option>系統專家</option>
+                                        </select>
+                                    </td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">Type2</th>
+                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" placeholder="PE,EE..." /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">Type3</th>
+                                    <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" placeholder="RMS,Marking..." /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">重要性</th>
+                                    <td>
+                                        <select id="ddlWeight">
+                                            <option>1</option>
+                                            <option>3</option>
+                                            <option>5</option>
+                                            <option>10</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">狀態</th>
+                        <td>
+                            <select id="ddlStatus">
+                                <option>Survey</option>
+                                <option>Confirm</option>
+                                <option>OnGoing</option>
+                                <option>Testing</option>
+                                <option>Trail-Run</option>
+                                <option>Close</option>
+                                <option>Pending</option>
+                            </select>
+                            <span style="color:#777777;font-size:xx-small;">Survey：不確定要做。Confirm：內容確認待派工。OnGoing：已派工。Pending：User無下文。</span>
+</td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">SR No</th>
+                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" /></td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">SR Title</th>
+                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" /></td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">客戶</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Due Date</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtDueDate" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">開始</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtStartDate" /></td>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtStartDate" /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">結束</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtEndDate" /></td>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtEndDate" /></td>
                                 </tr>
                             </table>
                         </td>
@@ -195,20 +297,33 @@
 </div>
 
 
-<input type="text" id="queryname" name="queryname" />
-<input type="text" id="queryid" name="queryid" />
-<input type="text" style="width:150px !important; height:25px !important;" id="txtOwnerUser2" placeholder="search...">
+<!-- 編輯畫面 End -->
+<!-- AutoComplete -->
 <style>
-    /*AutoComplete 必加*/
+    /*AutoComplete 必加不然看不到下拉項目*/
     .ui-autocomplete {
         z-index: 9999 !important;
     }
 </style>
-<!-- 編輯畫面 End -->
 <script>
-
-
-    $("#txtOwnerUser").autocomplete({
+    $("#txtUser1").autocomplete({
+        source: function (request, response) {
+            jQuery.get("mesWork/GetMatchUser", {
+                query: request.term
+            }, function (data) {
+                var data2 = JSON.parse(data);
+                response(data2);
+            });
+        },
+        select: function (event, ui) {
+            //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+            $("#lblUserName1").text(ui.item.label);
+            //$("#queryid").val(ui.item.value);
+            return false;
+        },
+        minLength: 2
+    });
+    $("#txtUser2").autocomplete({
         source: function (request, response) {
             jQuery.get("mesWork/GetMatchUser", {
                 query: request.term
@@ -229,20 +344,27 @@
                 //}));
             });
         },
-        select: function (event, ui) { //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
-            $("#queryname").val(ui.item.label);
-            $("#queryid").val(ui.item.value);
+        select: function (event, ui) {
+            //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+            $("#lblUserName2").text(ui.item.label);
+            //$("#queryid").val(ui.item.value);
             return false;
         },
         minLength: 2
     });
 </script>
+
 <!-- magicsearch -->
 <script>
     $.datepicker.setDefaults($.datepicker.regional[""]);
     $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtIssueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+</script>
+<!-- magicsearch -->
+<script>
+
 
     var dataSource = [
         { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
@@ -256,7 +378,7 @@
         { id: '9', notesID: 'Tony', cName: 'Well' },
         { id: '10', notesID: 'Bruce', cName: 'Wayne' },
     ];
-    $('#txtOwnerID').magicsearch({
+    $('#txtITOwner').magicsearch({
         dataSource: dataSource,
         fields: ['id', 'notesID', 'cName'],
         id: 'id',

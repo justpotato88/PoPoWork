@@ -159,7 +159,7 @@ namespace PotatoLab.Controllers
         public string GetMatchUser(string query)
         {
             //return "[\"CCC\",\"AAA\"]";
-            return "[{\"label\":\"你很皮\",\"value\":\"1\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+            return "[{\"label\":\"Potato Huang (黃群凱)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
         }
     }
 }

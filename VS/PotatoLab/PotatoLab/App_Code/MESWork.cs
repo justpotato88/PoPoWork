@@ -34,8 +34,8 @@ namespace PotatoLab
         public string NoteCIM { get; set; }
         public string NoteIT { get; set; }
         public string Benefit { get; set; }
+        public string Fac { get; set; }
         public string Oper { get; set; }
-        public string Cust2 { get; set; }
         public string Cust3 { get; set; }
         
         /// <summary>
