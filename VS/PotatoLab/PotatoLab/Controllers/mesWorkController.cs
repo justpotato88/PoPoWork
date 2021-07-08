@@ -61,12 +61,12 @@ namespace PotatoLab.Controllers
         //public ActionResult Edit(string txtWorkID, IFormCollection collection)
         // POST: mesWorkController/Edit/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult Edit(IFormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(IFormCollection form)
         {
             try
             {
-                
+                string workName = form["txtWorkName"].ToString();
                 //string a = txtWorkID;
                 return RedirectToAction(nameof(Index));
             }
