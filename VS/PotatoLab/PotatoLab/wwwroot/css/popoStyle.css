@@ -21,4 +21,22 @@
         border: 1px solid #CCC;
         padding: 4px;
         text-align: left;
-    } 
+    }
+
+
+    input::-webkit-input-placeholder { /* WebKit browsers */
+        color: #DDD;
+    }
+
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #DDD;
+    }
+
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #DDD;
+    }
+
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: #DDD;
+    }
+

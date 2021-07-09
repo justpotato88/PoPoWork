@@ -149,58 +149,58 @@
 
             <div id="showLoadingForEdit">Loading...</div>
             <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
-            <form method="post" action="mesWork/Edit" onkeypress="return event.keyCode != 13;">
+            <form method="post" action="mesWork/Edit">
                 @Html.AntiForgeryToken()
                 <table id="editUI">
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">WorkID</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
                                     <td><input type="text" value="" style="width:200px; height:25px !important;" id="txtWorkID" name="txtWorkID" readonly /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">Issue</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtIssueDate" name="txtIssueDate" /></td>
+                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtIssueDate" name="txtIssueDate" /></td>
                                 </tr>
                             </table>
 
                         </td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">Owner</th>
                         <td>
                             <input type="text" class="magicsearch" style="width:200px !important; height:25px !important;" id="txtITOwner" name="txtITOwner" placeholder="IT Owner">
 
                         </td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">User1</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" style="width:60px !important; height:25px !important;" id="txtUser1" name="txtUser1" placeholder="窗口"></td>
+                                    <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser1" name="txtUser1" placeholder="窗口"></td>
                                     <td><div id="lblUserName1" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">User2</th>
-                                    <td><input type="text" style="width:60px !important; height:25px !important;" id="txtUser2" name="txtUser2" placeholder="需求者"></td>
+                                    <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser2" name="txtUser2" placeholder="需求者"></td>
                                     <td><div id="lblUserName2" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">WorkName</th>
                         <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" name="txtWorkName" /></td>
                     </tr>
                     <tr>
                         <th style="padding:5px;">WorkDetail</th>
-                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" cols="85" rows="6"></textarea></td>
+                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" cols="100" rows="6"></textarea></td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">Type1</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
                                     <td>
-                                        <select id="ddlType1">
+                                        <select id="ddlType1" name="ddlType1">
                                             <option>議題討論</option>
                                             <option>程式修改</option>
                                             <option>資料設定</option>
@@ -212,17 +212,18 @@
                                             <option>異常排除</option>
                                             <option>其他</option>
                                             <option>指導協助</option>
+                                            <option>支援工作</option>
                                             <option>特殊業務</option>
                                             <option>系統專家</option>
                                         </select>
                                     </td>
                                     <th style="white-space: nowrap; padding-left: 10px;">Type2</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" placeholder="PE,EE..." /></td>
+                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" name="txtType2" placeholder="PE,EE..." /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">Type3</th>
-                                    <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" placeholder="RMS,Marking..." /></td>
+                                    <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" name="txtType3" placeholder="RMS,Marking..." /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">重要性</th>
                                     <td>
-                                        <select id="ddlWeight">
+                                        <select id="ddlWeight" name="ddlWeight">
                                             <option>1</option>
                                             <option>3</option>
                                             <option>5</option>
@@ -233,61 +234,76 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">狀態</th>
-                        <td>
-                            <select id="ddlStatus">
-                                <option>Survey</option>
-                                <option>Confirm</option>
-                                <option>OnGoing</option>
-                                <option>Testing</option>
-                                <option>Trail-Run</option>
-                                <option>Close</option>
-                                <option>Pending</option>
-                            </select>
-                            <span style="color:#777777;font-size:xx-small;">Survey：不確定要做。Confirm：內容確認待派工。OnGoing：已派工。Pending：User無下文。</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:5px;">SR No</th>
-                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" /></td>
-                    </tr>
-                    <tr>
-                        <th style="padding:5px;">SR Title</th>
-                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" /></td>
-                    </tr>
-                    <tr>
-                        <th style="padding:5px;">客戶</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" /></td>
+                                    <td>
+                                        <select id="ddlStatus" name="ddlStatus">
+                                            <option>Survey</option>
+                                            <option>Wait-Assign</option>
+                                            <option>OnGoing</option>
+                                            <option>Testing</option>
+                                            <option>Trail-Run</option>
+                                            <option>Closed</option>
+                                            <option>Pending</option>
+                                        </select>
+                                    </td>
+                                    <td><span style="color:#777777;font-size:xx-small;">Survey：不確定要做。WaitAssign：確認待派工。Pending：狀況不明。</span></td>
                                 </tr>
                             </table>
+                            
                         </td>
                     </tr>
-                    <tr>
+                    <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">Due Date</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtDueDate" /></td>
+                                    <td><input type="text" value="" style="width:80px; height:25px !important;" id="txtDueDate" name="txtDueDate" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">開始</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtStartDate" /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">結束</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtEndDate" /></td>
+                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtStartDate" name="txtStartDate" /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">完成</th>
+                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtEndDate" name="txtEndDate" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">結案</th>
+                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtCloseDate" name="txtCloseDate" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">SR No</th>
+                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">SR Title</th>
+                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" name="txtSRTitle" /></td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Benfit</th>
+                        <td style="padding-top:5px;"><textarea id="txtBenfit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">客戶</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
+                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" name="txtFac" /></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
 
+
                     <tr>
-                        <td colspan="2">
-                            <input type="submit" value="Save" class="btn btn-success" />
+                        <td></td>
+                        <td style="padding-top:10px;">
+                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp; 
                             <input type="button" value="Cancel" class="btn btn-warning" onclick="$('#editPanel').modal('hide');" />
                         </td>
                     </tr>
@@ -319,9 +335,13 @@
         select: function (event, ui) {
             //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
             $("#lblUserName1").text(ui.item.label);
-            //$("#queryid").val(ui.item.value);
+            $("#txtUser1").val(ui.item.value);
             return false;
         },
+        //change: function (e, ui) {
+        //    $("#lblUserName1").text(ui.item.label);
+        //    $("#txtUser1").val(ui.item.value);
+        //}, 
         minLength: 2
     });
     $("#txtUser2").autocomplete({
@@ -348,7 +368,7 @@
         select: function (event, ui) {
             //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
             $("#lblUserName2").text(ui.item.label);
-            //$("#queryid").val(ui.item.value);
+            $("#txtUser2").val(ui.item.value);
             return false;
         },
         minLength: 2
@@ -362,6 +382,7 @@
     $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#txtIssueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtCloseDate").datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
 <!-- magicsearch -->
 <script>
@@ -383,7 +404,7 @@
         dataSource: dataSource,
         fields: ['id', 'notesID', 'cName'],
         id: 'id',
-        format: ' %id% %notesID% (%cName%)',
+        format: ' %notesID% %cName% %id% ',
         dropdownBtn: true,
         focusShow: true
     });

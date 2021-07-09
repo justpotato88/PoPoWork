@@ -65,8 +65,36 @@ namespace PotatoLab.Controllers
         public ActionResult Edit(IFormCollection form)
         {
             try
-            {
-                string workName = form["txtWorkName"].ToString();
+            {            
+                string WorkID = form["txtWorkID"].ToString();
+                string WorkName = form["txtWorkName"].ToString();
+                string WorkDetail = form["txtWorkDetail"].ToString();
+                string Benfit = form["txtBenfit"].ToString();
+                //
+
+                string ITOwner = form["txtITOwner"].ToString();
+                string User1 = form["txtUser1"].ToString();
+                string User2 = form["txtUser2"].ToString();
+
+                string Type1 = form["ddlType1"].ToString();
+                string Type2 = form["txtType2"].ToString();
+                string Type3 = form["txtType3"].ToString();
+
+                string Weight = form["ddlWeight"].ToString();
+                string Status = form["ddlStatus"].ToString();
+                string SRNo = form["txtSRNo"].ToString();
+                string SRTitle = form["txtSRTitle"].ToString();
+
+                string Fac = form["txtFac"].ToString();
+                string Oper = form["txtOper"].ToString();
+                string Cust3 = form["txtCust3"].ToString();
+
+                string IssueDate = form["txtIssueDate"].ToString();
+                string DueDate = form["txtDueDate"].ToString();
+                string StartDate = form["txtStartDate"].ToString();
+                string EndDate = form["txtEndDate"].ToString();
+                string CloseDate = form["txtCloseDate"].ToString();
+
                 //string a = txtWorkID;
                 return RedirectToAction(nameof(Index));
             }
@@ -156,10 +184,15 @@ namespace PotatoLab.Controllers
         }
 
 
+        /// <summary>
+        /// 取得
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public string GetMatchUser(string query)
         {
             //return "[\"CCC\",\"AAA\"]";
-            return "[{\"label\":\"Potato Huang (黃群凱)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+            return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
         }
     }
 }
