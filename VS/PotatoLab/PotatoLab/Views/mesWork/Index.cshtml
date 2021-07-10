@@ -36,7 +36,8 @@
         var today = yyyy + "-" + MM + "-" + dd;
         return today;
     }
-    //開啟編輯畫面
+
+    //=====((開啟編輯畫面))=====
     function showEdit(workId) {
         //alert(workId);
         $('#showLoadingForEdit').show();
@@ -68,7 +69,7 @@
 
         $('#editPanel').modal('show');
     }
-
+    //=====((載入資料))=====
     function loadEditDataComplete(jsonStr) {
         //alert(workData);
         //alert(workData.WorkName);   //注意大小寫有差
@@ -77,22 +78,43 @@
         //注意!! workData 物件成員的大小寫要跟C#物件相符!!
         $('#txtWorkID').val(workData.WorkID);
         $('#txtWorkName').val(workData.WorkName);
-        $('#txtDueDate').val(workData.DateDue);
+        $('#txtWorkDetail').val(workData.WorkDetail);
+        $('#txtBenefit').val(workData.Benefit);
 
-        //alert(workData.OwnerIT);
-        //$('#txtOwnerID').trigger('set', { id: '3,4' });
-
+        $('#txtITOwner').val(workData.ITOwner);
         for (var i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].id == "C2043") {
-                $("#txtOwnerID").val(dataSource[i].id + ' ' + dataSource[i].notesID);
+            if (dataSource[i].id == workData.ITOwner) {
+                $("#txtITOwner").val(dataSource[i].notesID + ' ' + dataSource[i].cName + ' ' + dataSource[i].id);
                 break;
             }
         }
+        $('#txtUser1').val(workData.User1);
+        $('#txtUser2').val(workData.User2);
+
+        $('#ddlType1').val(workData.Type1);
+        $('#txtType2').val(workData.Type2);
+        $('#txtType3').val(workData.Type3);
+        $('#ddlWeight').val(workData.Weight);
+
+        $('#ddlStatus').val(workData.Status);
+        $('#txtSRNo').val(workData.SRNo);
+        $('#txtSRTitle').val(workData.SRTitle);
+
+        $('#txtFac').val(workData.Fac);
+        $('#txtOper').val(workData.Oper);
+        $('#txtCust3').val(workData.Cust3);
+
+        $('#txtIssueDate').val(workData.DateIssue);
+        $('#txtDueDate').val(workData.DateDue);
+        $('#txtStartDate').val(workData.DateStart);
+        $('#txtEndDate').val(workData.DateEnd);
+        $('#txtCloseDate').val(workData.DateClose);
+
 
         $('#showLoadingForEdit').hide();
         $('#editUI').show();
 
-        //$('#txtOwnerID').trigger('set', { id: '3' }); 無效
+        //$('#txtITOwner').trigger('set', { id: '3' }); 無效
     }
 
 
@@ -106,29 +128,41 @@
 <!-- Grid Table Start -->
 <table class="table1">
     <tr>
-        <th>SR No</th>
         <th>Title</th>
-        <th>Detail</th>
-        <th>IT</th>
-        <th>Due</th>
+        <th>SR No</th>
         <th>Status</th>
-        <th>Modify</th>
+        <th>IT</th>
+        <th>User1</th>
+        <th>User2</th>
+
+        <th>Due</th>
+        <th>-</th>
         <th>ID</th>
     </tr>
 
     @foreach (MESWork item in ViewBag.PageList)
     {
-        <tr>
+    <tr>
+        <td>
+            @if (item.SRTitle == "") {
+                <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
+            } else { 
+                <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
+            }
+    </td>
+    <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
+    <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
 
-            <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.WorkName)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.WorkDetail)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.OwnerIT)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
-            <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
-            <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
-        </tr>
+    <td>@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
+    <td>@Html.DisplayFor(modelItem2 => item.User1)</td>
+    <td>@Html.DisplayFor(modelItem2 => item.User2)</td>
+
+
+    <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
+
+    <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
+    <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+</tr>
     }
 
 </table>
@@ -201,18 +235,17 @@
                                 <tr>
                                     <td>
                                         <select id="ddlType1" name="ddlType1">
+                                            <option>榮團會</option>
                                             <option>議題討論</option>
                                             <option>程式修改</option>
                                             <option>資料設定</option>
                                             <option>資料修改</option>
                                             <option>資料提供</option>
-                                            <option>盤點工作</option>
-                                            <option>專案任務</option>
-                                            <option>課程參加</option>
+                                            <option>特別任務</option>
+                                            <option>課程認證</option>
                                             <option>異常排除</option>
                                             <option>其他</option>
-                                            <option>指導協助</option>
-                                            <option>支援工作</option>
+                                            <option>支援協助</option>
                                             <option>特殊業務</option>
                                             <option>系統專家</option>
                                         </select>
@@ -281,8 +314,8 @@
                         <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" name="txtSRTitle" /></td>
                     </tr>
                     <tr>
-                        <th style="padding:5px;">Benfit</th>
-                        <td style="padding-top:5px;"><textarea id="txtBenfit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
+                        <th style="padding:5px;">Benefit</th>
+                        <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">客戶</th>
@@ -315,6 +348,10 @@
 
 
 <!-- 編輯畫面 End -->
+
+
+
+<!-- =====((For Inition))=================================================================================== -->
 <!-- AutoComplete -->
 <style>
     /*AutoComplete 必加不然看不到下拉項目*/
@@ -375,7 +412,7 @@
     });
 </script>
 
-<!-- magicsearch -->
+<!-- 日曆元件 -->
 <script>
     $.datepicker.setDefaults($.datepicker.regional[""]);
     $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
@@ -386,7 +423,6 @@
 </script>
 <!-- magicsearch -->
 <script>
-
 
     var dataSource = [
         { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
@@ -404,7 +440,7 @@
         dataSource: dataSource,
         fields: ['id', 'notesID', 'cName'],
         id: 'id',
-        format: ' %notesID% %cName% %id% ',
+        format: '%notesID% %cName% %id%',
         dropdownBtn: true,
         focusShow: true
     });
@@ -412,20 +448,20 @@
     $('#set-btn').click(function () {
         //alert('ss');
         //.val("val2").change();
-        //$("#txtOwnerID").val('C2043').trigger("liszt:updated");
+        //$("#txtITOwner").val('C2043').trigger("liszt:updated");
 
         for (var i = 0; i < dataSource.length; i++) {
             if (dataSource[i].id == "C2043") {
-                $("#txtOwnerID").val(dataSource[i].id + ' ' + dataSource[i].notesID);
+                $("#txtITOwner").val(dataSource[i].id + ' ' + dataSource[i].notesID);
                 break;
             }
         }
 
-        //$("#txtOwnerID option[value='C2043']").prop('selected', true);
-        //$("#txtOwnerID").val('C2043').change();
-        //$('#txtOwnerID').trigger('set', { id: '3' });
-        //alert($("#txtOwnerID").val());
-        //$("#txtOwnerID option").each(function () {
+        //$("#txtITOwner option[value='C2043']").prop('selected', true);
+        //$("#txtITOwner").val('C2043').change();
+        //$('#txtITOwner').trigger('set', { id: '3' });
+        //alert($("#txtITOwner").val());
+        //$("#txtITOwner option").each(function () {
         //    alert($(this).text());
         //    if ("C2043" === $(this).text()) {
         //        value = $(this).val();

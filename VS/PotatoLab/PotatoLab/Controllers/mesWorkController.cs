@@ -69,8 +69,7 @@ namespace PotatoLab.Controllers
                 string WorkID = form["txtWorkID"].ToString();
                 string WorkName = form["txtWorkName"].ToString();
                 string WorkDetail = form["txtWorkDetail"].ToString();
-                string Benfit = form["txtBenfit"].ToString();
-                //
+                string Benefit = form["txtBenefit"].ToString();
 
                 string ITOwner = form["txtITOwner"].ToString();
                 string User1 = form["txtUser1"].ToString();
@@ -130,8 +129,32 @@ namespace PotatoLab.Controllers
             PotatoLab.MESWork tmpWork = new MESWork();
             tmpWork.WorkID = workID;
             tmpWork.WorkName = "hk4g4";
-            tmpWork.OwnerIT = "C2043";
-            tmpWork.DateDue = "2019-01-02";
+            tmpWork.WorkDetail = "WORKDETAIL";
+            tmpWork.Benefit = "BENFIT";
+
+            tmpWork.ITOwner = "C2043";
+            tmpWork.User1 = "C12112";
+            tmpWork.User2 = "C12113";
+
+            tmpWork.Type1 = "課程認證";
+            tmpWork.Type2 = "T2";
+            tmpWork.Type3 = "T3";
+            tmpWork.Weight = 1;
+
+            tmpWork.Status = "Wait-Assign";
+            tmpWork.SRNo = "sr_no";
+            tmpWork.SRTitle = "SRTITLE";
+            tmpWork.SRLink = "http://";
+
+            tmpWork.Fac = "ASE07";
+            tmpWork.Oper = "3800";
+            tmpWork.Cust3 = "MVL";
+
+            tmpWork.DateIssue = "2019-01-01";
+            tmpWork.DateStart = "2019-01-02";
+            tmpWork.DateEnd = "2019-01-03";
+            tmpWork.DateDue = "2019-01-04";
+            tmpWork.DateClose = "2019-01-05";
 
 
             string jsonString = JsonSerializer.Serialize(tmpWork);
@@ -152,7 +175,33 @@ namespace PotatoLab.Controllers
             List<PotatoLab.MESWork> xx = new List<MESWork>();
             PotatoLab.MESWork tmpWork = new MESWork();
             tmpWork.WorkID = "001";
-            tmpWork.WorkName = "AAAAAAAAA";
+            tmpWork.WorkName = "hk4g4";
+            tmpWork.WorkDetail = "WORKDETAIL";
+            tmpWork.Benefit = "BENFIT";
+
+            tmpWork.ITOwner = "C2043";
+            tmpWork.User1 = "C12112";
+            tmpWork.User2 = "C12113";
+
+            tmpWork.Type1 = "課程認證";
+            tmpWork.Type2 = "T2";
+            tmpWork.Type3 = "T3";
+            tmpWork.Weight = 1;
+
+            tmpWork.Status = "Wait-Assign";
+            tmpWork.SRNo = "sr_no";
+            tmpWork.SRTitle = "SRTITLE";
+            tmpWork.SRLink = "http://";
+
+            tmpWork.Fac = "ASE07";
+            tmpWork.Oper = "3800";
+            tmpWork.Cust3 = "MVL";
+
+            tmpWork.DateIssue = "2019-01-01";
+            tmpWork.DateStart = "2019-01-02";
+            tmpWork.DateEnd = "2019-01-03";
+            tmpWork.DateDue = "2019-01-04";
+            tmpWork.DateClose = "2019-01-05";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();

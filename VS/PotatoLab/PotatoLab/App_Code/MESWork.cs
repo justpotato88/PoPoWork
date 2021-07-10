@@ -25,12 +25,14 @@ namespace PotatoLab
         public string SRNo { get; set; }
         public string SRTitle { get; set; }
         public string SRLink { get; set; }
-        public string DateStart { get; set; }
-        public string DateEdn { get; set; }
+        public string DateIssue { get; set; }
         public string DateDue { get; set; }
-        public string OwnerIT { get; set; }
-        public string OwnerCIM { get; set; }
-        public string OwnerUser { get; set; }
+        public string DateStart { get; set; }
+        public string DateEnd { get; set; }
+        public string DateClose { get; set; }
+        public string ITOwner { get; set; }
+        public string User1 { get; set; }
+        public string User2 { get; set; }
         public string NoteCIM { get; set; }
         public string NoteIT { get; set; }
         public string Benefit { get; set; }
@@ -46,7 +48,8 @@ namespace PotatoLab
         /// CAB、PE、EE、MFG、QA、PC、GMO-IE
         /// </summary>
         public string Type2 { get; set; }
-        public string Score { get; set; }
+        public string Type3 { get; set; }
+        public int Weight { get; set; }
 
         public bool SaveToFile()
         {
