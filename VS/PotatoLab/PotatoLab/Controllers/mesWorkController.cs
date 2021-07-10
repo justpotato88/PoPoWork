@@ -169,6 +169,11 @@ namespace PotatoLab.Controllers
              */
         }
 
+        public string DeleteWork(string workID)
+        {
+            //return RedirectToAction(nameof(Index));
+            return "{\"Result\":\"OK" + workID + "\"}";
+        }
 
         private List<PotatoLab.MESWork> GetSampleData()
         {

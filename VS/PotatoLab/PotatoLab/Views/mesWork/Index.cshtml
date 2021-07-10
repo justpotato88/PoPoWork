@@ -116,8 +116,15 @@
 
         //$('#txtITOwner').trigger('set', { id: '3' }); 無效
     }
-
-
+    //=====((刪除))=====
+    function deleteWork(workId) {
+        CallServerFunction("mesWork/DeleteWork?workID=" + workId, null, deleteWorkComplete);
+    }
+    function deleteWorkComplete(jsonStr)
+    {
+        var message = JSON.parse(jsonStr);
+        alert(message.Result);
+    }
 </script>
 
 
@@ -142,13 +149,16 @@
 
     @foreach (MESWork item in ViewBag.PageList)
     {
-    <tr>
-        <td>
-            @if (item.SRTitle == "") {
-                <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
-            } else { 
-                <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
-            }
+<tr>
+    <td>
+        @if (item.SRTitle == "")
+        {
+            <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
+        }
+        else
+        {
+            <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
+        }
     </td>
     <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
     <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
@@ -162,6 +172,7 @@
 
     <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
     <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+    <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Delete" onclick="deleteWork('@item.WorkID'); " /></td>
 </tr>
     }
 
