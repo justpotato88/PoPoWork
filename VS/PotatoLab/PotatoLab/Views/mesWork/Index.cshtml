@@ -3,6 +3,7 @@
 @using X.PagedList.Mvc.Core;
 @{
     var pagedList = (IPagedList)ViewBag.PageList;
+
 }
 <link href="~/lib/x.paged-list/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -46,7 +47,7 @@
 
             //===修改===先藏起來等載完資料再顯示
             $('#editUI').hide();
-            CallServerFunction("mesWork/GetWorkData?workID=" + workId, null, loadEditDataComplete);
+            CallServerFunction("/mesWork/GetWorkData?workID=" + workId, null, loadEditDataComplete);
         }
         else {
             //===新增===清空TextBox
@@ -118,13 +119,39 @@
     }
     //=====((刪除))=====
     function deleteWork(workId) {
-        CallServerFunction("mesWork/DeleteWork?workID=" + workId, null, deleteWorkComplete);
+        CallServerFunction("/mesWork/DeleteWork?workID=" + workId, null, deleteWorkComplete);
     }
-    function deleteWorkComplete(jsonStr)
-    {
+    function deleteWorkComplete(jsonStr) {
         var message = JSON.parse(jsonStr);
         alert(message.Result);
+
+        var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=@ViewBag.CurrentSort";
+        window.location.replace(url);
+
     }
+    //=====((排序))=====
+    function sortWork(column) {
+
+        var sort = "@ViewBag.CurrentSort";
+        if (sort == "asc")
+            sort = "desc";
+        else
+            sort = "asc";
+        var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=" + sort;
+        window.location.replace(url);
+        //col= ViewBag.CurrentSortColumn, sort = ViewBag.CurrentSort
+    }
+
+    //------------------------
+    function postPage(page) {
+        var targetFormId = '#ProductList';
+        if ($(targetFormId).size() > 0) {
+            $('<input>')
+                .attr({ type: 'hidden', id: 'PageIndex', name: 'PageIndex', value: page })
+                .appendTo($(targetFormId));
+            $(targetFormId).submit();
+        }
+    };
 </script>
 
 
@@ -135,51 +162,57 @@
 <!-- Grid Table Start -->
 <table class="table1">
     <tr>
-        <th>Title</th>
-        <th>SR No</th>
-        <th>Status</th>
-        <th>IT</th>
-        <th>User1</th>
-        <th>User2</th>
-
-        <th>Due</th>
+        <th onclick="sortWork('title');">Title</th>
+        <th onclick="sortWork('status');">Status</th>
+        <th onclick="sortWork('sr_no');">SR No</th>
+        <th onclick="sortWork('sr_no');">SR Title</th>
+        <th onclick="sortWork('it');">IT</th>
+        <th onclick="sortWork('user1');">User1</th>
+        <th onclick="sortWork('user2');">User2</th>
+        <th onclick="sortWork('due');">Due</th>
         <th>-</th>
         <th>ID</th>
+        <th>-</th>
     </tr>
 
     @foreach (MESWork item in ViewBag.PageList)
     {
-<tr>
-    <td>
-        @if (item.SRTitle == "")
-        {
-            <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
-        }
-        else
-        {
-            <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
-        }
-    </td>
-    <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
+        <tr>
+            <td>
+                @if (item.SRTitle == "")
+                {
+                    <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
+                }
+                else
+                {
+                    <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
+                }
+            </td>
+            <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.SRTitle)</td>
+            
 
-    <td>@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.User1)</td>
-    <td>@Html.DisplayFor(modelItem2 => item.User2)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.User1)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.User2)</td>
 
 
-    <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
+            <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
 
-    <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Modify" onclick="showEdit('@item.WorkID'); " /></td>
-    <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
-    <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="Delete" onclick="deleteWork('@item.WorkID'); " /></td>
-</tr>
+            <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WorkID'); " /></td>
+            <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+            <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WorkID'); " /></td>
+        </tr>
     }
 
 </table>
 <!-- Grid Table End -->
 <!--for X.PagedList Start-->
-@Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+
+
+@Html.PagedListPager(pagedList, page => Url.Action("Index", new { page, orderby= ViewBag.CurrentOrderBy, sort = ViewBag.CurrentSort }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+<!-- Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic) -->
 <!--for X.PagedList End-->
 
 <input type="file" class="multi" accept="gif|jpg" />
@@ -297,7 +330,7 @@
                                     <td><span style="color:#777777;font-size:xx-small;">Survey：不確定要做。WaitAssign：確認待派工。Pending：狀況不明。</span></td>
                                 </tr>
                             </table>
-                            
+
                         </td>
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
@@ -318,7 +351,15 @@
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">SR No</th>
-                        <td><input type="text" value="" style="height:25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width: 150px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">URL</th>
+                                    <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtStartDate" name="txtSRURL" /></td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">SR Title</th>
@@ -347,7 +388,7 @@
                     <tr>
                         <td></td>
                         <td style="padding-top:10px;">
-                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp; 
+                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp;
                             <input type="button" value="Cancel" class="btn btn-warning" onclick="$('#editPanel').modal('hide');" />
                         </td>
                     </tr>
@@ -357,11 +398,7 @@
     </div>
 </div>
 
-
 <!-- 編輯畫面 End -->
-
-
-
 <!-- =====((For Inition))=================================================================================== -->
 <!-- AutoComplete -->
 <style>
@@ -389,7 +426,7 @@
         //change: function (e, ui) {
         //    $("#lblUserName1").text(ui.item.label);
         //    $("#txtUser1").val(ui.item.value);
-        //}, 
+        //},
         minLength: 2
     });
     $("#txtUser2").autocomplete({

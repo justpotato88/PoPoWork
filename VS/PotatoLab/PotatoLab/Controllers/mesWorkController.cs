@@ -16,15 +16,73 @@ namespace PotatoLab.Controllers
     public class mesWorkController : Controller
     {
         // GET: mesWorkController
-        public ActionResult Index(int page=1)
+        public ActionResult Index(int page=1, string orderby = "due", string sort="asc")
         {
+            
+
             int currentPage = page < 1 ? 1 : page;
             var resultList = GetSampleData().OrderBy(m => m.WorkID).ToList();
 
+            switch (orderby)
+            {
+
+                //OrderByDescending
+                case "title":
+                    if (sort=="asc")
+                        resultList = GetSampleData().OrderBy(m => m.WorkName).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.WorkName).ToList();
+                    break;
+                case "status":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.Status).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.Status).ToList();
+                    break;
+                case "sr_no":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.SRNo).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.SRNo).ToList();
+                    break;
+                case "due":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.DateDue).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.DateDue).ToList();
+                    break;
+                case "it":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.ITOwner).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.ITOwner).ToList();
+                    break;
+                case "user1":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.User1).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.User1).ToList();
+                    break;
+                case "user2":
+                    if (sort == "asc")
+                        resultList = GetSampleData().OrderBy(m => m.User2).ToList();
+                    else
+                        resultList = GetSampleData().OrderByDescending(m => m.User2).ToList();
+                    break;
+                default:
+                    break;
+            }
+            
+
             ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
+
+            //排序
+            ViewBag.CurrentOrderBy = orderby;
+            ViewBag.CurrentSort = sort;
+
+
             return View();
         }
-        //var result = resultList.ToPagedList(currentPage, 10);
 
         // GET: mesWorkController/Details/5
         public ActionResult Details(int id)
@@ -208,20 +266,23 @@ namespace PotatoLab.Controllers
             tmpWork.DateDue = "2019-01-04";
             tmpWork.DateClose = "2019-01-05";
             xx.Add(tmpWork);
-
+            //----------------------------------
             tmpWork = new MESWork();
             tmpWork.WorkID = "002";
             tmpWork.WorkName = "BBBBBBB";
+            tmpWork.SRNo = "sr_002";
             xx.Add(tmpWork);
-
+            //----------------------------------
             tmpWork = new MESWork();
             tmpWork.WorkID = "003";
             tmpWork.WorkName = "CCCCCC";
+            tmpWork.SRNo = "sr_003";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
             tmpWork.WorkID = "004";
             tmpWork.WorkName = "DDDDDD";
+            tmpWork.SRNo = "sr_004";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
