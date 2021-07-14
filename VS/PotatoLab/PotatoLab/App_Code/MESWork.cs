@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+using System.Text;
+
 namespace PotatoLab
 {
     public class MESWork
@@ -21,7 +23,6 @@ namespace PotatoLab
         public string WorkDetail { get; set; }
         public string WorkNote { get; set; }
         public string Status { get; set; }
-        public string CloseDate { get; set; }
         public string SRNo { get; set; }
         public string SRTitle { get; set; }
         public string SRLink { get; set; }
@@ -55,8 +56,79 @@ namespace PotatoLab
         {
             return true;
         }
-        public bool SaveToDB()
+        public bool SaveToDB(out string result)
         {
+            string sql = "";
+            
+            if (WorkID != "")
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("update xx.xxxxx set ");
+                //-------------------------------------
+                sb.Append(string.Format("WORK_NAME='{0}', ", WorkName));
+                sb.Append(string.Format("WORK_DETAIL='{0}', ", WorkDetail));
+                sb.Append(string.Format("WORK_NOTE='{0}', ", WorkNote));
+                sb.Append(string.Format("STATUS='{0}', ", Status));
+                sb.Append(string.Format("SR_NO='{0}', ", SRNo));
+                sb.Append(string.Format("SR_TITLE='{0}', ", SRTitle));
+                sb.Append(string.Format("SR_LINK='{0}', ", SRLink));
+                sb.Append(string.Format("ISSUE_DATE='{0}', ", DateIssue));
+                sb.Append(string.Format("DUE_DATE='{0}', ", DateDue));
+                sb.Append(string.Format("START_DATE='{0}', ", DateStart));
+                sb.Append(string.Format("END_DATE='{0}', ", DateEnd));
+                sb.Append(string.Format("CLOSE_DATE='{0}', ", DateClose));
+                sb.Append(string.Format("IT_OWNER='{0}', ", ITOwner));
+                sb.Append(string.Format("USER1='{0}', ", User1));
+                sb.Append(string.Format("USER2='{0}', ", User2));
+                sb.Append(string.Format("CIM_NOTE='{0}', ", NoteCIM));
+                sb.Append(string.Format("IT_NOTE='{0}', ", NoteIT));
+                sb.Append(string.Format("BENEFIT='{0}', ", Benefit));
+                sb.Append(string.Format("FAC='{0}', ", Fac));
+                sb.Append(string.Format("OPER='{0}', ", Oper));
+                sb.Append(string.Format("CUST3='{0}', ", Cust3));
+
+                sb.Append(string.Format("TYPE1='{0}', ", Type1));
+                sb.Append(string.Format("TYPE2='{0}', ", Type2));
+                sb.Append(string.Format("TYPE3='{0}', ", Type3));
+
+                sb.Append(string.Format("WEIGHT='{0}' ", Weight));
+                //-------------------------------------
+                sb.Append(string.Format("where WORK_ID='{0}'", WorkID));
+                //-------------------------------------
+                result = "OK";
+            }
+            else
+            {
+                //檢查資料重複
+                sql = string.Format("select * from XXXX.XXXX where SR_NO='{0}'", SRNo);
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("insert into XXXX.XXXX(");
+                sb.Append("WORK_ID, ");
+                sb.Append("WORK_NAME, WORK_DETAIL, WORK_NOTE, ");
+                sb.Append("STATUS, ");
+                sb.Append("SR_NO, SR_TITLE, SR_LINK, ");
+                sb.Append("ISSUE_DATE, DUE_DATE, START_DATE, END_DATE, CLOSE_DATE, ");
+                sb.Append("IT_OWNER, USER1, USER2, ");
+                sb.Append("CIM_NOTE, IT_NOTE, BENEFIT, ");
+                sb.Append("FAC, OPER, CUST3, ");
+                sb.Append("TYPE1, TYPE2, TYPE3, ");
+                sb.Append("WEIGHT ");
+                sb.Append(") values(");
+                sb.Append(string.Format("'{0}', ", WorkID));
+                sb.Append(string.Format("'{0}', ", WorkName)); sb.Append(string.Format("'{0}', ", WorkDetail)); sb.Append(string.Format("'{0}', ", WorkNote));
+                sb.Append(string.Format("'{0}', ", Status));
+                sb.Append(string.Format("'{0}', ", SRNo)); sb.Append(string.Format("'{0}', ", SRTitle)); sb.Append(string.Format("'{0}', ", SRLink));
+                sb.Append(string.Format("'{0}', ", DateIssue)); sb.Append(string.Format("'{0}', ", DateDue)); sb.Append(string.Format("'{0}', ", DateStart)); sb.Append(string.Format("'{0}', ", DateEnd)); sb.Append(string.Format("'{0}', ", DateClose));
+                sb.Append(string.Format("'{0}', ", ITOwner)); sb.Append(string.Format("'{0}', ", User1)); sb.Append(string.Format("'{0}', ", User2));
+                sb.Append(string.Format("'{0}', ", NoteCIM)); sb.Append(string.Format("'{0}', ", NoteIT)); sb.Append(string.Format("'{0}', ", Benefit));
+                sb.Append(string.Format("'{0}', ", Fac)); sb.Append(string.Format("'{0}', ", Oper)); sb.Append(string.Format("'{0}', ", Cust3));
+                sb.Append(string.Format("'{0}', ", Type1)); sb.Append(string.Format("'{0}', ", Type2)); sb.Append(string.Format("'{0}', ", Type3));
+                sb.Append(string.Format("'{0}' ", Weight));
+                sb.Append(")");
+                //-------------------------------------
+                result = "OK";
+            }
             return true;
         }
 

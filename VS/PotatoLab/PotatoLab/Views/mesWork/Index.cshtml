@@ -129,394 +129,474 @@
         window.location.replace(url);
 
     }
-    //=====((排序))=====
-    function sortWork(column) {
-
-        var sort = "@ViewBag.CurrentSort";
-        if (sort == "asc")
-            sort = "desc";
-        else
-            sort = "asc";
-        var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=" + sort;
-        window.location.replace(url);
-        //col= ViewBag.CurrentSortColumn, sort = ViewBag.CurrentSort
-    }
-
-    //------------------------
-    function postPage(page) {
-        var targetFormId = '#ProductList';
-        if ($(targetFormId).size() > 0) {
-            $('<input>')
-                .attr({ type: 'hidden', id: 'PageIndex', name: 'PageIndex', value: page })
-                .appendTo($(targetFormId));
-            $(targetFormId).submit();
-        }
-    };
 </script>
+@using (Html.BeginForm("Index", "mesWork", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "MyWorkList" }))
+{
 
-
-
-<!-- Create Buttom -->
-<input type="button" class="btn btn-primary" value="Create" onclick="showEdit(''); " />
-
-<!-- Grid Table Start -->
-<table class="table1">
-    <tr>
-        <th onclick="sortWork('title');">Title</th>
-        <th onclick="sortWork('status');">Status</th>
-        <th onclick="sortWork('sr_no');">SR No</th>
-        <th onclick="sortWork('sr_no');">SR Title</th>
-        <th onclick="sortWork('it');">IT</th>
-        <th onclick="sortWork('user1');">User1</th>
-        <th onclick="sortWork('user2');">User2</th>
-        <th onclick="sortWork('due');">Due</th>
-        <th>-</th>
-        <th>ID</th>
-        <th>-</th>
-    </tr>
-
-    @foreach (MESWork item in ViewBag.PageList)
-    {
+    <table>
+        <tr>
+            <td>狀態</td>
+            <td>
+                <select id="ddlQueryStatus" name="ddlQueryStatus">
+                    <option>ALL</option>
+                    <option>新議題</option>
+                    <option>處理中</option>
+                    <option>已結案</option>
+                </select>
+                <script>
+                    $('#ddlQueryStatus').val('@Html.Raw(@ViewBag.QueryStatus)').change();
+                </script>
+            </td>
+            <td>分類</td>
+            <td>
+                <select id="ddlQueryType" name="ddlQueryType">
+                    <option>ALL</option>
+                    <option>榮團會</option>
+                    <option>工作與需求</option>
+                    <option>其他</option>
+                    <option>業務或專家</option>
+                </select>
+                <script>
+                    $('#ddlQueryType').val('@Html.Raw(@ViewBag.QueryType)').change();
+                </script>
+            </td>
+        </tr>
         <tr>
             <td>
-                @if (item.SRTitle == "")
-                {
-                    <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
-                }
-                else
-                {
-                    <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
-                }
+                時間
             </td>
-            <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.SRTitle)</td>
-            
-
-            <td>@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.User1)</td>
-            <td>@Html.DisplayFor(modelItem2 => item.User2)</td>
-
-
-            <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
-
-            <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WorkID'); " /></td>
-            <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
-            <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WorkID'); " /></td>
+            <td>
+                <input type="text" value="@ViewBag.QueryStart" style="width:80px; height: 25px !important;" id="txtQueryStartDate" name="txtQueryStartDate" />
+            </td>
+            <td>
+                ~
+            </td>
+            <td>
+                <input type="text" value="@ViewBag.QueryEnd" style="width:80px; height: 25px !important;" id="txtQueryEndDate" name="txtQueryEndDate" />
+            </td>
+            <td>
+                人
+            </td>
+            <td>
+                <input type="text" value="@ViewBag.QueryUser" style="width:60px; height: 25px !important;" id="txtQueryUser" name="txtQueryUser" />
+            </td>
+            <td>
+                關鍵字
+            </td>
+            <td>
+                <input type="text" value="@ViewBag.QueryKeyWord" style="width:120px; height: 25px !important;" id="txtQueryKeyWord" name="txtQueryKeyWord" />
+            </td>
         </tr>
-    }
+    </table>
 
-</table>
-<!-- Grid Table End -->
-<!--for X.PagedList Start-->
+    <!-- Create Buttom -->
+    <input type="button" class="btn btn-primary" value="Create" onclick="showEdit(''); " />
 
+    <!-- Grid Table Start -->
+    <table class="table1">
+        <tr>
+            <th onclick="sortWork('title');">Title</th>
+            <th onclick="sortWork('status');">Status</th>
+            <th onclick="sortWork('sr_no');">SR No</th>
+            <th onclick="sortWork('sr_no');">SR Title</th>
+            <th onclick="sortWork('it');">IT</th>
+            <th onclick="sortWork('user1');">User1</th>
+            <th onclick="sortWork('user2');">User2</th>
+            <th onclick="sortWork('due');">Due</th>
+            <th onclick="sortWork('type1');">Type</th>
+            <th>-</th>
+            <th>ID</th>
+            <th>-</th>
+        </tr>
 
-@Html.PagedListPager(pagedList, page => Url.Action("Index", new { page, orderby= ViewBag.CurrentOrderBy, sort = ViewBag.CurrentSort }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
-<!-- Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic) -->
-<!--for X.PagedList End-->
-
-<input type="file" class="multi" accept="gif|jpg" />
-<input type="file" multiple
-       class="multi maxsize-15120 with-preview" accept="xlsx" />
-
-
-<!-- 編輯畫面 Start -->
-<div id="editPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
-        <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
-
-            <div id="showLoadingForEdit">Loading...</div>
-            <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
-            <form method="post" action="mesWork/Edit">
-                @Html.AntiForgeryToken()
-                <table id="editUI">
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">WorkID</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" value="" style="width:200px; height:25px !important;" id="txtWorkID" name="txtWorkID" readonly /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">Issue</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtIssueDate" name="txtIssueDate" /></td>
-                                </tr>
-                            </table>
-
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">Owner</th>
-                        <td>
-                            <input type="text" class="magicsearch" style="width:200px !important; height:25px !important;" id="txtITOwner" name="txtITOwner" placeholder="IT Owner">
-
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">User1</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser1" name="txtUser1" placeholder="窗口"></td>
-                                    <td><div id="lblUserName1" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">User2</th>
-                                    <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser2" name="txtUser2" placeholder="需求者"></td>
-                                    <td><div id="lblUserName2" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">WorkName</th>
-                        <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" name="txtWorkName" /></td>
-                    </tr>
-                    <tr>
-                        <th style="padding:5px;">WorkDetail</th>
-                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" cols="100" rows="6"></textarea></td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">Type1</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td>
-                                        <select id="ddlType1" name="ddlType1">
-                                            <option>榮團會</option>
-                                            <option>議題討論</option>
-                                            <option>程式修改</option>
-                                            <option>資料設定</option>
-                                            <option>資料修改</option>
-                                            <option>資料提供</option>
-                                            <option>特別任務</option>
-                                            <option>課程認證</option>
-                                            <option>異常排除</option>
-                                            <option>其他</option>
-                                            <option>支援協助</option>
-                                            <option>特殊業務</option>
-                                            <option>系統專家</option>
-                                        </select>
-                                    </td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">Type2</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" name="txtType2" placeholder="PE,EE..." /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">Type3</th>
-                                    <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" name="txtType3" placeholder="RMS,Marking..." /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">重要性</th>
-                                    <td>
-                                        <select id="ddlWeight" name="ddlWeight">
-                                            <option>1</option>
-                                            <option>3</option>
-                                            <option>5</option>
-                                            <option>10</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">狀態</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td>
-                                        <select id="ddlStatus" name="ddlStatus">
-                                            <option>Survey</option>
-                                            <option>Wait-Assign</option>
-                                            <option>OnGoing</option>
-                                            <option>Testing</option>
-                                            <option>Trail-Run</option>
-                                            <option>Closed</option>
-                                            <option>Pending</option>
-                                        </select>
-                                    </td>
-                                    <td><span style="color:#777777;font-size:xx-small;">Survey：不確定要做。WaitAssign：確認待派工。Pending：狀況不明。</span></td>
-                                </tr>
-                            </table>
-
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">Due Date</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" value="" style="width:80px; height:25px !important;" id="txtDueDate" name="txtDueDate" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">開始</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtStartDate" name="txtStartDate" /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">完成</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtEndDate" name="txtEndDate" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">結案</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtCloseDate" name="txtCloseDate" /></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">SR No</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" value="" style="width: 150px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">URL</th>
-                                    <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtStartDate" name="txtSRURL" /></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">SR Title</th>
-                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" name="txtSRTitle" /></td>
-                    </tr>
-                    <tr>
-                        <th style="padding:5px;">Benefit</th>
-                        <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
-                    </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">客戶</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" name="txtFac" /></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td></td>
-                        <td style="padding-top:10px;">
-                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp;
-                            <input type="button" value="Cancel" class="btn btn-warning" onclick="$('#editPanel').modal('hide');" />
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- 編輯畫面 End -->
-<!-- =====((For Inition))=================================================================================== -->
-<!-- AutoComplete -->
-<style>
-    /*AutoComplete 必加不然看不到下拉項目*/
-    .ui-autocomplete {
-        z-index: 9999 !important;
-    }
-</style>
-<script>
-    $("#txtUser1").autocomplete({
-        source: function (request, response) {
-            jQuery.get("mesWork/GetMatchUser", {
-                query: request.term
-            }, function (data) {
-                var data2 = JSON.parse(data);
-                response(data2);
-            });
-        },
-        select: function (event, ui) {
-            //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
-            $("#lblUserName1").text(ui.item.label);
-            $("#txtUser1").val(ui.item.value);
-            return false;
-        },
-        //change: function (e, ui) {
-        //    $("#lblUserName1").text(ui.item.label);
-        //    $("#txtUser1").val(ui.item.value);
-        //},
-        minLength: 2
-    });
-    $("#txtUser2").autocomplete({
-        source: function (request, response) {
-            jQuery.get("mesWork/GetMatchUser", {
-                query: request.term
-            }, function (data) {
-
-                //response(workData);
-                //alert(data);
-                var data2 = JSON.parse(data);
-                //alert(data2);
-                response(data2);
-                //response($.map(data2, function (item) { // 此處是將返回資料轉換為 JSON物件
-                //    //alert(item.label);
-                //    return {
-                //        label: item.label, // 下拉項顯示內容
-                //        value: item.value  // 下拉項對應數值
-                //        //另外可以自定義其它引數
-                //    }
-                //}));
-            });
-        },
-        select: function (event, ui) {
-            //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
-            $("#lblUserName2").text(ui.item.label);
-            $("#txtUser2").val(ui.item.value);
-            return false;
-        },
-        minLength: 2
-    });
-</script>
-
-<!-- 日曆元件 -->
-<script>
-    $.datepicker.setDefaults($.datepicker.regional[""]);
-    $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
-    $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
-    $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
-    $("#txtIssueDate").datepicker({ dateFormat: 'yy-mm-dd' });
-    $("#txtCloseDate").datepicker({ dateFormat: 'yy-mm-dd' });
-</script>
-<!-- magicsearch -->
-<script>
-
-    var dataSource = [
-        { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
-        { id: '2', notesID: 'Eric', cName: 'Baker' },
-        { id: '3', notesID: 'Victor', cName: 'Brown' },
-        { id: '4', notesID: 'Lisa', cName: 'White' },
-        { id: '5', notesID: 'Oliver', cName: 'Bull' },
-        { id: '6', notesID: 'Zade', cName: 'Stock' },
-        { id: '7', notesID: 'David', cName: 'Reed' },
-        { id: '8', notesID: 'George', cName: 'Hand' },
-        { id: '9', notesID: 'Tony', cName: 'Well' },
-        { id: '10', notesID: 'Bruce', cName: 'Wayne' },
-    ];
-    $('#txtITOwner').magicsearch({
-        dataSource: dataSource,
-        fields: ['id', 'notesID', 'cName'],
-        id: 'id',
-        format: '%notesID% %cName% %id%',
-        dropdownBtn: true,
-        focusShow: true
-    });
-
-    $('#set-btn').click(function () {
-        //alert('ss');
-        //.val("val2").change();
-        //$("#txtITOwner").val('C2043').trigger("liszt:updated");
-
-        for (var i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].id == "C2043") {
-                $("#txtITOwner").val(dataSource[i].id + ' ' + dataSource[i].notesID);
-                break;
+        @foreach (MESWork item in ViewBag.PageList)
+        {
+    <tr>
+        <td>
+            @if (item.SRTitle == "")
+            {
+                <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
             }
+            else
+            {
+                <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
+            }
+        </td>
+        <td>@Html.DisplayFor(modelItem2 => item.Status)</td>
+        <td>@Html.DisplayFor(modelItem2 => item.SRNo)</td>
+        <td>@Html.DisplayFor(modelItem2 => item.SRTitle)</td>
+
+
+        <td>@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
+        <td>@Html.DisplayFor(modelItem2 => item.User1)</td>
+        <td>@Html.DisplayFor(modelItem2 => item.User2)</td>
+
+
+        <td>@Html.DisplayFor(modelItem2 => item.DateDue)</td>
+        <td>@Html.DisplayFor(modelItem2 => item.Type1)</td>
+
+        <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WorkID'); " /></td>
+        <td>@Html.DisplayFor(modelItem2 => item.WorkID)</td>
+        <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WorkID'); " /></td>
+    </tr>
         }
 
-        //$("#txtITOwner option[value='C2043']").prop('selected', true);
-        //$("#txtITOwner").val('C2043').change();
-        //$('#txtITOwner').trigger('set', { id: '3' });
-        //alert($("#txtITOwner").val());
-        //$("#txtITOwner option").each(function () {
-        //    alert($(this).text());
-        //    if ("C2043" === $(this).text()) {
-        //        value = $(this).val();
-        //    }
-        //});
-    });
-</script>
+    </table>
+    <!-- Grid Table End -->
+    <!-- ========================================================================================================================= -->
+    <!--for X.PagedList Start -->
+    <input type="hidden" id="pageIndex" name="pageIndex" value="@ViewBag.PageIndex" />
+    <input type="hidden" id="orderBy" name="orderBy" value="@ViewBag.OrderBy" />
+    <input type="hidden" id="sort" name="sort" value="@ViewBag.Sort" />
+    @Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+    <script type="text/javascript">
+        //Html.PagedListPager(pagedList, page => Url.Action("Index", new { page, orderby = ViewBag.CurrentOrderBy, sort = ViewBag.CurrentSort }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+        $('.pagination>li>a[href]').each(function (i, item) {
+            var cIdx = $(item).attr('href').indexOf('?page=') + 6;
+            var page = $(item).attr('href').substr(cIdx);
+            $(item).attr('href', '#').click(function () { postPage(page); });
+            //var page = $(item).attr('href').replace('/index?page=', '');
+            //var page = $(item).attr('href').replace('/index?page=', '');
+            //$(item).attr('href', '#').click(function () { postPage(page); });
+        });
+
+        function postPage(page) {
+            $('#pageIndex').val(page);
+            $('#MyWorkList').submit();
+            //if ($(targetFormId).size() > 0) {
+            //    $('<input>')
+            //        .attr({ type: 'hidden', id: 'PageIndex', name: 'PageIndex', value: page })
+            //        .appendTo($(targetFormId));
+            //    $(targetFormId).submit();
+            //}
+        };
+        //=====((排序))=====
+        function sortWork(column) {
+
+            if ($('#sort').val() == "asc")
+                $('#sort').val('desc');
+            else
+                $('#sort').val('asc');
+
+            $('#orderBy').val(column);
+            $('#MyWorkList').submit();
+
+            @*var sort = "@ViewBag.CurrentSort";
+            if (sort == "asc")
+                sort = "desc";
+            else
+                sort = "asc";
+            var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=" + sort;
+            window.location.replace(url);*@
+            //col= ViewBag.CurrentSortColumn, sort = ViewBag.CurrentSort
+        }
+                </script>
+    <!-- Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic) -->
+    <!--for X.PagedList End-->
+    <!-- ========================================================================================================================= -->
+    }
+    <input type="file" class="multi" accept="gif|jpg" />
+    <input type="file" multiple
+           class="multi maxsize-15120 with-preview" accept="xlsx" />
+
+
+    <!-- 編輯畫面 Start -->
+    <div id="editPanel" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
+            <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
+
+                <div id="showLoadingForEdit">Loading...</div>
+                <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
+                <form method="post" action="mesWork/Edit">
+                    @Html.AntiForgeryToken()
+                    <table id="editUI">
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">WorkID</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td><input type="text" value="" style="width:200px; height:25px !important;" id="txtWorkID" name="txtWorkID" readonly /></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">Issue</th>
+                                        <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtIssueDate" name="txtIssueDate" /></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">Owner</th>
+                            <td>
+                                <input type="text" class="magicsearch" style="width:200px !important; height:25px !important;" id="txtITOwner" name="txtITOwner" placeholder="IT Owner">
+
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">User1</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser1" name="txtUser1" placeholder="窗口"></td>
+                                        <td><div id="lblUserName1" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">User2</th>
+                                        <td><input type="text" style="width:70px !important; height:25px !important;" id="txtUser2" name="txtUser2" placeholder="需求者"></td>
+                                        <td><div id="lblUserName2" style="color:#778899;font-size:x-small;padding-left:5px;"></div></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">WorkName</th>
+                            <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" name="txtWorkName" /></td>
+                        </tr>
+                        <tr>
+                            <th style="padding:5px;">WorkDetail</th>
+                            <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" cols="100" rows="6"></textarea></td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">Type1</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td>
+                                            <select id="ddlType1" name="ddlType1">
+                                                <option>榮團會</option>
+                                                <option>議題討論</option>
+                                                <option>程式修改</option>
+                                                <option>資料設定</option>
+                                                <option>資料修改</option>
+                                                <option>資料提供</option>
+                                                <option>特別任務</option>
+                                                <option>課程認證</option>
+                                                <option>異常排除</option>
+                                                <option>其他</option>
+                                                <option>支援協助</option>
+                                                <option>特殊業務</option>
+                                                <option>系統專家</option>
+                                            </select>
+                                        </td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">Type2</th>
+                                        <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" name="txtType2" placeholder="PE,EE..." /></td>
+                                        <th style="white-space: nowrap; padding-left:10px;">Type3</th>
+                                        <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" name="txtType3" placeholder="RMS,Marking..." /></td>
+                                        <th style="white-space: nowrap; padding-left:10px;">重要性</th>
+                                        <td>
+                                            <select id="ddlWeight" name="ddlWeight">
+                                                <option>1</option>
+                                                <option>3</option>
+                                                <option>5</option>
+                                                <option>10</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">狀態</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td>
+                                            <select id="ddlStatus" name="ddlStatus">
+                                                <option>Survey</option>
+                                                <option>Wait-Assign</option>
+                                                <option>OnGoing</option>
+                                                <option>Testing</option>
+                                                <option>Trail-Run</option>
+                                                <option>Closed</option>
+                                                <option>Pending</option>
+                                            </select>
+                                        </td>
+                                        <td><span style="color:#777777;font-size:xx-small;">Survey：不確定要做。WaitAssign：確認待派工。Pending：狀況不明。</span></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">Due Date</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td><input type="text" value="" style="width:80px; height:25px !important;" id="txtDueDate" name="txtDueDate" /></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">開始</th>
+                                        <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtStartDate" name="txtStartDate" /></td>
+                                        <th style="white-space: nowrap; padding-left:10px;">完成</th>
+                                        <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtEndDate" name="txtEndDate" /></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">結案</th>
+                                        <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtCloseDate" name="txtCloseDate" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">SR No</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td><input type="text" value="" style="width: 150px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">URL</th>
+                                        <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtStartDate" name="txtSRURL" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">SR Title</th>
+                            <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" name="txtSRTitle" /></td>
+                        </tr>
+                        <tr>
+                            <th style="padding:5px;">Benefit</th>
+                            <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
+                        </tr>
+                        <tr onkeypress="return event.keyCode != 13;">
+                            <th style="padding:5px;">客戶</th>
+                            <td>
+                                <table style="padding:0;margin:0;">
+                                    <tr>
+                                        <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
+                                        <th style="white-space: nowrap; padding-left: 10px;">站點</th>
+                                        <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" /></td>
+                                        <th style="white-space: nowrap; padding-left:10px;">廠別</th>
+                                        <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" name="txtFac" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td></td>
+                            <td style="padding-top:10px;">
+                                <input type="submit" value="Save" class="btn btn-success" /> &nbsp;
+                                <input type="button" value="Cancel" class="btn btn-warning" onclick="$('#editPanel').modal('hide');" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編輯畫面 End -->
+    <!-- =====((For Inition))=================================================================================== -->
+    <!-- AutoComplete -->
+    <style>
+        /*AutoComplete 必加不然看不到下拉項目*/
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+    </style>
+    <script>
+        $("#txtUser1").autocomplete({
+            source: function (request, response) {
+                jQuery.get("mesWork/GetMatchUser", {
+                    query: request.term
+                }, function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                });
+            },
+            select: function (event, ui) {
+                //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+                $("#lblUserName1").text(ui.item.label);
+                $("#txtUser1").val(ui.item.value);
+                return false;
+            },
+            //change: function (e, ui) {
+            //    $("#lblUserName1").text(ui.item.label);
+            //    $("#txtUser1").val(ui.item.value);
+            //},
+            minLength: 2
+        });
+        $("#txtUser2").autocomplete({
+            source: function (request, response) {
+                jQuery.get("mesWork/GetMatchUser", {
+                    query: request.term
+                }, function (data) {
+
+                    //response(workData);
+                    //alert(data);
+                    var data2 = JSON.parse(data);
+                    //alert(data2);
+                    response(data2);
+                    //response($.map(data2, function (item) { // 此處是將返回資料轉換為 JSON物件
+                    //    //alert(item.label);
+                    //    return {
+                    //        label: item.label, // 下拉項顯示內容
+                    //        value: item.value  // 下拉項對應數值
+                    //        //另外可以自定義其它引數
+                    //    }
+                    //}));
+                });
+            },
+            select: function (event, ui) {
+                //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+                $("#lblUserName2").text(ui.item.label);
+                $("#txtUser2").val(ui.item.value);
+                return false;
+            },
+            minLength: 2
+        });
+    </script>
+
+    <!-- 日曆元件 -->
+    <script>
+        $.datepicker.setDefaults($.datepicker.regional[""]);
+        $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtIssueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtCloseDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    </script>
+    <!-- magicsearch -->
+    <script>
+
+        var dataSource = [
+            { id: 'C2043', notesID: 'Potato', cName: '黃群凱' },
+            { id: '2', notesID: 'Eric', cName: 'Baker' },
+            { id: '3', notesID: 'Victor', cName: 'Brown' },
+            { id: '4', notesID: 'Lisa', cName: 'White' },
+            { id: '5', notesID: 'Oliver', cName: 'Bull' },
+            { id: '6', notesID: 'Zade', cName: 'Stock' },
+            { id: '7', notesID: 'David', cName: 'Reed' },
+            { id: '8', notesID: 'George', cName: 'Hand' },
+            { id: '9', notesID: 'Tony', cName: 'Well' },
+            { id: '10', notesID: 'Bruce', cName: 'Wayne' },
+        ];
+        $('#txtITOwner').magicsearch({
+            dataSource: dataSource,
+            fields: ['id', 'notesID', 'cName'],
+            id: 'id',
+            format: '%notesID% %cName% %id%',
+            dropdownBtn: true,
+            focusShow: true
+        });
+
+        $('#set-btn').click(function () {
+            //alert('ss');
+            //.val("val2").change();
+            //$("#txtITOwner").val('C2043').trigger("liszt:updated");
+
+            for (var i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].id == "C2043") {
+                    $("#txtITOwner").val(dataSource[i].id + ' ' + dataSource[i].notesID);
+                    break;
+                }
+            }
+
+            //$("#txtITOwner option[value='C2043']").prop('selected', true);
+            //$("#txtITOwner").val('C2043').change();
+            //$('#txtITOwner').trigger('set', { id: '3' });
+            //alert($("#txtITOwner").val());
+            //$("#txtITOwner option").each(function () {
+            //    alert($(this).text());
+            //    if ("C2043" === $(this).text()) {
+            //        value = $(this).val();
+            //    }
+            //});
+        });
+    </script>
 
 
 
