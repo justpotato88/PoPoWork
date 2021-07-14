@@ -428,6 +428,70 @@ namespace PotatoLab.Controllers
             return xx;
         }
 
+        private List<PotatoLab.MESWork> GetSampleData(string startDate, string endDate, string key, string userID, string status, string type)
+        {
+            List<PotatoLab.MESWork> xx = new List<MESWork>();
+            PotatoLab.MESWork tmpWork = new MESWork();
+            tmpWork.WorkID = "001";
+            tmpWork.WorkName = "hk4g4";
+            tmpWork.WorkDetail = "WORKDETAIL";
+            tmpWork.Benefit = "BENFIT";
+
+            tmpWork.ITOwner = "C2043";
+            tmpWork.User1 = "C12112";
+            tmpWork.User2 = "C12113";
+
+            tmpWork.Type1 = "課程認證";
+            tmpWork.Type2 = "T2";
+            tmpWork.Type3 = "T3";
+            tmpWork.Weight = 1;
+
+            tmpWork.Status = "Wait-Assign";
+            tmpWork.SRNo = "sr_no";
+            tmpWork.SRTitle = "SRTITLE";
+            tmpWork.SRLink = "http://";
+
+            tmpWork.Fac = "ASE07";
+            tmpWork.Oper = "3800";
+            tmpWork.Cust3 = "MVL";
+
+            tmpWork.DateIssue = "2019-01-01";
+            tmpWork.DateStart = "2019-01-02";
+            tmpWork.DateEnd = "2019-01-03";
+            tmpWork.DateDue = "2019-01-04";
+            tmpWork.DateClose = "2019-01-05";
+            xx.Add(tmpWork);
+            //----------------------------------
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "002";
+            tmpWork.WorkName = "BBBBBBB";
+            tmpWork.SRNo = "sr_002";
+            xx.Add(tmpWork);
+            //----------------------------------
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "003";
+            tmpWork.WorkName = "CCCCCC";
+            tmpWork.SRNo = "sr_003";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "004";
+            tmpWork.WorkName = "DDDDDD";
+            tmpWork.SRNo = "sr_004";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "005";
+            tmpWork.WorkName = "EEEEEEE";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "006";
+            tmpWork.WorkName = "FFFFFF";
+            xx.Add(tmpWork);
+
+            return xx;
+        }
 
         /// <summary>
         /// 取得

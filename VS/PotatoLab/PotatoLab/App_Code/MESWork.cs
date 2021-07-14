@@ -149,5 +149,24 @@ namespace PotatoLab
             }
             return result;
         }
+
+        public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
+        {
+            List<MESWork> result = new List<MESWork>();
+            try
+            {
+
+                using (IDbConnection db = new SqlConnection(constr))
+                {
+                    db.Execute("SELECT ID FROM dbo.TEST_TABLE");
+                    result = db.Query<MESWork>("SELECT ID FROM dbo.TEST_TABLE").ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return result;
+        }
     }
 }
