@@ -9,12 +9,26 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 //-------------------------
 using X.PagedList;
+using Microsoft.AspNetCore.Hosting;
 //-------------------------
 
 namespace PotatoLab.Controllers
 {
     public class mesWorkController : Controller
     {
+        #region 取得根目錄-----------------------------------------
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public mesWorkController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
+        public ActionResult RootPath()
+        {
+            return Content($"WebRootPath = {_hostingEnvironment.WebRootPath}\n" +
+                           $"ContentRootPath = {_hostingEnvironment.ContentRootPath}");
+        }
+        #endregion -----------------------------------------------
+
         // GET: mesWorkController
         public ActionResult Index(int page=1, string orderby = "due", string sort="asc")
         {

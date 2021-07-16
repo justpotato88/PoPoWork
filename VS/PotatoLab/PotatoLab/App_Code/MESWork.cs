@@ -132,6 +132,38 @@ namespace PotatoLab
             return true;
         }
 
+        #region 靜態 Function -----------------------------------------------------------------
+        
+        public static bool UpdateStatus(string workID, out string result, string status, string startDate, string endDate, string closeDate, string dueDate)
+        {
+            result = "OK";
+            return true;
+        }
+
+        //Note 可以放會議紀錄之類的 itNote 放 SQL
+        public static bool UpdateWorkInfo(string workID, out string result, string workName, string workDetail, string workNote, string itNote)
+        {
+            result = "OK";
+            return true;
+        }
+
+        public static bool UpdateCIMNote(string workID, out string result, string noteText)
+        {
+            result = "OK";
+            return true;
+        }
+
+        public static string ReadTextFile(string filePath)
+        {
+            return "XXXXX";
+        }
+        public static bool SaveTextFile(out string result, string filePath, string saveHtml)
+        {
+            result = "OK";
+            return true;
+        }
+        #endregion ----------------------------------------------------------------------------
+
         public static List<MESWork> DapperMapping()
         {
             List<MESWork> result = new List<MESWork>();
