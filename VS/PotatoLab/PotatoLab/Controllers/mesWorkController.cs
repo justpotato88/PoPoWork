@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using X.PagedList;
 using Microsoft.AspNetCore.Hosting;
 //-------------------------
+using System.Text;
 
 namespace PotatoLab.Controllers
 {
@@ -35,65 +36,38 @@ namespace PotatoLab.Controllers
             
 
             int currentPage = page < 1 ? 1 : page;
-            var resultList = GetSampleData().OrderBy(m => m.WorkID).ToList();
+            var resultList = MESWork.GetUrgentWorkList(7).OrderBy(m => m.DateDue).ToList();
 
-            switch (orderby)
-            {
-
-                //OrderByDescending
-                case "title":
-                    if (sort=="asc")
-                        resultList = GetSampleData().OrderBy(m => m.WorkName).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.WorkName).ToList();
-                    break;
-                case "status":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.Status).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.Status).ToList();
-                    break;
-                case "sr_no":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.SRNo).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.SRNo).ToList();
-                    break;
-                case "due":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.DateDue).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.DateDue).ToList();
-                    break;
-                case "it":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.ITOwner).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.ITOwner).ToList();
-                    break;
-                case "user1":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.User1).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.User1).ToList();
-                    break;
-                case "user2":
-                    if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.User2).ToList();
-                    else
-                        resultList = GetSampleData().OrderByDescending(m => m.User2).ToList();
-                    break;
-                default:
-                    break;
-            }
-            
 
             ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
 
-            //排序
+            ////排序
             ViewBag.CurrentOrderBy = orderby;
             ViewBag.CurrentSort = sort;
 
+
+            //預設值
+            ViewBag.QueryStart = DateTime.Now.AddDays(-90).ToString("yyyy-MM-dd");
+            ViewBag.QueryEnd = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
+
+            ViewBag.QueryStatus01 = "checked";
+            ViewBag.QueryStatus02 = "checked";
+            ViewBag.QueryStatus03 = "checked";
+            ViewBag.QueryStatus04 = "checked";
+            ViewBag.QueryStatus05 = "checked";
+
+            ViewBag.QueryType01 = "checked";
+            ViewBag.QueryType02 = "checked";
+            ViewBag.QueryType03 = "checked";
+            ViewBag.QueryType04 = "checked";
+            ViewBag.QueryType05 = "checked";
+            ViewBag.QueryType06 = "checked";
+            ViewBag.QueryType07 = "checked";
+            ViewBag.QueryType08 = "checked";
+            ViewBag.QueryType09 = "checked";
+            ViewBag.QueryType10 = "checked";
+
+            ViewBag.QueryWeight = 2;
 
             return View();
         }
@@ -108,78 +82,210 @@ namespace PotatoLab.Controllers
             string orderby = form["orderBy"].ToString();
             string sort = form["sort"].ToString();
 
-            
+            string status = "";
+            string type = "";
+            #region 勾選的條件 --------------------------------------
+            if (form["qStatus01"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus01 = "checked";
+                status += form["qStatus01"].ToString() + ",";
+            }
+            if (form["qStatus02"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus02 = "checked";
+                status += form["qStatus02"].ToString() + ",";
+            }
+            if (form["qStatus03"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus03 = "checked";
+                status += form["qStatus03"].ToString() + ",";
+            }
+            if (form["qStatus04"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus04 = "checked";
+                status += form["qStatus04"].ToString() + ",";
+            }
+            if (form["qStatus05"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus05 = "checked";
+                status += form["qStatus05"].ToString() + ",";
+            }
+            if (form["qStatus06"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus06 = "checked";
+                status += form["qStatus06"].ToString() + ",";
+            }
+            if (form["qStatus07"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus07 = "checked";
+                status += form["qStatus07"].ToString() + ",";
+            }
+            status = status.TrimEnd(',');
+            //---------------------------------------
+            if (form["qType01"].ToString().Length > 0)
+            {
+                ViewBag.QueryType01 = "checked";
+                type += form["qType01"].ToString() + ",";
+            }
+            if (form["qType02"].ToString().Length > 0)
+            {
+                ViewBag.QueryType02 = "checked";
+                type += form["qType02"].ToString() + ",";
+            }
+            if (form["qType03"].ToString().Length > 0)
+            {
+                ViewBag.QueryType03 = "checked";
+                type += form["qType03"].ToString() + ",";
+            }
+            if (form["qType04"].ToString().Length > 0)
+            {
+                ViewBag.QueryType04 = "checked";
+                type += form["qType04"].ToString() + ",";
+            }
+            if (form["qType05"].ToString().Length > 0)
+            {
+                ViewBag.QueryType05 = "checked";
+                type += form["qType05"].ToString() + ",";
+            }
+            if (form["qType06"].ToString().Length > 0)
+            {
+                ViewBag.QueryType06 = "checked";
+                type += form["qType06"].ToString() + ",";
+            }
+            if (form["qType07"].ToString().Length > 0)
+            {
+                ViewBag.QueryType07 = "checked";
+                type += form["qType07"].ToString() + ",";
+            }
+            if (form["qType08"].ToString().Length > 0)
+            {
+                ViewBag.QueryType08 = "checked";
+                type += form["qType08"].ToString() + ",";
+            }
+            if (form["qType09"].ToString().Length > 0)
+            {
+                ViewBag.QueryType09 = "checked";
+                type += form["qType09"].ToString() + ",";
+            }
+            if (form["qType10"].ToString().Length > 0)
+            {
+                ViewBag.QueryType10 = "checked";
+                type += form["qType10"].ToString() + ",";
+            }
+            if (form["qType11"].ToString().Length > 0)
+            {
+                ViewBag.QueryType11 = "checked";
+                type += form["qType11"].ToString() + ",";
+            }
+            if (form["qType12"].ToString().Length > 0)
+            {
+                ViewBag.QueryType12 = "checked";
+                type += form["qType12"].ToString() + ",";
+            }
+            type = type.TrimEnd(',');
+
+            #endregion ----------------------------------------------
+
+            int weight = 2;
+            try
+            {
+                Convert.ToInt32(form["txtQueryWeight"]);
+            }
+            catch { }
             var resultList = new List<MESWork>();
 
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, "", "", "", "", weight);
             switch (orderby)
             {
-
-                //OrderByDescending
                 case "title":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.WorkName).ToList();
+                        resultList = resultList.OrderBy(m => m.WorkName).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.WorkName).ToList();
+                        resultList = resultList.OrderByDescending(m => m.WorkName).ToList();
                     break;
                 case "status":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.Status).ToList();
+                        resultList = resultList.OrderBy(m => m.Status).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.Status).ToList();
+                        resultList = resultList.OrderByDescending(m => m.Status).ToList();
                     break;
                 case "sr_no":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.SRNo).ToList();
+                        resultList = resultList.OrderBy(m => m.SRNo).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.SRNo).ToList();
+                        resultList = resultList.OrderByDescending(m => m.SRNo).ToList();
                     break;
                 case "due":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.DateDue).ToList();
+                        resultList = resultList.OrderBy(m => m.DateDue).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.DateDue).ToList();
+                        resultList = resultList.OrderByDescending(m => m.DateDue).ToList();
                     break;
                 case "it":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.ITOwner).ToList();
+                        resultList = resultList.OrderBy(m => m.ITOwner).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.ITOwner).ToList();
+                        resultList = resultList.OrderByDescending(m => m.ITOwner).ToList();
                     break;
                 case "user1":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.User1).ToList();
+                        resultList = resultList.OrderBy(m => m.User1).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.User1).ToList();
+                        resultList = resultList.OrderByDescending(m => m.User1).ToList();
                     break;
                 case "user2":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.User2).ToList();
+                        resultList = resultList.OrderBy(m => m.User2).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.User2).ToList();
+                        resultList = resultList.OrderByDescending(m => m.User2).ToList();
                     break;
 
                 case "type1":
                     if (sort == "asc")
-                        resultList = GetSampleData().OrderBy(m => m.Type1).ToList();
+                        resultList = resultList.OrderBy(m => m.Type1).ToList();
                     else
-                        resultList = GetSampleData().OrderByDescending(m => m.Type1).ToList();
+                        resultList = resultList.OrderByDescending(m => m.Type1).ToList();
+                    break;
+                case "type2":
+                    if (sort == "asc")
+                        resultList = resultList.OrderBy(m => m.Type2).ToList();
+                    else
+                        resultList = resultList.OrderByDescending(m => m.Type2).ToList();
+                    break;
+                case "type3":
+                    if (sort == "asc")
+                        resultList = resultList.OrderBy(m => m.Type3).ToList();
+                    else
+                        resultList = resultList.OrderByDescending(m => m.Type3).ToList();
+                    break;
+                case "oper":
+                    if (sort == "asc")
+                        resultList = resultList.OrderBy(m => m.Oper).ToList();
+                    else
+                        resultList = resultList.OrderByDescending(m => m.Oper).ToList();
+                    break;
+                case "cust":
+                    if (sort == "asc")
+                        resultList = resultList.OrderBy(m => m.Cust3).ToList();
+                    else
+                        resultList = resultList.OrderByDescending(m => m.Cust3).ToList();
                     break;
                 default:
-                    resultList = GetSampleData().OrderBy(m => m.WorkID).ToList();
+                    resultList = resultList.OrderBy(m => m.WorkID).ToList();
                     break;
             }
 
-            int currentPage = page < 1 ? 1 : page;
-            ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
-
             //查詢條件
-            ViewBag.QueryStatus = form["ddlQueryStatus"].ToString();
-            ViewBag.QueryType = form["ddlQueryType"].ToString();
             ViewBag.QueryStart = form["txtQueryStartDate"].ToString();
             ViewBag.QueryEnd = form["txtQueryEndDate"].ToString();
             ViewBag.QueryUser = form["txtQueryUser"].ToString();
             ViewBag.QueryKeyWord = form["txtQueryKeyWord"].ToString();
-            
+            ViewBag.QueryWeight = form["txtQueryWeight"].ToString();
+
+            //分頁
+            int currentPage = page < 1 ? 1 : page;
+            ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
+
             //排序
             ViewBag.OrderBy = orderby;
             ViewBag.Sort = sort;
@@ -332,6 +438,8 @@ namespace PotatoLab.Controllers
             tmpWork.WorkID = workID;
             tmpWork.WorkName = "hk4g4";
             tmpWork.WorkDetail = "WORKDETAIL";
+            tmpWork.WorkNote = "WORKDETAILsss1";
+            tmpWork.NoteIT = "WORKDEssTAILsss2";
             tmpWork.Benefit = "BENFIT";
 
             tmpWork.ITOwner = "C2043";

@@ -182,8 +182,10 @@ namespace PotatoLab
             return result;
         }
 
-        public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
+        //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
+        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight)
         {
+            return GetSampleData();
             List<MESWork> result = new List<MESWork>();
             try
             {
@@ -199,6 +201,92 @@ namespace PotatoLab
                 Console.WriteLine(ex.Message);
             }
             return result;
+        }
+
+        public static List<MESWork> GetUrgentWorkList(int remindDay)
+        {
+            return GetSampleData();
+            List<MESWork> result = new List<MESWork>();
+            try
+            {
+
+                using (IDbConnection db = new SqlConnection(constr))
+                {
+                    db.Execute("SELECT ID FROM dbo.TEST_TABLE");
+                    result = db.Query<MESWork>("SELECT ID FROM dbo.TEST_TABLE").ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return result;
+        }
+        public static List<MESWork> GetSampleData()
+        {
+            #region Test -------------------------------
+            List<PotatoLab.MESWork> xx = new List<MESWork>();
+            PotatoLab.MESWork tmpWork = new MESWork();
+            tmpWork.WorkID = "001";
+            tmpWork.WorkName = "客戶 XD123 需求，這邊那邊都要通通包起來";
+            tmpWork.WorkDetail = "1.WORKDETAIL<br>2.SSFSGSGSGSFSFSFF";
+            tmpWork.Benefit = "每天要三個人出手，要花1000000元";
+
+            tmpWork.ITOwner = "Potato";
+            tmpWork.User1 = "Abcd Huang";
+            tmpWork.User2 = "Jc Lee";
+
+            tmpWork.Type1 = "課程認證";
+            tmpWork.Type2 = "PE";
+            tmpWork.Type3 = "RMS";
+            tmpWork.Weight = 1;
+
+            tmpWork.Status = "Wait-Assign";
+            tmpWork.SRNo = "SR-123456875";
+            tmpWork.SRTitle = "XD123-SRTITLEssssssssss";
+            tmpWork.SRLink = "http://";
+
+            tmpWork.Fac = "ASE07";
+            tmpWork.Oper = "3800";
+            tmpWork.Cust3 = "MVL";
+
+            tmpWork.DateIssue = "2019-01-01";
+            tmpWork.DateStart = "2019-01-02";
+            tmpWork.DateEnd = "2019-01-03";
+            tmpWork.DateDue = "2019-01-04";
+            tmpWork.DateClose = "2019-01-05";
+            xx.Add(tmpWork);
+            //----------------------------------
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "002";
+            tmpWork.WorkName = "BBBBBBB";
+            tmpWork.SRNo = "sr_002";
+            xx.Add(tmpWork);
+            //----------------------------------
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "003";
+            tmpWork.WorkName = "CCCCCC";
+            tmpWork.SRNo = "sr_003";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "004";
+            tmpWork.WorkName = "DDDDDD";
+            tmpWork.SRNo = "sr_004";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "005";
+            tmpWork.WorkName = "EEEEEEE";
+            xx.Add(tmpWork);
+
+            tmpWork = new MESWork();
+            tmpWork.WorkID = "006";
+            tmpWork.WorkName = "FFFFFF";
+            xx.Add(tmpWork);
+
+            return xx;
+            #endregion ---------------------------------
         }
     }
 }
