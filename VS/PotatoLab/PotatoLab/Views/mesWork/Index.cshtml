@@ -104,41 +104,42 @@
 
         var workData = JSON.parse(jsonStr);
         //注意!! workData 物件成員的大小寫要跟C#物件相符!!
-        $('#txtWorkID').val(workData.WorkID);
-        $('#txtWorkName').val(workData.WorkName);
-        $('#txtWorkDetail').val(workData.WorkDetail);
-        $('#txtWorkNote').val(workData.WorkNote);
-        $('#txtITNote').val(workData.NoteIT);
-        $('#txtBenefit').val(workData.Benefit);
+        $('#txtWorkID').val(workData.WORK_ID);
+        $('#txtWorkName').val(workData.WORK_NAME);
+        $('#txtWorkDetail').val(workData.WORK_DETAIL);
+        $('#txtWorkNote').val(workData.WORK_NOTE);
+        $('#txtITNote').val(workData.IT_NOTE);
+        $('#txtBenefit').val(workData.BENEFIT);
 
-        $('#txtITOwner').val(workData.ITOwner);
-        for (var i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].id == workData.ITOwner) {
-                $("#txtITOwner").val(dataSource[i].notesID + ' ' + dataSource[i].cName + ' ' + dataSource[i].id);
-                break;
-            }
-        }
-        $('#txtUser1').val(workData.User1);
-        $('#txtUser2').val(workData.User2);
+        //$('#txtITOwner').val(workData.IT_OWNER);
+        $('#ddlITOwner').val(workData.IT_OWNER);
+        //for (var i = 0; i < dataSource.length; i++) {
+        //    if (dataSource[i].id == workData.IT_OWNER) {
+        //        $("#txtITOwner").val(dataSource[i].notesID + ' ' + dataSource[i].cName + ' ' + dataSource[i].id);
+        //        break;
+        //    }
+        //}
+        $('#txtUser1').val(workData.USER1);
+        $('#txtUser2').val(workData.USER2);
 
-        $('#ddlType1').val(workData.Type1);
-        $('#txtType2').val(workData.Type2);
-        $('#txtType3').val(workData.Type3);
-        $('#ddlWeight').val(workData.Weight);
+        $('#ddlType1').val(workData.TYPE1);
+        $('#txtType2').val(workData.TYPE2);
+        $('#txtType3').val(workData.TYPE3);
+        $('#ddlWeight').val(workData.WEIGHT);
 
-        $('#ddlStatus').val(workData.Status);
-        $('#txtSRNo').val(workData.SRNo);
-        $('#txtSRTitle').val(workData.SRTitle);
+        $('#ddlStatus').val(workData.STATUS);
+        $('#txtSRNo').val(workData.SR_NO);
+        $('#txtSRTitle').val(workData.SR_TITLE);
 
-        $('#txtFac').val(workData.Fac);
-        $('#txtOper').val(workData.Oper);
-        $('#txtCust3').val(workData.Cust3);
+        $('#txtFac').val(workData.FAC);
+        $('#txtOper').val(workData.OPER);
+        $('#txtCust3').val(workData.CUST3);
 
-        $('#txtIssueDate').val(workData.DateIssue);
-        $('#txtDueDate').val(workData.DateDue);
-        $('#txtStartDate').val(workData.DateStart);
-        $('#txtEndDate').val(workData.DateEnd);
-        $('#txtCloseDate').val(workData.DateClose);
+        $('#txtIssueDate').val(workData.ISSUE_DATE);
+        $('#txtDueDate').val(workData.DUE_DATE);
+        $('#txtStartDate').val(workData.START_DATE);
+        $('#txtEndDate').val(workData.END_DATE);
+        $('#txtCloseDate').val(workData.CLOSE_DATE);
 
 
         $('#showLoadingForEdit').hide();
@@ -245,32 +246,32 @@
         @foreach (MESWork item in ViewBag.PageList)
         {
     <tr>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.DateDue)</td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ITOwner)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.DUE_DATE)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.IT_OWNER)</td>
         <td>
-            @if (item.SRTitle == "")
+            @if (item.SR_TITLE == "")
             {
-                <b>@Html.DisplayFor(modelItem2 => item.WorkName)</b>
+                <b>@Html.DisplayFor(modelItem2 => item.WORK_NAME)</b>
             }
             else
             {
-                <b> @Html.DisplayFor(modelItem2 => item.WorkName)</b> <br><span style="color:#999999;font-size:60%;"> @Html.DisplayFor(modelItem2 => item.SRTitle)</span>
+                <b> @Html.DisplayFor(modelItem2 => item.WORK_NAME)</b> <br><span style="color:#999999;font-size:60%;"> @Html.DisplayFor(modelItem2 => item.SR_TITLE)</span>
             }
         </td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.Status)</td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.SRNo)</td>
-        <td style="font-size:80% !important;">@Html.Raw(item.WorkDetail)</td>
-        <td style="font-size:80% !important;">@Html.Raw(item.Oper)</td>
-        <td style="font-size:80% !important;">@Html.Raw(item.Cust3)</td>
-        <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.User1)</td>
-        <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.User2)</td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.Type1)</td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.Type2)</td>
-        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.Type3)</td>
-        <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WorkID'); " /></td>
-        <td style="font-size: xx-small !important;">@Html.DisplayFor(modelItem2 => item.WorkID)</td>
-        <td style="font-size: 80% !important;">@Html.DisplayFor(modelItem2 => item.Benefit)</td>
-        <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WorkID'); " /></td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.STATUS)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.SR_NO)</td>
+        <td style="font-size:80% !important;">@Html.Raw(item.WORK_DETAIL)</td>
+        <td style="font-size:80% !important;">@Html.Raw(item.OPER)</td>
+        <td style="font-size:80% !important;">@Html.Raw(item.CUST3)</td>
+        <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.USER1)</td>
+        <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.USER2)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE1)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE2)</td>
+        <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE3)</td>
+        <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WORK_ID'); " /></td>
+        <td style="font-size: xx-small !important;">@Html.DisplayFor(modelItem2 => item.WORK_ID)</td>
+        <td style="font-size: 80% !important;">@Html.DisplayFor(modelItem2 => item.BENEFIT)</td>
+        <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WORK_ID'); " /></td>
     </tr>
         }
 
@@ -349,7 +350,21 @@
                             <th style="padding:5px;">Owner</th>
                             <td>
                                 <input type="text" class="magicsearch" style="width:200px !important; height:25px !important;" id="txtITOwner" name="txtITOwner" placeholder="IT Owner">
-
+                                <select id="ddlITOwner" name="ddlITOwner">
+                                    <option value="C2043">Potato</option>
+                                    <option value="">Ben</option>
+                                    <option value="">Bella</option>
+                                    <option value="">Eden</option>
+                                    <option value="">Gary</option>
+                                    <option value="">Gloria</option>
+                                    <option value="">DavidGS</option>
+                                    <option value="">MarkPJ</option>
+                                    <option value="">Smith</option>
+                                    <option value="">Vic</option>
+                                    <option value="">(Other)</option>
+                                    <option value="">(A3)</option>
+                                    <option value="">(A5)</option>
+                                </select>
                             </td>
                         </tr>
                         <tr onkeypress="return event.keyCode != 13;">
@@ -484,9 +499,9 @@
                             <td>
                                 <table style="padding:0;margin:0;">
                                     <tr>
-                                        <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
+                                        <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" placeholder="客三碼" /></td>
                                         <th style="white-space: nowrap; padding-left: 10px;">站點</th>
-                                        <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" /></td>
+                                        <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
                                         <th style="white-space: nowrap; padding-left:10px;">廠別</th>
                                         <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" name="txtFac" /></td>
                                     </tr>
@@ -568,6 +583,24 @@
             },
             minLength: 2
         });
+        $("#txtCust3").autocomplete({
+            source: function (request, response) {
+                jQuery.get("mesWork/GetMatchCust", {
+                    query: request.term
+                }, function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                });
+            },
+            select: function (event, ui) {
+                //event引數是事件物件，ui物件只有一個item屬性，對應資料來源中被選中的物件
+                //$("#lblUserName2").text(ui.item.label);
+                $("#txtCust3").val(ui.item.value);
+                return false;
+            },
+            minLength: 2
+        });
+        //
         $("#txtQueryUser").autocomplete({
             source: function (request, response) {
                 jQuery.get("mesWork/GetMatchUser", {

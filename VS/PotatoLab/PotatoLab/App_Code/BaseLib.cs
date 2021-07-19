@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PotatoLab.App_Code
+namespace PotatoLab
 {
     public class CustFile
     {

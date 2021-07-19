@@ -36,7 +36,7 @@ namespace PotatoLab.Controllers
             
 
             int currentPage = page < 1 ? 1 : page;
-            var resultList = MESWork.GetUrgentWorkList(7).OrderBy(m => m.DateDue).ToList();
+            var resultList = MESWork.GetUrgentWorkList(7).OrderBy(m => m.DUE_DATE).ToList();
 
 
             ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
@@ -199,79 +199,79 @@ namespace PotatoLab.Controllers
             {
                 case "title":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.WorkName).ToList();
+                        resultList = resultList.OrderBy(m => m.WORK_NAME).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.WorkName).ToList();
+                        resultList = resultList.OrderByDescending(m => m.WORK_NAME).ToList();
                     break;
                 case "status":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Status).ToList();
+                        resultList = resultList.OrderBy(m => m.STATUS).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Status).ToList();
+                        resultList = resultList.OrderByDescending(m => m.STATUS).ToList();
                     break;
                 case "sr_no":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.SRNo).ToList();
+                        resultList = resultList.OrderBy(m => m.SR_NO).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.SRNo).ToList();
+                        resultList = resultList.OrderByDescending(m => m.SR_NO).ToList();
                     break;
                 case "due":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.DateDue).ToList();
+                        resultList = resultList.OrderBy(m => m.DUE_DATE).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.DateDue).ToList();
+                        resultList = resultList.OrderByDescending(m => m.DUE_DATE).ToList();
                     break;
                 case "it":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.ITOwner).ToList();
+                        resultList = resultList.OrderBy(m => m.IT_OWNER).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.ITOwner).ToList();
+                        resultList = resultList.OrderByDescending(m => m.IT_OWNER).ToList();
                     break;
                 case "user1":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.User1).ToList();
+                        resultList = resultList.OrderBy(m => m.USER1).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.User1).ToList();
+                        resultList = resultList.OrderByDescending(m => m.USER1).ToList();
                     break;
                 case "user2":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.User2).ToList();
+                        resultList = resultList.OrderBy(m => m.USER2).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.User2).ToList();
+                        resultList = resultList.OrderByDescending(m => m.USER2).ToList();
                     break;
 
                 case "type1":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Type1).ToList();
+                        resultList = resultList.OrderBy(m => m.TYPE1).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Type1).ToList();
+                        resultList = resultList.OrderByDescending(m => m.TYPE1).ToList();
                     break;
                 case "type2":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Type2).ToList();
+                        resultList = resultList.OrderBy(m => m.TYPE2).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Type2).ToList();
+                        resultList = resultList.OrderByDescending(m => m.TYPE2).ToList();
                     break;
                 case "type3":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Type3).ToList();
+                        resultList = resultList.OrderBy(m => m.TYPE3).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Type3).ToList();
+                        resultList = resultList.OrderByDescending(m => m.TYPE3).ToList();
                     break;
                 case "oper":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Oper).ToList();
+                        resultList = resultList.OrderBy(m => m.OPER).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Oper).ToList();
+                        resultList = resultList.OrderByDescending(m => m.OPER).ToList();
                     break;
                 case "cust":
                     if (sort == "asc")
-                        resultList = resultList.OrderBy(m => m.Cust3).ToList();
+                        resultList = resultList.OrderBy(m => m.CUST3).ToList();
                     else
-                        resultList = resultList.OrderByDescending(m => m.Cust3).ToList();
+                        resultList = resultList.OrderByDescending(m => m.CUST3).ToList();
                     break;
                 default:
-                    resultList = resultList.OrderBy(m => m.WorkID).ToList();
+                    resultList = resultList.OrderBy(m => m.WORK_ID).ToList();
                     break;
             }
 
@@ -336,33 +336,33 @@ namespace PotatoLab.Controllers
             try
             {
                 MESWork tmpWork = new MESWork();
-                tmpWork.WorkID = form["txtWorkID"].ToString();
-                tmpWork.WorkName = form["txtWorkName"].ToString();
-                tmpWork.WorkDetail = form["txtWorkDetail"].ToString();
-                tmpWork.Benefit = form["txtBenefit"].ToString();
+                tmpWork.WORK_ID = form["txtWorkID"].ToString();
+                tmpWork.WORK_NAME = form["txtWorkName"].ToString();
+                tmpWork.WORK_DETAIL = form["txtWorkDetail"].ToString();
+                tmpWork.BENEFIT = form["txtBenefit"].ToString();
 
-                tmpWork.ITOwner = form["txtITOwner"].ToString();
-                tmpWork.User1 = form["txtUser1"].ToString();
-                tmpWork.User2 = form["txtUser2"].ToString();
+                tmpWork.IT_OWNER = form["txtITOwner"].ToString();
+                tmpWork.USER1 = form["txtUser1"].ToString();
+                tmpWork.USER2 = form["txtUser2"].ToString();
 
-                tmpWork.Type1 = form["ddlType1"].ToString();
-                tmpWork.Type2 = form["txtType2"].ToString();
-                tmpWork.Type3 = form["txtType3"].ToString();
+                tmpWork.TYPE1 = form["ddlType1"].ToString();
+                tmpWork.TYPE2 = form["txtType2"].ToString();
+                tmpWork.TYPE3 = form["txtType3"].ToString();
 
-                tmpWork.Weight = Convert.ToInt32(form["ddlWeight"]);
-                tmpWork.Status = form["ddlStatus"].ToString();
-                tmpWork.SRNo = form["txtSRNo"].ToString();
-                tmpWork.SRTitle = form["txtSRTitle"].ToString();
+                tmpWork.WEIGHT = Convert.ToInt32(form["ddlWeight"]);
+                tmpWork.STATUS = form["ddlStatus"].ToString();
+                tmpWork.SR_NO = form["txtSRNo"].ToString();
+                tmpWork.SR_TITLE = form["txtSRTitle"].ToString();
 
-                tmpWork.Fac = form["txtFac"].ToString();
-                tmpWork.Oper = form["txtOper"].ToString();
-                tmpWork.Cust3 = form["txtCust3"].ToString();
+                tmpWork.FAC = form["txtFac"].ToString();
+                tmpWork.OPER = form["txtOper"].ToString();
+                tmpWork.CUST3 = form["txtCust3"].ToString();
 
-                tmpWork.DateIssue = form["txtIssueDate"].ToString();
-                tmpWork.DateDue = form["txtDueDate"].ToString();
-                tmpWork.DateStart = form["txtStartDate"].ToString();
-                tmpWork.DateEnd = form["txtEndDate"].ToString();
-                tmpWork.DateClose = form["txtCloseDate"].ToString();
+                tmpWork.ISSUE_DATE = form["txtIssueDate"].ToString();
+                tmpWork.DUE_DATE = form["txtDueDate"].ToString();
+                tmpWork.START_DATE = form["txtStartDate"].ToString();
+                tmpWork.END_DATE = form["txtEndDate"].ToString();
+                tmpWork.CLOSE_DATE = form["txtCloseDate"].ToString();
 
                 string resultMsg = "";
                 if (tmpWork.SaveToDB(out resultMsg) == false)
@@ -370,8 +370,8 @@ namespace PotatoLab.Controllers
                     ViewBag.Message = resultMsg;
                 }
 
-                ViewBag.QueryStart = tmpWork.DateIssue;
-                ViewBag.QueryEnd = tmpWork.DateIssue;
+                ViewBag.QueryStart = tmpWork.ISSUE_DATE;
+                ViewBag.QueryEnd = tmpWork.ISSUE_DATE;
 
                 //To Save
                 //string WorkID = form["txtWorkID"].ToString();
@@ -434,37 +434,41 @@ namespace PotatoLab.Controllers
 
         public string GetWorkData(string workID)
         {
+            //PotatoLab.MESWork tmpWork = PotatoLab.MESWork.GetWorkData(workID);
+            //string jsonString = JsonSerializer.Serialize(tmpWork);
+            //return jsonString;
+
             PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WorkID = workID;
-            tmpWork.WorkName = "hk4g4";
-            tmpWork.WorkDetail = "WORKDETAIL";
-            tmpWork.WorkNote = "WORKDETAILsss1";
-            tmpWork.NoteIT = "WORKDEssTAILsss2";
-            tmpWork.Benefit = "BENFIT";
+            tmpWork.WORK_ID = workID;
+            tmpWork.WORK_NAME = "hk4g4";
+            tmpWork.WORK_DETAIL = "WORKDETAIL";
+            tmpWork.WORK_NOTE = "WORKDETAILsss1";
+            tmpWork.IT_NOTE = "WORKDEssTAILsss2";
+            tmpWork.BENEFIT = "BENFIT";
 
-            tmpWork.ITOwner = "C2043";
-            tmpWork.User1 = "C12112";
-            tmpWork.User2 = "C12113";
+            tmpWork.IT_OWNER = "C2043";
+            tmpWork.USER1 = "C12112";
+            tmpWork.USER2 = "C12113";
 
-            tmpWork.Type1 = "課程認證";
-            tmpWork.Type2 = "T2";
-            tmpWork.Type3 = "T3";
-            tmpWork.Weight = 1;
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "T2";
+            tmpWork.TYPE3 = "T3";
+            tmpWork.WEIGHT = 1;
 
-            tmpWork.Status = "Wait-Assign";
-            tmpWork.SRNo = "sr_no";
-            tmpWork.SRTitle = "SRTITLE";
-            tmpWork.SRLink = "http://";
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "sr_no";
+            tmpWork.SR_TITLE = "SRTITLE";
+            tmpWork.SR_LINK = "http://";
 
-            tmpWork.Fac = "ASE07";
-            tmpWork.Oper = "3800";
-            tmpWork.Cust3 = "MVL";
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
 
-            tmpWork.DateIssue = "2019-01-01";
-            tmpWork.DateStart = "2019-01-02";
-            tmpWork.DateEnd = "2019-01-03";
-            tmpWork.DateDue = "2019-01-04";
-            tmpWork.DateClose = "2019-01-05";
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
 
 
             string jsonString = JsonSerializer.Serialize(tmpWork);
@@ -489,62 +493,62 @@ namespace PotatoLab.Controllers
         {
             List<PotatoLab.MESWork> xx = new List<MESWork>();
             PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WorkID = "001";
-            tmpWork.WorkName = "hk4g4";
-            tmpWork.WorkDetail = "WORKDETAIL";
-            tmpWork.Benefit = "BENFIT";
+            tmpWork.WORK_ID = "001";
+            tmpWork.WORK_NAME = "hk4g4";
+            tmpWork.WORK_DETAIL = "WORKDETAIL";
+            tmpWork.BENEFIT = "BENFIT";
 
-            tmpWork.ITOwner = "C2043";
-            tmpWork.User1 = "C12112";
-            tmpWork.User2 = "C12113";
+            tmpWork.IT_OWNER = "C2043";
+            tmpWork.USER1 = "C12112";
+            tmpWork.USER2 = "C12113";
 
-            tmpWork.Type1 = "課程認證";
-            tmpWork.Type2 = "T2";
-            tmpWork.Type3 = "T3";
-            tmpWork.Weight = 1;
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "T2";
+            tmpWork.TYPE3 = "T3";
+            tmpWork.WEIGHT = 1;
 
-            tmpWork.Status = "Wait-Assign";
-            tmpWork.SRNo = "sr_no";
-            tmpWork.SRTitle = "SRTITLE";
-            tmpWork.SRLink = "http://";
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "sr_no";
+            tmpWork.SR_TITLE = "SRTITLE";
+            tmpWork.SR_LINK = "http://";
 
-            tmpWork.Fac = "ASE07";
-            tmpWork.Oper = "3800";
-            tmpWork.Cust3 = "MVL";
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
 
-            tmpWork.DateIssue = "2019-01-01";
-            tmpWork.DateStart = "2019-01-02";
-            tmpWork.DateEnd = "2019-01-03";
-            tmpWork.DateDue = "2019-01-04";
-            tmpWork.DateClose = "2019-01-05";
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
             xx.Add(tmpWork);
             //----------------------------------
             tmpWork = new MESWork();
-            tmpWork.WorkID = "002";
-            tmpWork.WorkName = "BBBBBBB";
-            tmpWork.SRNo = "sr_002";
+            tmpWork.WORK_ID = "002";
+            tmpWork.WORK_NAME = "BBBBBBB";
+            tmpWork.SR_NO = "sr_002";
             xx.Add(tmpWork);
             //----------------------------------
             tmpWork = new MESWork();
-            tmpWork.WorkID = "003";
-            tmpWork.WorkName = "CCCCCC";
-            tmpWork.SRNo = "sr_003";
+            tmpWork.WORK_ID = "003";
+            tmpWork.WORK_NAME = "CCCCCC";
+            tmpWork.SR_NO = "sr_003";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "004";
-            tmpWork.WorkName = "DDDDDD";
-            tmpWork.SRNo = "sr_004";
+            tmpWork.WORK_ID = "004";
+            tmpWork.WORK_NAME = "DDDDDD";
+            tmpWork.SR_NO = "sr_004";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "005";
-            tmpWork.WorkName = "EEEEEEE";
+            tmpWork.WORK_ID = "005";
+            tmpWork.WORK_NAME = "EEEEEEE";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "006";
-            tmpWork.WorkName = "FFFFFF";
+            tmpWork.WORK_ID = "006";
+            tmpWork.WORK_NAME = "FFFFFF";
             xx.Add(tmpWork);
 
             return xx;
@@ -554,62 +558,62 @@ namespace PotatoLab.Controllers
         {
             List<PotatoLab.MESWork> xx = new List<MESWork>();
             PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WorkID = "001";
-            tmpWork.WorkName = "hk4g4";
-            tmpWork.WorkDetail = "WORKDETAIL";
-            tmpWork.Benefit = "BENFIT";
+            tmpWork.WORK_ID = "001";
+            tmpWork.WORK_NAME = "hk4g4";
+            tmpWork.WORK_DETAIL = "WORKDETAIL";
+            tmpWork.BENEFIT = "BENFIT";
 
-            tmpWork.ITOwner = "C2043";
-            tmpWork.User1 = "C12112";
-            tmpWork.User2 = "C12113";
+            tmpWork.IT_OWNER = "C2043";
+            tmpWork.USER1 = "C12112";
+            tmpWork.USER2 = "C12113";
 
-            tmpWork.Type1 = "課程認證";
-            tmpWork.Type2 = "T2";
-            tmpWork.Type3 = "T3";
-            tmpWork.Weight = 1;
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "T2";
+            tmpWork.TYPE3 = "T3";
+            tmpWork.WEIGHT = 1;
 
-            tmpWork.Status = "Wait-Assign";
-            tmpWork.SRNo = "sr_no";
-            tmpWork.SRTitle = "SRTITLE";
-            tmpWork.SRLink = "http://";
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "sr_no";
+            tmpWork.SR_TITLE = "SRTITLE";
+            tmpWork.SR_LINK = "http://";
 
-            tmpWork.Fac = "ASE07";
-            tmpWork.Oper = "3800";
-            tmpWork.Cust3 = "MVL";
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
 
-            tmpWork.DateIssue = "2019-01-01";
-            tmpWork.DateStart = "2019-01-02";
-            tmpWork.DateEnd = "2019-01-03";
-            tmpWork.DateDue = "2019-01-04";
-            tmpWork.DateClose = "2019-01-05";
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
             xx.Add(tmpWork);
             //----------------------------------
             tmpWork = new MESWork();
-            tmpWork.WorkID = "002";
-            tmpWork.WorkName = "BBBBBBB";
-            tmpWork.SRNo = "sr_002";
+            tmpWork.WORK_ID = "002";
+            tmpWork.WORK_NAME = "BBBBBBB";
+            tmpWork.SR_NO = "sr_002";
             xx.Add(tmpWork);
             //----------------------------------
             tmpWork = new MESWork();
-            tmpWork.WorkID = "003";
-            tmpWork.WorkName = "CCCCCC";
-            tmpWork.SRNo = "sr_003";
+            tmpWork.WORK_ID = "003";
+            tmpWork.WORK_NAME = "CCCCCC";
+            tmpWork.SR_NO = "sr_003";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "004";
-            tmpWork.WorkName = "DDDDDD";
-            tmpWork.SRNo = "sr_004";
+            tmpWork.WORK_ID = "004";
+            tmpWork.WORK_NAME = "DDDDDD";
+            tmpWork.SR_NO = "sr_004";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "005";
-            tmpWork.WorkName = "EEEEEEE";
+            tmpWork.WORK_ID = "005";
+            tmpWork.WORK_NAME = "EEEEEEE";
             xx.Add(tmpWork);
 
             tmpWork = new MESWork();
-            tmpWork.WorkID = "006";
-            tmpWork.WorkName = "FFFFFF";
+            tmpWork.WORK_ID = "006";
+            tmpWork.WORK_NAME = "FFFFFF";
             xx.Add(tmpWork);
 
             return xx;
@@ -622,14 +626,16 @@ namespace PotatoLab.Controllers
         /// <returns></returns>
         public string GetMatchUser(string query)
         {
+            List<UserFile> tmpUser = BaseLib.QueryUser(query);
             //return "[\"CCC\",\"AAA\"]";
             return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
         }
 
         public string GetMatchCust(string query)
         {
+            //List<CustFile> tmpUser = BaseLib.QueryCust(query);
             //return "[\"CCC\",\"AAA\"]";
-            return "[{\"label\":\"MVL (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+            return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
         }
     }
 }
