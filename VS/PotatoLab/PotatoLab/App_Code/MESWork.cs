@@ -32,8 +32,11 @@ namespace PotatoLab
         public string END_DATE { get; set; }
         public string CLOSE_DATE { get; set; }
         public string IT_OWNER { get; set; }
+        public string IT_OWNER_NAME { get; set; }
         public string USER1 { get; set; }
+        public string USER1_NAME { get; set; }
         public string USER2 { get; set; }
+        public string USER2_NAME { get; set; }
         public string CIM_NOTE { get; set; }
         public string IT_NOTE { get; set; }
         public string BENEFIT { get; set; }
@@ -206,15 +209,50 @@ namespace PotatoLab
         }
 
         //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
-        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight)
+        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string isSR)
         {
             return GetSampleData();
             List<MESWork> result = new List<MESWork>();
             try
             {
+                StringBuilder sb = new StringBuilder();
+
+                if (startDate.Length > 0)
+                    sb.Append(string.Format(" and (DUE_DATE >= '{0}' or CLOSE_DATE >= '{0}') ", startDate));
+                if (endDate.Length > 0)
+                    sb.Append(string.Format(" and (ISSUE_DATE <= '{0}') ", endDate));
+                if (key.Length > 0)
+                    sb.Append(string.Format(" and (upper(WORK_TITLE) like '%{0}%' or upper(WORK_DETAIL) like '%{0}%' or upper(WORK_NOTE) like '%{0}%') ", key));
+                if (userID.Length > 0)
+                    sb.Append(string.Format(" and (IT_OWNER='{0}' or USER1='{0}' or USER2='{0}') ", userID));
+                if (status.Length > 0)
+                    sb.Append(string.Format(" and STATUS in ('{0}') ", status.Replace(",", "','")));
+                if (type1.Length > 0)
+                    sb.Append(string.Format(" and TYPE1 in ('{0}') ", type1.Replace(",", "','")));
+                if (type2.Length > 0)
+                    sb.Append(string.Format(" and TYPE2 like '%{0}%' ", type2));
+                if (type3.Length > 0)
+                    sb.Append(string.Format(" and TYPE3 like '%{0}%' ", type3));
+                if (oper.Length > 0)
+                    sb.Append(string.Format(" and OPER like '%{0}%' ", oper));
+                if (cust3.Length > 0)
+                    sb.Append(string.Format(" and CUST3 like '%{0}%' ", cust3));
+                if (minWeight >= 0)
+                    sb.Append(string.Format(" and WEIGHT >= {0} ", minWeight));
+
+                if(isSR.Length > 0)
+                {
+                    if(isSR=="Y")
+                        sb.Append(" and SR_NO is not null ");
+                    else
+                        sb.Append(" and SR_NO is null ");
+                }
+
+                string sql = "SELECT * FROM fwpdb.MES_WORK_LIST where 1=1";
+                sql += sb.ToString();
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
-                    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST").ToList();
+                    result = db.Query<MESWork>(sql).ToList();
                 }
                 //using (IDbConnection db = new SqlConnection(constr))
                 //{
@@ -239,7 +277,7 @@ namespace PotatoLab
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
                     //db.Execute("SELECT ID FROM fwpdb.MES_WORK_LIST");
-                    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST").ToList();
+                    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST where DUE_DATE < to_char(sysdate+8,'yyyy-mm-dd') and Status not in ('Close')").ToList();
                 }
             }
             catch (Exception ex)

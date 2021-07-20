@@ -194,7 +194,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, "", "", "", "", weight);
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, "", "", "", "", weight, "");
             switch (orderby)
             {
                 case "title":

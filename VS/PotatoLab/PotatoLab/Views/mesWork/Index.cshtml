@@ -618,6 +618,15 @@
             },
             minLength: 2
         });
+        //----------------
+        var type2_src = ["PE", "EE", "QA","IT","LSI","MFG","CIM","TEST","SOX"];
+        $("#txtType2").autocomplete({
+            source: type2_src
+        });
+        var type3_src = ["Marking", "RMS", "Automation", "Repair", "VM", "Packing", "aEDC"];
+        $("#txtType3").autocomplete({
+            source: type3_src
+        });
     </script>
 
     <!-- 日曆元件 -->
