@@ -194,7 +194,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, "", "", "", "", weight, "");
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString());
             switch (orderby)
             {
                 case "title":
@@ -220,6 +220,12 @@ namespace PotatoLab.Controllers
                         resultList = resultList.OrderBy(m => m.DUE_DATE).ToList();
                     else
                         resultList = resultList.OrderByDescending(m => m.DUE_DATE).ToList();
+                    break;
+                case "issue":
+                    if (sort == "asc")
+                        resultList = resultList.OrderBy(m => m.ISSUE_DATE).ToList();
+                    else
+                        resultList = resultList.OrderByDescending(m => m.ISSUE_DATE).ToList();
                     break;
                 case "it":
                     if (sort == "asc")
@@ -281,6 +287,12 @@ namespace PotatoLab.Controllers
             ViewBag.QueryUser = form["txtQueryUser"].ToString();
             ViewBag.QueryKeyWord = form["txtQueryKeyWord"].ToString();
             ViewBag.QueryWeight = form["txtQueryWeight"].ToString();
+
+            ViewBag.QueryType2 = form["txtQueryType2"].ToString();
+            ViewBag.QueryType3 = form["txtQueryType3"].ToString();
+            ViewBag.QuerySRNo = form["txtSRNo"].ToString();
+
+
 
             //分頁
             int currentPage = page < 1 ? 1 : page;
@@ -447,8 +459,11 @@ namespace PotatoLab.Controllers
             tmpWork.BENEFIT = "BENFIT";
 
             tmpWork.IT_OWNER = "C2043";
+            tmpWork.IT_OWNER_NAME = "C2043";
             tmpWork.USER1 = "C12112";
+            tmpWork.USER1_NAME = "C12112";
             tmpWork.USER2 = "C12113";
+            tmpWork.USER2_NAME = "C12113";
 
             tmpWork.TYPE1 = "課程認證";
             tmpWork.TYPE2 = "T2";
@@ -626,16 +641,59 @@ namespace PotatoLab.Controllers
         /// <returns></returns>
         public string GetMatchUser(string query)
         {
-            List<UserFile> tmpUser = BaseLib.QueryUser(query);
-            //return "[\"CCC\",\"AAA\"]";
             return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+
+
+            List<UserFile> tmpUser = BaseLib.QueryUser(query);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            for (int i = 0; i < tmpUser.Count; i++)
+            {
+                if(i>0)
+                    sb.Append(",");
+                sb.Append("{");
+                sb.Append("\"label\":\"");
+                sb.Append(tmpUser[i].NotesID);
+                sb.Append("(");
+                sb.Append(tmpUser[i].CName);
+                sb.Append(")");
+                sb.Append("\",");
+                sb.Append("\"value\":\"");
+                sb.Append(tmpUser[i].ID);
+                sb.Append("\"");
+                sb.Append(")");
+                sb.Append("}");
+            }
+            sb.Append("]");
+            return sb.ToString();
         }
 
         public string GetMatchCust(string query)
         {
-            //List<CustFile> tmpUser = BaseLib.QueryCust(query);
-            //return "[\"CCC\",\"AAA\"]";
             return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+
+            List<CustFile> tmpCust = BaseLib.QueryCust(query);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            for (int i = 0; i < tmpCust.Count; i++)
+            {
+                if (i > 0)
+                    sb.Append(",");
+                sb.Append("{");
+                sb.Append("\"label\":\"");
+                sb.Append(tmpCust[i].Cust3);
+                sb.Append("(");
+                sb.Append(tmpCust[i].CustName);
+                sb.Append(")");
+                sb.Append("\",");
+                sb.Append("\"value\":\"");
+                sb.Append(tmpCust[i].Cust3);
+                sb.Append("\"");
+                sb.Append(")");
+                sb.Append("}");
+            }
+            sb.Append("]");
+            return sb.ToString();
         }
     }
 }

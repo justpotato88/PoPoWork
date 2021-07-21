@@ -55,6 +55,10 @@ namespace PotatoLab
         public string TYPE3 { get; set; }
         public int WEIGHT { get; set; }
 
+        //剩餘天數
+        public int REMAIN_DATE { get; set; }
+        
+
         public bool SaveToFile()
         {
             return true;
@@ -72,7 +76,7 @@ namespace PotatoLab
                 sb.Append(string.Format("WORK_DETAIL='{0}', ", WORK_DETAIL));
                 sb.Append(string.Format("WORK_NOTE='{0}', ", WORK_NOTE));
                 sb.Append(string.Format("STATUS='{0}', ", STATUS));
-                sb.Append(string.Format("SR_NO='{0}', ", SR_NO));
+                sb.Append(string.Format("SR_NO='{0}', ", SR_NO.ToUpper()));
                 sb.Append(string.Format("SR_TITLE='{0}', ", SR_TITLE));
                 sb.Append(string.Format("SR_LINK='{0}', ", SR_LINK));
                 sb.Append(string.Format("ISSUE_DATE='{0}', ", ISSUE_DATE));
@@ -80,15 +84,15 @@ namespace PotatoLab
                 sb.Append(string.Format("START_DATE='{0}', ", START_DATE));
                 sb.Append(string.Format("END_DATE='{0}', ", END_DATE));
                 sb.Append(string.Format("CLOSE_DATE='{0}', ", CLOSE_DATE));
-                sb.Append(string.Format("IT_OWNER='{0}', ", IT_OWNER));
-                sb.Append(string.Format("USER1='{0}', ", USER1));
-                sb.Append(string.Format("USER2='{0}', ", USER2));
+                sb.Append(string.Format("IT_OWNER='{0}', ", IT_OWNER.ToUpper()));
+                sb.Append(string.Format("USER1='{0}', ", USER1.ToUpper()));
+                sb.Append(string.Format("USER2='{0}', ", USER2.ToUpper()));
                 sb.Append(string.Format("CIM_NOTE='{0}', ", CIM_NOTE));
                 sb.Append(string.Format("IT_NOTE='{0}', ", IT_NOTE));
                 sb.Append(string.Format("BENEFIT='{0}', ", BENEFIT));
                 sb.Append(string.Format("FAC='{0}', ", FAC));
                 sb.Append(string.Format("OPER='{0}', ", OPER));
-                sb.Append(string.Format("CUST3='{0}', ", CUST3));
+                sb.Append(string.Format("CUST3='{0}', ", CUST3.ToUpper()));
 
                 sb.Append(string.Format("TYPE1='{0}', ", TYPE1));
                 sb.Append(string.Format("TYPE2='{0}', ", TYPE2));
@@ -209,7 +213,7 @@ namespace PotatoLab
         }
 
         //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
-        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string isSR)
+        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo)
         {
             return GetSampleData();
             List<MESWork> result = new List<MESWork>();
@@ -230,23 +234,17 @@ namespace PotatoLab
                 if (type1.Length > 0)
                     sb.Append(string.Format(" and TYPE1 in ('{0}') ", type1.Replace(",", "','")));
                 if (type2.Length > 0)
-                    sb.Append(string.Format(" and TYPE2 like '%{0}%' ", type2));
+                    sb.Append(string.Format(" and upper(TYPE2) like '%{0}%' ", type2.ToUpper()));
                 if (type3.Length > 0)
-                    sb.Append(string.Format(" and TYPE3 like '%{0}%' ", type3));
+                    sb.Append(string.Format(" and upper(TYPE3) like '%{0}%' ", type3.ToUpper()));
                 if (oper.Length > 0)
                     sb.Append(string.Format(" and OPER like '%{0}%' ", oper));
                 if (cust3.Length > 0)
                     sb.Append(string.Format(" and CUST3 like '%{0}%' ", cust3));
                 if (minWeight >= 0)
                     sb.Append(string.Format(" and WEIGHT >= {0} ", minWeight));
-
-                if(isSR.Length > 0)
-                {
-                    if(isSR=="Y")
-                        sb.Append(" and SR_NO is not null ");
-                    else
-                        sb.Append(" and SR_NO is null ");
-                }
+                if(srNo.Length > 0)
+                    sb.Append(string.Format(" and SR_NO like '{0}%' ", srNo));
 
                 string sql = "SELECT * FROM fwpdb.MES_WORK_LIST where 1=1";
                 sql += sb.ToString();
@@ -297,8 +295,11 @@ namespace PotatoLab
             tmpWork.BENEFIT = "每天要三個人出手，要花1000000元";
 
             tmpWork.IT_OWNER = "Potato";
+            tmpWork.IT_OWNER_NAME = "Potato";
             tmpWork.USER1 = "Abcd Huang";
+            tmpWork.USER1_NAME = "Abcd Huang";
             tmpWork.USER2 = "Jc Lee";
+            tmpWork.USER2_NAME = "Jc Lee";
 
             tmpWork.TYPE1 = "課程認證";
             tmpWork.TYPE2 = "PE";

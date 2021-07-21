@@ -24,6 +24,26 @@
     }
 
 
+    .table2 {
+
+    }
+
+    .table2 th {
+        font-weight:bold;
+        padding: 4px;
+        color: #444;
+        text-align: right;
+    }
+
+    .table2 td {
+        font-weight:bold;
+        padding: 4px;
+        color: #26A;
+        text-align: left;
+    }
+
+
+
     input::-webkit-input-placeholder { /* WebKit browsers */
         color: #DDD;
     }
