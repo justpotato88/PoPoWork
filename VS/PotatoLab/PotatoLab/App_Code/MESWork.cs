@@ -72,9 +72,9 @@ namespace PotatoLab
                 StringBuilder sb = new StringBuilder();
                 sb.Append("update fwpdb.MES_WORK_LIST set ");
                 //-------------------------------------
-                sb.Append(string.Format("WORK_NAME='{0}', ", WORK_NAME));
-                sb.Append(string.Format("WORK_DETAIL='{0}', ", WORK_DETAIL));
-                sb.Append(string.Format("WORK_NOTE='{0}', ", WORK_NOTE));
+                sb.Append(string.Format("WORK_NAME='{0}', ", WORK_NAME.Replace("'", "''")));
+                sb.Append(string.Format("WORK_DETAIL='{0}', ", WORK_DETAIL.Replace("'", "''")));
+                sb.Append(string.Format("WORK_NOTE='{0}', ", WORK_NOTE.Replace("'", "''")));
                 sb.Append(string.Format("STATUS='{0}', ", STATUS));
                 sb.Append(string.Format("SR_NO='{0}', ", SR_NO.ToUpper()));
                 sb.Append(string.Format("SR_TITLE='{0}', ", SR_TITLE));
@@ -87,9 +87,9 @@ namespace PotatoLab
                 sb.Append(string.Format("IT_OWNER='{0}', ", IT_OWNER.ToUpper()));
                 sb.Append(string.Format("USER1='{0}', ", USER1.ToUpper()));
                 sb.Append(string.Format("USER2='{0}', ", USER2.ToUpper()));
-                sb.Append(string.Format("CIM_NOTE='{0}', ", CIM_NOTE));
-                sb.Append(string.Format("IT_NOTE='{0}', ", IT_NOTE));
-                sb.Append(string.Format("BENEFIT='{0}', ", BENEFIT));
+                sb.Append(string.Format("CIM_NOTE='{0}', ", CIM_NOTE.Replace("'", "''")));
+                sb.Append(string.Format("IT_NOTE='{0}', ", IT_NOTE.Replace("'", "''")));
+                sb.Append(string.Format("BENEFIT='{0}', ", BENEFIT.Replace("'", "''")));
                 sb.Append(string.Format("FAC='{0}', ", FAC));
                 sb.Append(string.Format("OPER='{0}', ", OPER));
                 sb.Append(string.Format("CUST3='{0}', ", CUST3.ToUpper()));
