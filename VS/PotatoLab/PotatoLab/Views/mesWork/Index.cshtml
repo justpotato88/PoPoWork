@@ -50,12 +50,12 @@
     function showView(workId) {
 
         CallServerFunction("/mesWork/GetWorkData?workID=" + workId, null, loadViewDataComplete);
-        
+
 
         $('#viewPanel').modal('show');
     }
     function loadViewDataComplete(jsonStr) {
-        
+
         var workData = JSON.parse(jsonStr);
         //注意!! workData 物件成員的大小寫要跟C#物件相符!!
         $('#vWorkID').text(workData.WORK_ID);
@@ -151,12 +151,6 @@
 
         //$('#txtITOwner').val(workData.IT_OWNER);
         $('#ddlITOwner').val(workData.IT_OWNER);
-        //for (var i = 0; i < dataSource.length; i++) {
-        //    if (dataSource[i].id == workData.IT_OWNER) {
-        //        $("#txtITOwner").val(dataSource[i].notesID + ' ' + dataSource[i].cName + ' ' + dataSource[i].id);
-        //        break;
-        //    }
-        //}
         $('#txtUser1').val(workData.USER1);
         $('#txtUser2').val(workData.USER2);
 
@@ -168,6 +162,7 @@
         $('#ddlStatus').val(workData.STATUS);
         $('#txtSRNo').val(workData.SR_NO);
         $('#txtSRTitle').val(workData.SR_TITLE);
+        $('#txtSRLink').val(workData.SR_LINK);
 
         $('#txtFac').val(workData.FAC);
         $('#txtOper').val(workData.OPER);
@@ -235,16 +230,16 @@
         </tr>
         <tr>
             <td style="padding-right:5px;">
-                Type1
+                Type2
             </td>
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
                 <table style="padding:0;margin:0;">
                     <tr>
                         <td><input type="text" value="@ViewBag.QueryType1" style="width:80px; height: 25px !important;" id="txtQueryType1" name="txtQueryType1" /></td>
-                        <td style="padding-left:5px;">Type2</td>
+                        <td style="padding-left:5px;">Type3</td>
                         <td><input type="text" value="@ViewBag.QueryType2" style="width:80px; height: 25px !important;" id="txtQueryType2" name="txtQueryType2" /></td>
                         <td style="padding-left:5px;">SR_NO</td>
-                        <td><input type="text" value="@ViewBag.QuerySRNo" style="width:60px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                        <td><input type="text" value="@ViewBag.QuerySRNo" style="width:60px; height: 25px !important;" id="txtQuerySRNo" name="txtQuerySRNo" /></td>
                     </tr>
                 </table>
             </td>
@@ -539,7 +534,7 @@
                                 <tr>
                                     <td><input type="text" value="" style="width: 150px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">URL</th>
-                                    <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtStartDate" name="txtSRURL" /></td>
+                                    <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtSRLink" name="txtSRLink" /></td>
                                 </tr>
                             </table>
                         </td>
@@ -576,6 +571,18 @@
                         </td>
                     </tr>
                 </table>
+                <input type="hidden" id="t_pageIndex" name="t_pageIndex" value="@ViewBag.PageIndex" />
+                <input type="hidden" id="t_orderBy" name="t_orderBy" value="@ViewBag.OrderBy" />
+                <input type="hidden" id="t_sort" name="t_sort" value="@ViewBag.Sort" />
+
+                <input type="hidden" id="t_QueryStartDate" name="t_QueryStartDate" value="@ViewBag.QueryStart" />
+                <input type="hidden" id="t_QueryEndDate" name="t_QueryEndDate" value="@ViewBag.QueryEnd" />
+                <input type="hidden" id="t_QueryUser" name="t_QueryUser" value="@ViewBag.QueryUser" />
+                <input type="hidden" id="t_QueryKeyWord" name="t_QueryKeyWord" value="@ViewBag.QueryKeyWord" />
+                <input type="hidden" id="t_QueryWeight" name="t_QueryWeight" value="@ViewBag.QueryWeight" />
+
+
+
             </form>
         </div>
     </div>

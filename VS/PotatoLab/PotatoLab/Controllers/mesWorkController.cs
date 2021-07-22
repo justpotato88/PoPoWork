@@ -194,7 +194,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryUser"].ToString(), form["txtQueryKeyWord"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString());
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString());
             switch (orderby)
             {
                 case "title":
@@ -313,26 +313,26 @@ namespace PotatoLab.Controllers
             return View();
         }
 
-        // GET: mesWorkController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: mesWorkController/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        // POST: mesWorkController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// POST: mesWorkController/Create
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         //// GET: mesWorkController/Edit/5
         //public ActionResult Edit(int id)
@@ -353,7 +353,7 @@ namespace PotatoLab.Controllers
                 tmpWork.WORK_DETAIL = form["txtWorkDetail"].ToString();
                 tmpWork.BENEFIT = form["txtBenefit"].ToString();
 
-                tmpWork.IT_OWNER = form["txtITOwner"].ToString();
+                tmpWork.IT_OWNER = form["ddlITOwner"].ToString();
                 tmpWork.USER1 = form["txtUser1"].ToString();
                 tmpWork.USER2 = form["txtUser2"].ToString();
 
@@ -365,6 +365,7 @@ namespace PotatoLab.Controllers
                 tmpWork.STATUS = form["ddlStatus"].ToString();
                 tmpWork.SR_NO = form["txtSRNo"].ToString();
                 tmpWork.SR_TITLE = form["txtSRTitle"].ToString();
+                tmpWork.SR_LINK = form["txtSRLink"].ToString();
 
                 tmpWork.FAC = form["txtFac"].ToString();
                 tmpWork.OPER = form["txtOper"].ToString();
@@ -385,41 +386,12 @@ namespace PotatoLab.Controllers
                 ViewBag.QueryStart = tmpWork.ISSUE_DATE;
                 ViewBag.QueryEnd = tmpWork.ISSUE_DATE;
 
-                //To Save
-                //string WorkID = form["txtWorkID"].ToString();
-                //string WorkName = form["txtWorkName"].ToString();
-                //string WorkDetail = form["txtWorkDetail"].ToString();
-                //string Benefit = form["txtBenefit"].ToString();
 
-                //string ITOwner = form["txtITOwner"].ToString();
-                //string User1 = form["txtUser1"].ToString();
-                //string User2 = form["txtUser2"].ToString();
-
-                //string Type1 = form["ddlType1"].ToString();
-                //string Type2 = form["txtType2"].ToString();
-                //string Type3 = form["txtType3"].ToString();
-
-                //string Weight = form["ddlWeight"].ToString();
-                //string Status = form["ddlStatus"].ToString();
-                //string SRNo = form["txtSRNo"].ToString();
-                //string SRTitle = form["txtSRTitle"].ToString();
-
-                //string Fac = form["txtFac"].ToString();
-                //string Oper = form["txtOper"].ToString();
-                //string Cust3 = form["txtCust3"].ToString();
-
-                //string IssueDate = form["txtIssueDate"].ToString();
-                //string DueDate = form["txtDueDate"].ToString();
-                //string StartDate = form["txtStartDate"].ToString();
-                //string EndDate = form["txtEndDate"].ToString();
-                //string CloseDate = form["txtCloseDate"].ToString();
-
-                //string a = txtWorkID;
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
