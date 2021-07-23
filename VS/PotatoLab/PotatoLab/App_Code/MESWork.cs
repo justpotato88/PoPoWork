@@ -1,8 +1,9 @@
-﻿using Dapper;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Dapper;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -124,12 +125,12 @@ namespace PotatoLab
                 sb.Append("WEIGHT ");
                 sb.Append(") values(");
                 sb.Append(string.Format("'{0}', ", WORK_ID));
-                sb.Append(string.Format("'{0}', ", WORK_NAME)); sb.Append(string.Format("'{0}', ", WORK_DETAIL)); sb.Append(string.Format("'{0}', ", WORK_NOTE));
+                sb.Append(string.Format("'{0}', ", WORK_NAME.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_DETAIL.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_NOTE.Replace("'", "''")));
                 sb.Append(string.Format("'{0}', ", STATUS));
                 sb.Append(string.Format("'{0}', ", SR_NO)); sb.Append(string.Format("'{0}', ", SR_TITLE)); sb.Append(string.Format("'{0}', ", SR_LINK));
                 sb.Append(string.Format("'{0}', ", ISSUE_DATE)); sb.Append(string.Format("'{0}', ", DUE_DATE)); sb.Append(string.Format("'{0}', ", START_DATE)); sb.Append(string.Format("'{0}', ", END_DATE)); sb.Append(string.Format("'{0}', ", CLOSE_DATE));
                 sb.Append(string.Format("'{0}', ", IT_OWNER)); sb.Append(string.Format("'{0}', ", USER1)); sb.Append(string.Format("'{0}', ", USER2));
-                sb.Append(string.Format("'{0}', ", CIM_NOTE)); sb.Append(string.Format("'{0}', ", IT_NOTE)); sb.Append(string.Format("'{0}', ", BENEFIT));
+                sb.Append(string.Format("'{0}', ", CIM_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", IT_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", BENEFIT.Replace("'", "''")));
                 sb.Append(string.Format("'{0}', ", FAC)); sb.Append(string.Format("'{0}', ", OPER)); sb.Append(string.Format("'{0}', ", CUST3));
                 sb.Append(string.Format("'{0}', ", TYPE1)); sb.Append(string.Format("'{0}', ", TYPE2)); sb.Append(string.Format("'{0}', ", TYPE3));
                 sb.Append(string.Format("'{0}' ", WEIGHT));
@@ -246,17 +247,16 @@ namespace PotatoLab
                 if(srNo.Length > 0)
                     sb.Append(string.Format(" and SR_NO like '{0}%' ", srNo));
 
-                string sql = "SELECT * FROM fwpdb.MES_WORK_LIST where 1=1";
+                string sql = @"SELECT a.* 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME
+                               FROM fwpdb.MES_WORK_LIST a where 1=1";
                 sql += sb.ToString();
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
                     result = db.Query<MESWork>(sql).ToList();
                 }
-                //using (IDbConnection db = new SqlConnection(constr))
-                //{
-                //    //db.Execute("SELECT * FROM fwpdb.MES_WORK_LIST");
-                //    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST").ToList();
-                //}
             }
             catch (Exception ex)
             {
@@ -271,12 +271,20 @@ namespace PotatoLab
             List<MESWork> result = new List<MESWork>();
             try
             {
-
+                string sql = @"SELECT a.* 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME
+                               FROM fwpdb.MES_WORK_LIST a where DUE_DATE < to_char(sysdate+14,'yyyy-mm-dd') and Status not in ('Close')";
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
-                    //db.Execute("SELECT ID FROM fwpdb.MES_WORK_LIST");
-                    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST where DUE_DATE < to_char(sysdate+8,'yyyy-mm-dd') and Status not in ('Close')").ToList();
+                    result = db.Query<MESWork>(sql).ToList();
                 }
+                //using (IDbConnection db = DB.PDB.GetConnection())
+                //{
+                //    //db.Execute("SELECT ID FROM fwpdb.MES_WORK_LIST");
+                //    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST where DUE_DATE < to_char(sysdate+8,'yyyy-mm-dd') and Status not in ('Close')").ToList();
+                //}
             }
             catch (Exception ex)
             {

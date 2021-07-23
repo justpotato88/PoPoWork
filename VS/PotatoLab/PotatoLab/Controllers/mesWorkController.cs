@@ -633,7 +633,6 @@ namespace PotatoLab.Controllers
                 sb.Append("\"value\":\"");
                 sb.Append(tmpUser[i].ID);
                 sb.Append("\"");
-                sb.Append(")");
                 sb.Append("}");
             }
             sb.Append("]");
@@ -661,7 +660,6 @@ namespace PotatoLab.Controllers
                 sb.Append("\"value\":\"");
                 sb.Append(tmpCust[i].Cust3);
                 sb.Append("\"");
-                sb.Append(")");
                 sb.Append("}");
             }
             sb.Append("]");
