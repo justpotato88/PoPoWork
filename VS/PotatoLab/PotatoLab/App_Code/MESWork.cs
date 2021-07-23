@@ -21,26 +21,37 @@ namespace PotatoLab
 
         public string WORK_ID { get; set; }
         public string WORK_NAME { get; set; }
-        public string WORK_DETAIL { get; set; }
-        public string WORK_NOTE { get; set; }
+        private string _workDetail = "";
+        public string WORK_DETAIL { get { return _workDetail ?? ""; } set { _workDetail = value; } }
+        private string _workNote = "";
+        public string WORK_NOTE { get { return _workNote ?? ""; } set { _workNote = value; } }
         public string STATUS { get; set; }
-        public string SR_NO { get; set; }
-        public string SR_TITLE { get; set; }
+        private string _srNo = "";
+        public string SR_NO { get { return _srNo ?? ""; } set { _srNo = value; } }
+        private string _srTitle = "";
+        public string SR_TITLE { get { return _srTitle ?? ""; } set { _srTitle = value; } }
         public string SR_LINK { get; set; }
         public string ISSUE_DATE { get; set; }
         public string DUE_DATE { get; set; }
         public string START_DATE { get; set; }
         public string END_DATE { get; set; }
         public string CLOSE_DATE { get; set; }
-        public string IT_OWNER { get; set; }
+        private string _itOwner = "";
+        public string IT_OWNER { get { return _itOwner ?? ""; } set { _itOwner = value; } }
         public string IT_OWNER_NAME { get; set; }
-        public string USER1 { get; set; }
+        private string _itUser1 = "";
+        public string USER1 { get { return _itUser1 ?? ""; } set { _itUser1 = value; } }
         public string USER1_NAME { get; set; }
-        public string USER2 { get; set; }
+        private string _itUser2 = "";
+        public string USER2 { get { return _itUser2 ?? ""; } set { _itUser2 = value; } }
         public string USER2_NAME { get; set; }
-        public string CIM_NOTE { get; set; }
-        public string IT_NOTE { get; set; }
-        public string BENEFIT { get; set; }
+        
+        private string _itNote = "";
+        public string IT_NOTE { get { return _itNote ?? ""; } set { _itNote = value; } }
+        private string _cimNote = "";
+        public string CIM_NOTE { get { return _cimNote ?? ""; } set { _cimNote = value; } }
+        private string _benefit = "";
+        public string BENEFIT { get { return _benefit ?? ""; } set { _benefit = value; } }
         public string FAC { get; set; }
         public string OPER { get; set; }
         public string CUST3 { get; set; }
@@ -57,7 +68,8 @@ namespace PotatoLab
         public int WEIGHT { get; set; }
 
         //剩餘天數
-        public int REMAIN_DATE { get; set; }
+        private int _remainDay = 1;
+        public int REMAIN_DAY { get; set; }
         
 
         public bool SaveToFile()
@@ -250,7 +262,8 @@ namespace PotatoLab
                 string sql = @"SELECT a.* 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
-                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
+                               round(to_date(nvl(DUE_DATE, to_char(sysdate+1,'yyyy-mm-dd')), 'yyyy-mm-dd')-sysdate) as REMAIN_DAY
                                FROM fwpdb.MES_WORK_LIST a where 1=1";
                 sql += sb.ToString();
                 using (IDbConnection db = DB.PDB.GetConnection())
@@ -274,7 +287,8 @@ namespace PotatoLab
                 string sql = @"SELECT a.* 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
-                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
+                               round(to_date(nvl(DUE_DATE, to_char(sysdate+1,'yyyy-mm-dd')), 'yyyy-mm-dd')-sysdate) as REMAIN_DAY
                                FROM fwpdb.MES_WORK_LIST a where DUE_DATE < to_char(sysdate+14,'yyyy-mm-dd') and Status not in ('Close')";
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
