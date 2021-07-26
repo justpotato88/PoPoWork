@@ -290,7 +290,7 @@ namespace PotatoLab.Controllers
 
             ViewBag.QueryType2 = form["txtQueryType2"].ToString();
             ViewBag.QueryType3 = form["txtQueryType3"].ToString();
-            ViewBag.QuerySRNo = form["txtSRNo"].ToString();
+            ViewBag.QuerySRNo = form["txtQuerySRNo"].ToString();
 
 
 
@@ -351,6 +351,8 @@ namespace PotatoLab.Controllers
                 tmpWork.WORK_ID = form["txtWorkID"].ToString();
                 tmpWork.WORK_NAME = form["txtWorkName"].ToString();
                 tmpWork.WORK_DETAIL = form["txtWorkDetail"].ToString();
+                tmpWork.WORK_NOTE = form["txtWorkNote"].ToString();
+                tmpWork.IT_NOTE = form["txtITNote"].ToString();
                 tmpWork.BENEFIT = form["txtBenefit"].ToString();
 
                 tmpWork.IT_OWNER = form["ddlITOwner"].ToString();

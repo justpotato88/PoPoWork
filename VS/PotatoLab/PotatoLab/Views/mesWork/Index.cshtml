@@ -194,13 +194,36 @@
         var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=@ViewBag.CurrentSort";
         window.location.replace(url);
     }*@
+    function typeSelect(ss) {
+        $('#qType01').prop("checked", ss);
+        $('#qType02').prop("checked", ss);
+        $('#qType03').prop("checked", ss);
+        $('#qType04').prop("checked", ss);
+        $('#qType05').prop("checked", ss);
+        $('#qType06').prop("checked", ss);
+        $('#qType07').prop("checked", ss);
+        $('#qType08').prop("checked", ss);
+        $('#qType09').prop("checked", ss);
+        $('#qType10').prop("checked", ss);
+        $('#qType11').prop("checked", ss);
+        $('#qType12').prop("checked", ss);
+    }
+    function statusSelect(ss) {
+        $('#qStatus01').prop("checked", ss);
+        $('#qStatus02').prop("checked", ss);
+        $('#qStatus03').prop("checked", ss);
+        $('#qStatus04').prop("checked", ss);
+        $('#qStatus05').prop("checked", ss);
+        $('#qStatus06').prop("checked", ss);
+        $('#qStatus07').prop("checked", ss);
+    }
 </script>
 @using (Html.BeginForm("Index", "mesWork", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "MyWorkList" }))
 {
-
+    <input type="hidden" id="actionMode" name="actionMode" value="Query" />
     <table>
         <tr>
-            <td style="padding-right:5px;">狀態</td>
+            <td style="padding-right:5px;font-size:80%;">狀態</td>
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus01" name="qStatus01" @ViewBag.QueryStatus01 value="Survey">Survey</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus02" name="qStatus02" @ViewBag.QueryStatus02 value="Wait-Assign">Wait-Assign</label>
@@ -209,10 +232,11 @@
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus05" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run">Trail-Run</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus06" name="qStatus06" @ViewBag.QueryStatus06 value="Closed">Closed</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus07" name="qStstus07" @ViewBag.QueryStatus07 value="Pending">Pending</label>
+                &nbsp; |<a href="#" onclick="statusSelect(true)">全選</a>|<a href="#" onclick="statusSelect(false)">取消</a>|
             </td>
         </tr>
         <tr>
-            <td style="padding-right:5px;">分類</td>
+            <td style="padding-right:5px;font-size:80%;">分類</td>
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
                 <label style="margin-right:4px;"><input type="checkbox" id="qType01" name="qType01" @ViewBag.QueryType01 value="榮團會">榮團會</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qType02" name="qType02" @ViewBag.QueryType02 value="議題討論">議題討論</label>
@@ -226,10 +250,11 @@
                 <label style="margin-right:4px;"><input type="checkbox" id="qType10" name="qType10" @ViewBag.QueryType10 value="支援協助">支援協助</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qType11" name="qType11" @ViewBag.QueryType11 value="特殊業務">特殊業務</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qType12" name="qType12" @ViewBag.QueryType12 value="系統專家">系統專家</label>
+                &nbsp; |<a href="#" onclick="typeSelect(true)">全選</a>|<a href="#" onclick="typeSelect(false)">取消</a>|
             </td>
         </tr>
         <tr>
-            <td style="padding-right:5px;">
+            <td style="padding-right:5px;font-size:80%;">
                 Type2
             </td>
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
@@ -245,7 +270,7 @@
             </td>
         </tr>
         <tr>
-            <td style="padding-right:5px;">
+            <td style="padding-right:5px;font-size:80%;">
                 時間
             </td>
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
@@ -347,12 +372,21 @@
             //$(item).attr('href', '#').click(function () { postPage(page); });
         });
         function postPage(page) {
+            //$("[name='pageIndex']").val(page);
             $('#pageIndex').val(page);
             $('#MyWorkList').submit();
         };
         //=====((排序))=====
         function sortWork(column) {
 
+
+            //if ($("[name='sort']").val() == "asc")
+            //    $("[name='sort']").val('desc');
+            //else
+            //    $("[name='sort']").val('asc');
+            
+            //$("[name='orderBy']").val(column);
+            //$("[name='orderBy']").submit();
             if ($('#sort').val() == "asc")
                 $('#sort').val('desc');
             else
@@ -382,7 +416,7 @@
 
             <div id="showLoadingForEdit">Loading...</div>
             <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
-            <form method="post" action="mesWork/Edit">
+            <form method="post" action="/mesWork/Index">
                 @Html.AntiForgeryToken()
                 <table id="editUI">
                     <tr onkeypress="return event.keyCode != 13;">
@@ -571,16 +605,42 @@
                         </td>
                     </tr>
                 </table>
-                <input type="hidden" id="t_pageIndex" name="t_pageIndex" value="@ViewBag.PageIndex" />
-                <input type="hidden" id="t_orderBy" name="t_orderBy" value="@ViewBag.OrderBy" />
-                <input type="hidden" id="t_sort" name="t_sort" value="@ViewBag.Sort" />
+                <input type="hidden" id="actionMode" name="actionMode" value="Edit" />
 
-                <input type="hidden" id="t_QueryStartDate" name="t_QueryStartDate" value="@ViewBag.QueryStart" />
-                <input type="hidden" id="t_QueryEndDate" name="t_QueryEndDate" value="@ViewBag.QueryEnd" />
-                <input type="hidden" id="t_QueryUser" name="t_QueryUser" value="@ViewBag.QueryUser" />
-                <input type="hidden" id="t_QueryKeyWord" name="t_QueryKeyWord" value="@ViewBag.QueryKeyWord" />
-                <input type="hidden" id="t_QueryWeight" name="t_QueryWeight" value="@ViewBag.QueryWeight" />
 
+                <input type="hidden" id="txtQueryType1_2" name="txtQueryType1" value="@ViewBag.QueryType1" />
+                <input type="hidden" id="txtQueryType2_2" name="txtQueryType2" value="@ViewBag.QueryType2" />
+                <input type="hidden" id="txtQuerySRNo_2" name="txtQuerySRNo" value="@ViewBag.QuerySRNo" />
+                <input type="hidden" id="txtQueryStartDate_2" name="txtQueryStartDate" value="@ViewBag.QueryStart" />
+                <input type="hidden" id="txtQueryEndDate_2" name="txtQueryEndDate" value="@ViewBag.QueryEnd" />
+                <input type="hidden" id="txtQueryUser_2" name="txtQueryUser" value="@ViewBag.QueryUser" />
+                <input type="hidden" id="txtQueryKeyWord_2" name="txtQueryKeyWord" value="@ViewBag.QueryKeyWord" />
+                <input type="hidden" id="txtQueryWeight_2" name="txtQueryWeight" value="@ViewBag.QueryWeight" />
+
+                <input type="hidden" id="qStatus01_2" name="qStatus01" value="@ViewBag.QueryStatus01" />
+                <input type="hidden" id="qStatus02_2" name="qStatus02" value="@ViewBag.QueryStatus02" />
+                <input type="hidden" id="qStatus03_2" name="qStatus03" value="@ViewBag.QueryStatus03" />
+                <input type="hidden" id="qStatus04_2" name="qStatus04" value="@ViewBag.QueryStatus04" />
+                <input type="hidden" id="qStatus05_2" name="qStatus05" value="@ViewBag.QueryStatus05" />
+                <input type="hidden" id="qStatus06_2" name="qStatus06" value="@ViewBag.QueryStatus06" />
+                <input type="hidden" id="qStatus07_2" name="qStatus07" value="@ViewBag.QueryStatus07" />
+
+                <input type="hidden" id="qType01_2" name="qType01" value="@ViewBag.QueryType01" />
+                <input type="hidden" id="qType02_2" name="qType02" value="@ViewBag.QueryType02" />
+                <input type="hidden" id="qType03_2" name="qType03" value="@ViewBag.QueryType03" />
+                <input type="hidden" id="qType04_2" name="qType04" value="@ViewBag.QueryType04" />
+                <input type="hidden" id="qType05_2" name="qType05" value="@ViewBag.QueryType05" />
+                <input type="hidden" id="qType06_2" name="qType06" value="@ViewBag.QueryType06" />
+                <input type="hidden" id="qType07_2" name="qType07" value="@ViewBag.QueryType07" />
+                <input type="hidden" id="qType08_2" name="qType08" value="@ViewBag.QueryType08" />
+                <input type="hidden" id="qType09_2" name="qType09" value="@ViewBag.QueryType09" />
+                <input type="hidden" id="qType10_2" name="qType10" value="@ViewBag.QueryType10" />
+                <input type="hidden" id="qType11_2" name="qType11" value="@ViewBag.QueryType11" />
+                <input type="hidden" id="qType12_2" name="qType12" value="@ViewBag.QueryType12" />
+
+                <input type="hidden" id="pageIndex_2" name="pageIndex" value="@ViewBag.PageIndex" />
+                <input type="hidden" id="orderBy_2" name="orderBy" value="@ViewBag.OrderBy" />
+                <input type="hidden" id="sort_2" name="sort" value="@ViewBag.Sort" />
 
 
             </form>

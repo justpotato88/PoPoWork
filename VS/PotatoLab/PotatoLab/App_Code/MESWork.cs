@@ -226,7 +226,7 @@ namespace PotatoLab
                 if (endDate.Length > 0)
                     sb.Append(string.Format(" and (ISSUE_DATE <= '{0}') ", endDate));
                 if (key.Length > 0)
-                    sb.Append(string.Format(" and (upper(WORK_TITLE) like '%{0}%' or upper(WORK_DETAIL) like '%{0}%' or upper(WORK_NOTE) like '%{0}%') ", key));
+                    sb.Append(string.Format(" and (upper(WORK_NAME) like '%{0}%' or upper(WORK_DETAIL) like '%{0}%' or upper(WORK_NOTE) like '%{0}%' or upper(IT_NOTE) like '%{0}%') ", key));
                 if (userID.Length > 0)
                     sb.Append(string.Format(" and (IT_OWNER='{0}' or USER1='{0}' or USER2='{0}') ", userID));
                 if (status.Length > 0)
