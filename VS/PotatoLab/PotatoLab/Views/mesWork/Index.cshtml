@@ -152,6 +152,7 @@
 
         //$('#txtITOwner').val(workData.IT_OWNER);
         $('#ddlITOwner').val(workData.IT_OWNER);
+        $('#ddlITOwner option[value=' + workData.IT_OWNER + ']').attr('selected', 'selected');
         $('#txtUser1').val(workData.USER1);
         $('#txtUser2').val(workData.USER2);
 
@@ -195,6 +196,8 @@
         var url = "/mesWork/index?page=@pagedList.PageNumber&orderby=" + column + "&sort=@ViewBag.CurrentSort";
         window.location.replace(url);
     }*@
+
+    //全選 or 全部取消
     function typeSelect(ss) {
         $('#qType01').prop("checked", ss);
         $('#qType02').prop("checked", ss);
@@ -218,7 +221,16 @@
         $('#qStatus06').prop("checked", ss);
         $('#qStatus07').prop("checked", ss);
     }
+
+    function queryUser(userID) {
+        $('#txtQueryUser').val(userID);
+        $('#pageIndex').val(1);
+        $('#MyWorkList').submit();
+    }
 </script>
+
+<!-- ========================================================================================================================= -->
+<!-- (((主畫面))) -->
 @using (Html.BeginForm("Index", "mesWork", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "MyWorkList" }))
 {
     <input type="hidden" id="actionMode" name="actionMode" value="Query" />
@@ -266,6 +278,15 @@
                         <td><input type="text" value="@ViewBag.QueryType2" style="width:80px; height: 25px !important;" id="txtQueryType2" name="txtQueryType2" /></td>
                         <td style="padding-left:5px;">SR_NO</td>
                         <td><input type="text" value="@ViewBag.QuerySRNo" style="width:60px; height: 25px !important;" id="txtQuerySRNo" name="txtQuerySRNo" /></td>
+                        <td style="width:20px;"></td>
+                        <td><input type="checkbox" id="qShowSR" name="qShowSR" @ViewBag.QueryShowSR value="ShowSR">Show SR.AR</td>
+                        <td style="width:40px;"></td>
+                        <td>
+                            | <a href="#" onclick="queryUser('C2043');">Potato</a>
+                            | <a href="#" onclick="queryUser('A22043');">Ben</a>
+                            | <a href="#" onclick="queryUser('C1384');">Gloria</a>
+                            |
+                        </td>
                     </tr>
                 </table>
             </td>
@@ -385,7 +406,7 @@
             //    $("[name='sort']").val('desc');
             //else
             //    $("[name='sort']").val('asc');
-            
+
             //$("[name='orderBy']").val(column);
             //$("[name='orderBy']").submit();
             if ($('#sort').val() == "asc")
@@ -791,7 +812,7 @@
     $("#txtType2").autocomplete({
         source: type2_src
     });
-    var type3_src = ["Marking", "RMS", "Automation", "Repair", "VM", "Packing", "aEDC"];
+    var type3_src = ["Marking", "RMS", "Automation", "Repair", "VM", "Packing", "aEDC", "Carrier", "Tooling"];
     $("#txtType3").autocomplete({
         source: type3_src
     });

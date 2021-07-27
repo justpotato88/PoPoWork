@@ -226,7 +226,7 @@ namespace PotatoLab
         }
 
         //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
-        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo)
+        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo, bool showSR)
         {
             return GetSampleData();
             List<MESWork> result = new List<MESWork>();
@@ -258,6 +258,9 @@ namespace PotatoLab
                     sb.Append(string.Format(" and WEIGHT >= {0} ", minWeight));
                 if(srNo.Length > 0)
                     sb.Append(string.Format(" and SR_NO like '{0}%' ", srNo));
+
+                if(showSR==false)
+                    sb.Append(" and SR_NO is null ");
 
                 string sql = @"SELECT a.* 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 

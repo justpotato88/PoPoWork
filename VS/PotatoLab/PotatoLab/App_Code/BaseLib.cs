@@ -25,6 +25,26 @@ namespace PotatoLab
     {
         public static List<CustFile> QueryCust(string queryKey)
         {
+            //----------------------------------------
+            List<CustFile> test = new List<CustFile>();
+            CustFile tmpCust = new CustFile();
+            tmpCust.CustName = "M.V.L";
+            tmpCust.Cust3 = "MVL";
+            tmpCust.Cust2 = "AA";
+            test.Add(tmpCust);
+            tmpCust = new CustFile();
+            tmpCust.CustName = "T.S.M";
+            tmpCust.Cust3 = "TSM";
+            tmpCust.Cust2 = "AA";
+            test.Add(tmpCust);
+            tmpCust = new CustFile();
+            tmpCust.CustName = "M.T.K";
+            tmpCust.Cust3 = "MTK";
+            tmpCust.Cust2 = "AA";
+            test.Add(tmpCust);
+            return test;
+            //----------------------------------------
+
             List<CustFile> result = new List<CustFile>();
             try
             {
@@ -52,6 +72,26 @@ namespace PotatoLab
 
         public static List<UserFile> QueryUser(string queryKey)
         {
+            //----------------------------------------
+            List<UserFile> test = new List<UserFile>();
+            UserFile tmpCust = new UserFile();
+            tmpCust.ID = "C2043";
+            tmpCust.CName = "黃群凱";
+            tmpCust.NotesID = "Potato_Huang";
+            test.Add(tmpCust);
+            tmpCust = new UserFile();
+            tmpCust.ID = "C1384";
+            tmpCust.CName = "杜靜宜";
+            tmpCust.NotesID = "Gloria_Tu";
+            test.Add(tmpCust);
+            tmpCust = new UserFile();
+            tmpCust.ID = "C9558";
+            tmpCust.CName = "林冠榮";
+            tmpCust.NotesID = "Eden_Lin";
+            test.Add(tmpCust);
+            return test;
+            //----------------------------------------
+
             List<UserFile> result = new List<UserFile>();
             try
             {
