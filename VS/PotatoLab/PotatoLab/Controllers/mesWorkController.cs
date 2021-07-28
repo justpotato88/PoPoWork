@@ -67,6 +67,8 @@ namespace PotatoLab.Controllers
             ViewBag.QueryType09 = "checked";
             ViewBag.QueryType10 = "checked";
 
+            ViewBag.QueryShowSR = "checked";
+
             ViewBag.QueryWeight = 2;
 
             return View();
@@ -183,7 +185,13 @@ namespace PotatoLab.Controllers
                 type += form["qType12"].ToString() + ",";
             }
             type = type.TrimEnd(',');
-
+            //-------------------------------
+            bool showSR = false;
+            if (form["qShowSR"].ToString().Length > 0)
+            {
+                ViewBag.QueryShowSR = "checked";
+                showSR = true;
+            }
             #endregion ----------------------------------------------
 
             int weight = 2;
@@ -194,7 +202,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtQuerySRNo"].ToString());
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString(), showSR);
             switch (orderby)
             {
                 case "title":
@@ -351,6 +359,8 @@ namespace PotatoLab.Controllers
                 tmpWork.WORK_ID = form["txtWorkID"].ToString();
                 tmpWork.WORK_NAME = form["txtWorkName"].ToString();
                 tmpWork.WORK_DETAIL = form["txtWorkDetail"].ToString();
+                tmpWork.WORK_NOTE = form["txtWorkNote"].ToString();
+                tmpWork.IT_NOTE = form["txtITNote"].ToString();
                 tmpWork.BENEFIT = form["txtBenefit"].ToString();
 
                 tmpWork.IT_OWNER = form["ddlITOwner"].ToString();
@@ -613,7 +623,7 @@ namespace PotatoLab.Controllers
         /// <returns></returns>
         public string GetMatchUser(string query)
         {
-            return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+            //return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
 
 
             List<UserFile> tmpUser = BaseLib.QueryUser(query);
@@ -641,7 +651,7 @@ namespace PotatoLab.Controllers
 
         public string GetMatchCust(string query)
         {
-            return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
+            //return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
 
             List<CustFile> tmpCust = BaseLib.QueryCust(query);
             StringBuilder sb = new StringBuilder();

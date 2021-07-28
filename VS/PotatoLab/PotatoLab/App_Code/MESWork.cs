@@ -226,7 +226,7 @@ namespace PotatoLab
         }
 
         //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
-        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo)
+        public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo, bool showSR)
         {
             return GetSampleData();
             List<MESWork> result = new List<MESWork>();
@@ -239,7 +239,7 @@ namespace PotatoLab
                 if (endDate.Length > 0)
                     sb.Append(string.Format(" and (ISSUE_DATE <= '{0}') ", endDate));
                 if (key.Length > 0)
-                    sb.Append(string.Format(" and (upper(WORK_TITLE) like '%{0}%' or upper(WORK_DETAIL) like '%{0}%' or upper(WORK_NOTE) like '%{0}%') ", key));
+                    sb.Append(string.Format(" and (upper(WORK_NAME) like '%{0}%' or upper(WORK_DETAIL) like '%{0}%' or upper(WORK_NOTE) like '%{0}%' or upper(IT_NOTE) like '%{0}%') ", key));
                 if (userID.Length > 0)
                     sb.Append(string.Format(" and (IT_OWNER='{0}' or USER1='{0}' or USER2='{0}') ", userID));
                 if (status.Length > 0)
@@ -259,7 +259,10 @@ namespace PotatoLab
                 if(srNo.Length > 0)
                     sb.Append(string.Format(" and SR_NO like '{0}%' ", srNo));
 
-                string sql = @"SELECT a.*, 
+                if(showSR==false)
+                    sb.Append(" and SR_NO is null ");
+
+                string sql = @"SELECT a.* 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
