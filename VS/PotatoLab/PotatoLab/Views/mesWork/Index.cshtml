@@ -29,6 +29,9 @@
 
 
 <script>
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
     function getTodayDate() {
         var fullDate = new Date();
         var yyyy = fullDate.getFullYear();
@@ -51,7 +54,6 @@
 
         CallServerFunction("/mesWork/GetWorkData?workID=" + workId, null, loadViewDataComplete);
 
-
         $('#viewPanel').modal('show');
     }
     function loadViewDataComplete(jsonStr) {
@@ -60,10 +62,10 @@
         //注意!! workData 物件成員的大小寫要跟C#物件相符!!
         $('#vWorkID').text(workData.WORK_ID);
         $('#vWorkName').text(workData.WORK_NAME);
-        $('#vWorkDetail').html(workData.WORK_DETAIL.replace("\n", "<br/>") );
-        $('#vWorkNote').html(workData.WORK_NOTE.replace("\n", "<br/>") );
-        $('#vITNote').html(workData.IT_NOTE.replace("\n", "<br/>") );
-        $('#vBenefit').html(workData.BENEFIT.replace("\n", "<br/>") );
+        $('#vWorkDetail').html(replaceAll(workData.WORK_DETAIL, "\n", "<br/>") );
+        $('#vWorkNote').html(replaceAll(workData.WORK_NOTE, "\n", "<br/>") );
+        $('#vITNote').html(replaceAll(workData.IT_NOTE, "\n", "<br/>"));
+        $('#vBenefit').html(replaceAll(workData.BENEFIT, "\n", "<br/>"));
         $('#vITOwner').text(workData.IT_OWNER_NAME + " (" + workData.IT_OWNER + ")");
         $('#vUser1').text(workData.USER1_NAME + " (" + workData.USER1 + ")");
         $('#vUser2').text(workData.USER2_NAME + " (" + workData.USER2 + ")");
@@ -73,8 +75,13 @@
         $('#vType3').text(workData.TYPE3);
         //$('#vWeight').val(workData.WEIGHT);
         $('#vStatus').text(workData.STATUS);
-        $('#vSRNo').html("<a href='" + workData.SR_LINK + "' target='_blank'>" + workData.SR_NO + "</a>");
-        $('#vSRTitle').text(workData.SR_TITLE);
+
+        if (workData.SR_NO != "") {
+            var srInfo = "<a href='" + workData.SR_LINK + "' target='_blank' style=\"font-weight:bold;color:#99DDFF;\">" + workData.SR_NO + "</a>：" + workData.SR_TITLE;
+            $('#vSR').html(srInfo);
+        }
+        //$('#vSRNo').html("<a href='" + workData.SR_LINK + "' target='_blank'>" + workData.SR_NO + "</a>");
+        //$('#vSRTitle').text(workData.SR_TITLE);
         $('#vFac').text(workData.FAC);
         $('#vOper').text(workData.OPER);
         $('#vCust3').text(workData.CUST3);
@@ -104,30 +111,37 @@
             //var todayStr = Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate();
             //var todayStr = $.datepicker.formatDate('dd M yy', new Date());
             var todayStr = getTodayDate();
-            $('#txtIssueDate').val(todayStr);
-            $('#txtDueDate').val(getDefaultDueDate());
+            
 
             $('#txtWorkID').val('');
             $('#txtWorkName').val('');
             $('#txtWorkNote').val('');
             $('#txtITNote').val('');
-            $('#txtSRNo').val('');
-            $('#txtSRTitle').val('');
-            $('#txtSRLink').val('');
+            $('#txtBenefit').val('');
 
             $('#ddlITOwner').val('');
             $('#txtUser1').val('');
             $('#txtUser2').val('');
 
+            $('#ddlType1').val('榮團會');
+            $('#txtType2').val('');
+            $('#txtType3').val('');
             $('#ddlWeight').val(3);
+
+            $('#ddlStatus').val('Survey');
+            $('#txtSRNo').val('');
+            $('#txtSRTitle').val('');
+            $('#txtSRLink').val('');
 
             $('#txtFac').val('');
             $('#txtOper').val('');
             $('#txtCust3').val('');
 
+            $('#txtIssueDate').val(todayStr);
             $('#txtStartDate').val('');
             $('#txtEndDate').val('');
             $('#txtCloseDate').val('');
+            $('#txtDueDate').val(getDefaultDueDate());
 
             //顯示
             $('#showLoadingForEdit').hide();
@@ -152,7 +166,7 @@
 
         //$('#txtITOwner').val(workData.IT_OWNER);
         $('#ddlITOwner').val(workData.IT_OWNER);
-        $('#ddlITOwner option[value=' + workData.IT_OWNER + ']').attr('selected', 'selected');
+        //$('#ddlITOwner option[value=' + workData.IT_OWNER + ']').attr('selected', 'selected'); 這行會錯誤
         $('#txtUser1').val(workData.USER1);
         $('#txtUser2').val(workData.USER2);
 
@@ -236,21 +250,21 @@
     <input type="hidden" id="actionMode" name="actionMode" value="Query" />
     <table>
         <tr>
-            <td style="padding-right:5px;font-size:80%;">狀態</td>
-            <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
+            <td style="padding-right:5px;font-size:90%;">狀態</td>
+            <td style="font-size: 90%; border-bottom: 2px dotted #CCC;">
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus01" name="qStatus01" @ViewBag.QueryStatus01 value="Survey">Survey</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus02" name="qStatus02" @ViewBag.QueryStatus02 value="Wait-Assign">Wait-Assign</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus03" name="qStatus03" @ViewBag.QueryStatus03 value="OnGoing">OnGoing</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus04" name="qStatus04" @ViewBag.QueryStatus04 value="Testing">Testing</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus05" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run">Trail-Run</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qStatus06" name="qStatus06" @ViewBag.QueryStatus06 value="Closed">Closed</label>
-                <label style="margin-right:4px;"><input type="checkbox" id="qStatus07" name="qStstus07" @ViewBag.QueryStatus07 value="Pending">Pending</label>
+                <label style="margin-right:4px;"><input type="checkbox" id="qStatus07" name="qStatus07" @ViewBag.QueryStatus07 value="Pending">Pending</label>
                 &nbsp; |<a href="#" onclick="statusSelect(true)">全選</a>|<a href="#" onclick="statusSelect(false)">取消</a>|
             </td>
         </tr>
         <tr>
-            <td style="padding-right:5px;font-size:80%;">分類</td>
-            <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
+            <td style="padding-right:5px;font-size:90%;">分類</td>
+            <td style="font-size: 90%; border-bottom: 2px dotted #CCC;">
                 <label style="margin-right:4px;"><input type="checkbox" id="qType01" name="qType01" @ViewBag.QueryType01 value="榮團會">榮團會</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qType02" name="qType02" @ViewBag.QueryType02 value="議題討論">議題討論</label>
                 <label style="margin-right:4px;"><input type="checkbox" id="qType03" name="qType03" @ViewBag.QueryType03 value="程式修改">程式修改</label>
@@ -267,10 +281,10 @@
             </td>
         </tr>
         <tr>
-            <td style="padding-right:5px;font-size:80%;">
+            <td style="padding-right:5px;font-size:90%;">
                 Type2
             </td>
-            <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
+            <td style="font-size: 90%; border-bottom: 2px dotted #CCC;">
                 <table style="padding:0;margin:0;">
                     <tr>
                         <td><input type="text" value="@ViewBag.QueryType2" style="width:80px; height: 25px !important;" id="txtQueryType2" name="txtQueryType2" /></td>
@@ -322,9 +336,9 @@
         <tr>
             <th>-</th>
             <th onclick="sortWork('issue');" style="cursor: pointer;">Issue</th>
+            <th onclick="sortWork('due');" style="cursor: pointer;">Due</th>
             <th onclick="sortWork('it');" style="cursor: pointer;">IT</th>
             <th onclick="sortWork('title');" style="min-width: 260px; cursor: pointer;">Work Item</th>
-            <th onclick="sortWork('due');" style="cursor: pointer;">Due</th>
             <th onclick="sortWork('status');" style="cursor: pointer;">Status</th>
             <th onclick="sortWork('sr_no');" style="cursor: pointer;">SR No</th>
             <th style="min-width:200px;">Detail</th>
@@ -346,29 +360,20 @@
             <tr>
                 <td><input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WORK_ID'); " /></td>
                 <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ISSUE_DATE)</td>
-                <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.IT_OWNER_NAME)</td>
-                <td>
-                    @if (item.SR_TITLE == "")
-                    {
-                        <b><a href="#" onclick="showView('@item.WORK_ID')">@Html.DisplayFor(modelItem2 => item.WORK_NAME)</a></b>
-                    }
-                    else
-                    {
-                        <b><a href="#" onclick="showView('@item.WORK_ID')">@Html.DisplayFor(modelItem2 => item.WORK_NAME)</a></b> <br><span style="color:#999999;font-size:60%;"> @Html.DisplayFor(modelItem2 => item.SR_TITLE)</span>
-                    }
-                </td>
                 <td style="white-space: nowrap;color:#990000;">@Html.DisplayFor(modelItem2 => item.DUE_DATE)</td>
+                <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.IT_OWNER_NAME)</td>
+                <td><b style="font-size: 100% !important;"><a href="#" onclick="showView('@item.WORK_ID')">@Html.DisplayFor(modelItem2 => item.WORK_NAME)</a></b></td>
                 <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.STATUS)</td>
                 <td style="white-space: nowrap;"><a href="@Html.DisplayFor(modelItem2 => item.SR_LINK)" target="_blank">@Html.DisplayFor(modelItem2 => item.SR_NO)</a></td>
-                <td style="font-size:80% !important;">@Html.Raw(item.WORK_DETAIL)</td>
-                <td style="font-size:80% !important;">@Html.Raw(item.OPER)</td>
-                <td style="font-size:80% !important;">@Html.Raw(item.CUST3)</td>
-                <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.USER1_NAME)</td>
-                <td style="font-size:80% !important;">@Html.DisplayFor(modelItem2 => item.USER2_NAME)</td>
+                <td style="">@Html.Raw(item.WORK_DETAIL)</td>
+                <td style="">@Html.Raw(item.OPER)</td>
+                <td style="">@Html.Raw(item.CUST3)</td>
+                <td style="">@Html.DisplayFor(modelItem2 => item.USER1_NAME)</td>
+                <td style="">@Html.DisplayFor(modelItem2 => item.USER2_NAME)</td>
                 <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE1)</td>
                 <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE2)</td>
                 <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE3)</td>
-                <td style="font-size: 80% !important;">@Html.DisplayFor(modelItem2 => item.BENEFIT)</td>
+                <td style="font-size: 90% !important;">@Html.DisplayFor(modelItem2 => item.BENEFIT)</td>
                 <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WORK_ID'); " /></td>
                 <td style="font-size: xx-small !important;">@Html.DisplayFor(modelItem2 => item.WORK_ID)</td>
             </tr>
@@ -639,31 +644,30 @@
                 <input type="hidden" id="txtQueryKeyWord_2" name="txtQueryKeyWord" value="@ViewBag.QueryKeyWord" />
                 <input type="hidden" id="txtQueryWeight_2" name="txtQueryWeight" value="@ViewBag.QueryWeight" />
 
-                <input type="hidden" id="qStatus01_2" name="qStatus01" value="@ViewBag.QueryStatus01" />
-                <input type="hidden" id="qStatus02_2" name="qStatus02" value="@ViewBag.QueryStatus02" />
-                <input type="hidden" id="qStatus03_2" name="qStatus03" value="@ViewBag.QueryStatus03" />
-                <input type="hidden" id="qStatus04_2" name="qStatus04" value="@ViewBag.QueryStatus04" />
-                <input type="hidden" id="qStatus05_2" name="qStatus05" value="@ViewBag.QueryStatus05" />
-                <input type="hidden" id="qStatus06_2" name="qStatus06" value="@ViewBag.QueryStatus06" />
-                <input type="hidden" id="qStatus07_2" name="qStatus07" value="@ViewBag.QueryStatus07" />
-
-                <input type="hidden" id="qType01_2" name="qType01" value="@ViewBag.QueryType01" />
-                <input type="hidden" id="qType02_2" name="qType02" value="@ViewBag.QueryType02" />
-                <input type="hidden" id="qType03_2" name="qType03" value="@ViewBag.QueryType03" />
-                <input type="hidden" id="qType04_2" name="qType04" value="@ViewBag.QueryType04" />
-                <input type="hidden" id="qType05_2" name="qType05" value="@ViewBag.QueryType05" />
-                <input type="hidden" id="qType06_2" name="qType06" value="@ViewBag.QueryType06" />
-                <input type="hidden" id="qType07_2" name="qType07" value="@ViewBag.QueryType07" />
-                <input type="hidden" id="qType08_2" name="qType08" value="@ViewBag.QueryType08" />
-                <input type="hidden" id="qType09_2" name="qType09" value="@ViewBag.QueryType09" />
-                <input type="hidden" id="qType10_2" name="qType10" value="@ViewBag.QueryType10" />
-                <input type="hidden" id="qType11_2" name="qType11" value="@ViewBag.QueryType11" />
-                <input type="hidden" id="qType12_2" name="qType12" value="@ViewBag.QueryType12" />
+                <input type="checkbox" id="qStatus01_2" name="qStatus01" @ViewBag.QueryStatus01 value="Survey" style="display:none;">
+                <input type="checkbox" id="qStatus02_2" name="qStatus02" @ViewBag.QueryStatus02 value="Wait-Assign" style="display:none;">
+                <input type="checkbox" id="qStatus03_2" name="qStatus03" @ViewBag.QueryStatus03 value="OnGoing" style="display:none;">
+                <input type="checkbox" id="qStatus04_2" name="qStatus04" @ViewBag.QueryStatus04 value="Testing" style="display:none;">
+                <input type="checkbox" id="qStatus05_2" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run" style="display:none;">
+                <input type="checkbox" id="qStatus06_2" name="qStatus06" @ViewBag.QueryStatus06 value="Closed" style="display:none;">
+                <input type="checkbox" id="qStatus07_2" name="qStatus07" @ViewBag.QueryStatus07 value="Pending" style="display:none;">
+               
+                <input type="checkbox" id="qType01_2" name="qType01" @ViewBag.QueryType01 value="榮團會" style="display:none;">
+                <input type="checkbox" id="qType02_2" name="qType02" @ViewBag.QueryType02 value="議題討論" style="display:none;">
+                <input type="checkbox" id="qType03_2" name="qType03" @ViewBag.QueryType03 value="程式修改" style="display:none;">
+                <input type="checkbox" id="qType04_2" name="qType04" @ViewBag.QueryType04 value="資料設定" style="display:none;">
+                <input type="checkbox" id="qType05_2" name="qType05" @ViewBag.QueryType05 value="資料提供" style="display:none;">
+                <input type="checkbox" id="qType06_2" name="qType06" @ViewBag.QueryType06 value="特別任務" style="display:none;">
+                <input type="checkbox" id="qType07_2" name="qType07" @ViewBag.QueryType07 value="課程認證" style="display:none;">
+                <input type="checkbox" id="qType08_2" name="qType08" @ViewBag.QueryType08 value="異常排除" style="display:none;">
+                <input type="checkbox" id="qType09_2" name="qType09" @ViewBag.QueryType09 value="其他" style="display:none;">
+                <input type="checkbox" id="qType10_2" name="qType10" @ViewBag.QueryType10 value="支援協助" style="display:none;">
+                <input type="checkbox" id="qType11_2" name="qType11" @ViewBag.QueryType11 value="特殊業務" style="display:none;">
+                <input type="checkbox" id="qType12_2" name="qType12" @ViewBag.QueryType12 value="系統專家" style="display:none;">
 
                 <input type="hidden" id="pageIndex_2" name="pageIndex" value="@ViewBag.PageIndex" />
                 <input type="hidden" id="orderBy_2" name="orderBy" value="@ViewBag.OrderBy" />
                 <input type="hidden" id="sort_2" name="sort" value="@ViewBag.Sort" />
-
 
             </form>
         </div>
@@ -673,38 +677,35 @@
 <!-- 編輯畫面 End -->
 <!-- 查詢畫面 Start -->
 <div id="viewPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="min-width: 80vw !important;">
+    <div class="modal-dialog modal-lg" style="min-width: 85vw !important;">
         <div class="modal-content" style="padding:30px; background-color:#EEEEEE; color:#555555; font-size:small;">
-            <table border="1">
+            <span id="vWorkName" style="font-weight:bold;font-size:180%;"></span>
+            <table border="1" style="width:100%">
                 <tr>
-                    <td valign="top">
-                        <span id="vWorkName" style="font-weight:bold;font-size:150%;"></span><br>
-                        <span id="vSRNo" style="font-weight:bold;color:#99DDFF;"></span>：<span id="vSRTitle"></span>
-                        <br>&nbsp;<br>
-                        <span id="vWorkDetail"></span>
-                        <br>&nbsp;<br>
-                        <span id="vWorkNote"></span>
-                        <hr>
-                        <span id="vITNote"></span>
-                        <hr>
+                    <td valign="top" style="background-color:#223344;color:#FFFFFF;padding:10px;width:70%;font-size:110%;">
+                        <span id="vSR"></span>
+                        <div id="vWorkDetail" style="border-bottom: 2px #5f5f5f dotted; padding-bottom:6px;"></div>
+                        <div id="vWorkNote" style="border-bottom: 2px #5f5f5f dotted; padding-bottom: 6px;"></div>
+                        <div id="vITNote" style="border-bottom: 2px #5f5f5f dotted; padding-bottom: 6px;"></div>
                         <span id="vBenefit"></span>
                     </td>
-                    <td valign="top">
+                    <td valign="top" style="max-width:200px;">
                         <table class="table2">
                             <tr><th>Status</th><td><span id="vStatus"></span></td></tr>
                             <tr><th>Issue</th><td><span id="vIssueDate"></span></td></tr>
                             <tr><th>Due</th><td><span id="vDueDate"></span></td></tr>
-                            <tr><th>Start</th><td><span id="vStartDate"></span></td></tr>
-                            <tr><th>End</th><td><span id="vEndDate"></span></td></tr>
+                            <tr><th>Work</th><td><span id="vStartDate"></span> ~ <span id="vEndDate"></span></td></tr>
                             <tr><th>Close</th><td><span id="vCloseDate"></span></td></tr>
+                            <tr><td colspan="2" style="background-color:#556677;"></td></tr>
                             <tr><th>Type1</th><td><span id="vType1"></span></td></tr>
                             <tr><th>Type2</th><td><span id="vType2"></span></td></tr>
                             <tr><th>Type3</th><td><span id="vType3"></span></td></tr>
-                            <tr><th>User1</th><td><span id="vUser1"></span></td></tr>
-                            <tr><th>User2</th><td><span id="vUser2"></span></td></tr>
                             <tr><th>Fac</th><td><span id="vFac"></span></td></tr>
                             <tr><th>Oper</th><td><span id="vOper"></span></td></tr>
                             <tr><th>Cust</th><td><span id="vCust3"></span></td></tr>
+                            <tr><td colspan="2" style="background-color:#556677;"></td></tr>
+                            <tr><th>User1</th><td><span id="vUser1"></span></td></tr>
+                            <tr><th>User2</th><td><span id="vUser2"></span></td></tr>
                         </table>
                     </td>
                 </tr>

@@ -77,6 +77,13 @@ namespace PotatoLab.Controllers
         [HttpPost]
         public ActionResult Index(IFormCollection form)
         {
+            if (form["actionMode"].ToString() == "EDIT")
+            {
+                if (Edit(form) == false)
+                    ViewBag.ErrorMessage = "儲存失敗!!";
+            }
+
+
             int page = 1;
             try { page = Convert.ToInt32(form["PageIndex"]); }
             catch { }
@@ -202,7 +209,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString(), showSR);
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtQuerySRNo"].ToString(), showSR);
             switch (orderby)
             {
                 case "title":
@@ -351,7 +358,7 @@ namespace PotatoLab.Controllers
         // POST: mesWorkController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(IFormCollection form)
+        public bool Edit(IFormCollection form)
         {
             try
             {
@@ -396,12 +403,13 @@ namespace PotatoLab.Controllers
                 ViewBag.QueryStart = tmpWork.ISSUE_DATE;
                 ViewBag.QueryEnd = tmpWork.ISSUE_DATE;
 
-
-                return RedirectToAction(nameof(Index));
+                return true;
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return RedirectToAction(nameof(Index));
+                return false;
+                //return RedirectToAction(nameof(Index));
             }
         }
 
@@ -624,7 +632,6 @@ namespace PotatoLab.Controllers
         public string GetMatchUser(string query)
         {
             //return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
-
 
             List<UserFile> tmpUser = BaseLib.QueryUser(query);
             StringBuilder sb = new StringBuilder();

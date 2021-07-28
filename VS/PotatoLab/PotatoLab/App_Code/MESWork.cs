@@ -79,79 +79,96 @@ namespace PotatoLab
         public bool SaveToDB(out string result)
         {
             string sql = "";
+
+            try
+            {
+                if (WORK_ID != "")
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("update fwpdb.MES_WORK_LIST set ");
+                    //-------------------------------------
+                    sb.Append(string.Format("WORK_NAME='{0}', ", WORK_NAME.Replace("'", "''")));
+                    sb.Append(string.Format("WORK_DETAIL='{0}', ", WORK_DETAIL.Replace("'", "''")));
+                    sb.Append(string.Format("WORK_NOTE='{0}', ", WORK_NOTE.Replace("'", "''")));
+                    sb.Append(string.Format("STATUS='{0}', ", STATUS));
+                    sb.Append(string.Format("SR_NO='{0}', ", SR_NO.ToUpper()));
+                    sb.Append(string.Format("SR_TITLE='{0}', ", SR_TITLE));
+                    sb.Append(string.Format("SR_LINK='{0}', ", SR_LINK));
+                    sb.Append(string.Format("ISSUE_DATE='{0}', ", ISSUE_DATE));
+                    sb.Append(string.Format("DUE_DATE='{0}', ", DUE_DATE));
+                    sb.Append(string.Format("START_DATE='{0}', ", START_DATE));
+                    sb.Append(string.Format("END_DATE='{0}', ", END_DATE));
+                    sb.Append(string.Format("CLOSE_DATE='{0}', ", CLOSE_DATE));
+                    sb.Append(string.Format("IT_OWNER='{0}', ", IT_OWNER.ToUpper()));
+                    sb.Append(string.Format("USER1='{0}', ", USER1.ToUpper()));
+                    sb.Append(string.Format("USER2='{0}', ", USER2.ToUpper()));
+                    sb.Append(string.Format("CIM_NOTE='{0}', ", CIM_NOTE.Replace("'", "''")));
+                    sb.Append(string.Format("IT_NOTE='{0}', ", IT_NOTE.Replace("'", "''")));
+                    sb.Append(string.Format("BENEFIT='{0}', ", BENEFIT.Replace("'", "''")));
+                    sb.Append(string.Format("FAC='{0}', ", FAC));
+                    sb.Append(string.Format("OPER='{0}', ", OPER));
+                    sb.Append(string.Format("CUST3='{0}', ", CUST3.ToUpper()));
+
+                    sb.Append(string.Format("TYPE1='{0}', ", TYPE1));
+                    sb.Append(string.Format("TYPE2='{0}', ", TYPE2));
+                    sb.Append(string.Format("TYPE3='{0}', ", TYPE3));
+
+                    sb.Append(string.Format("WEIGHT='{0}' ", WEIGHT));
+                    //-------------------------------------
+                    sb.Append(string.Format("where WORK_ID='{0}'", WORK_ID));
+                    //-------------------------------------
+                    DB.PDB.ExecuteNonQuery(sb.ToString());
+                    result = "OK";
+                }
+                else
+                {
+                    //檢查資料重複
+                    //sql = string.Format("select * from fwpdb.MES_WORK_LIST where SR_NO='{0}'", SR_NO);
+
+                    sql = "select fwpdb.cimseq() from dual";
+                    DataTable seqDT = DB.PDB.GetDataTable(sql);
+                    if (seqDT.Rows.Count > 0)
+                        WORK_ID = seqDT.Rows[0][0].ToString();
+                    else
+                        WORK_ID = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("insert into fwpdb.MES_WORK_LIST(");
+                    sb.Append("WORK_ID, ");
+                    sb.Append("WORK_NAME, WORK_DETAIL, WORK_NOTE, ");
+                    sb.Append("STATUS, ");
+                    sb.Append("SR_NO, SR_TITLE, SR_LINK, ");
+                    sb.Append("ISSUE_DATE, DUE_DATE, START_DATE, END_DATE, CLOSE_DATE, ");
+                    sb.Append("IT_OWNER, USER1, USER2, ");
+                    sb.Append("CIM_NOTE, IT_NOTE, BENEFIT, ");
+                    sb.Append("FAC, OPER, CUST3, ");
+                    sb.Append("TYPE1, TYPE2, TYPE3, ");
+                    sb.Append("WEIGHT ");
+                    sb.Append(") values(");
+                    sb.Append(string.Format("'{0}', ", WORK_ID));
+                    sb.Append(string.Format("'{0}', ", WORK_NAME.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_DETAIL.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_NOTE.Replace("'", "''")));
+                    sb.Append(string.Format("'{0}', ", STATUS));
+                    sb.Append(string.Format("'{0}', ", SR_NO)); sb.Append(string.Format("'{0}', ", SR_TITLE)); sb.Append(string.Format("'{0}', ", SR_LINK));
+                    sb.Append(string.Format("'{0}', ", ISSUE_DATE)); sb.Append(string.Format("'{0}', ", DUE_DATE)); sb.Append(string.Format("'{0}', ", START_DATE)); sb.Append(string.Format("'{0}', ", END_DATE)); sb.Append(string.Format("'{0}', ", CLOSE_DATE));
+                    sb.Append(string.Format("'{0}', ", IT_OWNER)); sb.Append(string.Format("'{0}', ", USER1)); sb.Append(string.Format("'{0}', ", USER2));
+                    sb.Append(string.Format("'{0}', ", CIM_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", IT_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", BENEFIT.Replace("'", "''")));
+                    sb.Append(string.Format("'{0}', ", FAC)); sb.Append(string.Format("'{0}', ", OPER)); sb.Append(string.Format("'{0}', ", CUST3));
+                    sb.Append(string.Format("'{0}', ", TYPE1)); sb.Append(string.Format("'{0}', ", TYPE2)); sb.Append(string.Format("'{0}', ", TYPE3));
+                    sb.Append(string.Format("'{0}' ", WEIGHT));
+                    sb.Append(")");
+                    //-------------------------------------
+                    DB.PDB.ExecuteNonQuery(sb.ToString());
+                    result = "OK";
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                return false;
+            }
             
-            if (WORK_ID != "")
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("update fwpdb.MES_WORK_LIST set ");
-                //-------------------------------------
-                sb.Append(string.Format("WORK_NAME='{0}', ", WORK_NAME.Replace("'", "''")));
-                sb.Append(string.Format("WORK_DETAIL='{0}', ", WORK_DETAIL.Replace("'", "''")));
-                sb.Append(string.Format("WORK_NOTE='{0}', ", WORK_NOTE.Replace("'", "''")));
-                sb.Append(string.Format("STATUS='{0}', ", STATUS));
-                sb.Append(string.Format("SR_NO='{0}', ", SR_NO.ToUpper()));
-                sb.Append(string.Format("SR_TITLE='{0}', ", SR_TITLE));
-                sb.Append(string.Format("SR_LINK='{0}', ", SR_LINK));
-                sb.Append(string.Format("ISSUE_DATE='{0}', ", ISSUE_DATE));
-                sb.Append(string.Format("DUE_DATE='{0}', ", DUE_DATE));
-                sb.Append(string.Format("START_DATE='{0}', ", START_DATE));
-                sb.Append(string.Format("END_DATE='{0}', ", END_DATE));
-                sb.Append(string.Format("CLOSE_DATE='{0}', ", CLOSE_DATE));
-                sb.Append(string.Format("IT_OWNER='{0}', ", IT_OWNER.ToUpper()));
-                sb.Append(string.Format("USER1='{0}', ", USER1.ToUpper()));
-                sb.Append(string.Format("USER2='{0}', ", USER2.ToUpper()));
-                sb.Append(string.Format("CIM_NOTE='{0}', ", CIM_NOTE.Replace("'", "''")));
-                sb.Append(string.Format("IT_NOTE='{0}', ", IT_NOTE.Replace("'", "''")));
-                sb.Append(string.Format("BENEFIT='{0}', ", BENEFIT.Replace("'", "''")));
-                sb.Append(string.Format("FAC='{0}', ", FAC));
-                sb.Append(string.Format("OPER='{0}', ", OPER));
-                sb.Append(string.Format("CUST3='{0}', ", CUST3.ToUpper()));
-
-                sb.Append(string.Format("TYPE1='{0}', ", TYPE1));
-                sb.Append(string.Format("TYPE2='{0}', ", TYPE2));
-                sb.Append(string.Format("TYPE3='{0}', ", TYPE3));
-
-                sb.Append(string.Format("WEIGHT='{0}' ", WEIGHT));
-                //-------------------------------------
-                sb.Append(string.Format("where WORK_ID='{0}'", WORK_ID));
-                //-------------------------------------
-                DB.PDB.ExecuteNonQuery(sb.ToString());
-                result = "OK";
-            }
-            else
-            {
-                //檢查資料重複
-                sql = string.Format("select * from fwpdb.MES_WORK_LIST where SR_NO='{0}'", SR_NO);
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("insert into fwpdb.MES_WORK_LIST(");
-                sb.Append("WORK_ID, ");
-                sb.Append("WORK_NAME, WORK_DETAIL, WORK_NOTE, ");
-                sb.Append("STATUS, ");
-                sb.Append("SR_NO, SR_TITLE, SR_LINK, ");
-                sb.Append("ISSUE_DATE, DUE_DATE, START_DATE, END_DATE, CLOSE_DATE, ");
-                sb.Append("IT_OWNER, USER1, USER2, ");
-                sb.Append("CIM_NOTE, IT_NOTE, BENEFIT, ");
-                sb.Append("FAC, OPER, CUST3, ");
-                sb.Append("TYPE1, TYPE2, TYPE3, ");
-                sb.Append("WEIGHT ");
-                sb.Append(") values(");
-                sb.Append(string.Format("'{0}', ", WORK_ID));
-                sb.Append(string.Format("'{0}', ", WORK_NAME.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_DETAIL.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", WORK_NOTE.Replace("'", "''")));
-                sb.Append(string.Format("'{0}', ", STATUS));
-                sb.Append(string.Format("'{0}', ", SR_NO)); sb.Append(string.Format("'{0}', ", SR_TITLE)); sb.Append(string.Format("'{0}', ", SR_LINK));
-                sb.Append(string.Format("'{0}', ", ISSUE_DATE)); sb.Append(string.Format("'{0}', ", DUE_DATE)); sb.Append(string.Format("'{0}', ", START_DATE)); sb.Append(string.Format("'{0}', ", END_DATE)); sb.Append(string.Format("'{0}', ", CLOSE_DATE));
-                sb.Append(string.Format("'{0}', ", IT_OWNER)); sb.Append(string.Format("'{0}', ", USER1)); sb.Append(string.Format("'{0}', ", USER2));
-                sb.Append(string.Format("'{0}', ", CIM_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", IT_NOTE.Replace("'", "''"))); sb.Append(string.Format("'{0}', ", BENEFIT.Replace("'", "''")));
-                sb.Append(string.Format("'{0}', ", FAC)); sb.Append(string.Format("'{0}', ", OPER)); sb.Append(string.Format("'{0}', ", CUST3));
-                sb.Append(string.Format("'{0}', ", TYPE1)); sb.Append(string.Format("'{0}', ", TYPE2)); sb.Append(string.Format("'{0}', ", TYPE3));
-                sb.Append(string.Format("'{0}' ", WEIGHT));
-                sb.Append(")");
-                //-------------------------------------
-                DB.PDB.ExecuteNonQuery(sb.ToString());
-                result = "OK";
-            }
-            return true;
         }
 
         #region 靜態 Function -----------------------------------------------------------------
@@ -262,7 +279,7 @@ namespace PotatoLab
                 if(showSR==false)
                     sb.Append(" and SR_NO is null ");
 
-                string sql = @"SELECT a.* 
+                string sql = @"SELECT a.*, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
