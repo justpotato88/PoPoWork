@@ -194,7 +194,7 @@ namespace PotatoLab.Controllers
             catch { }
             var resultList = new List<MESWork>();
 
-            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtSRNo"].ToString());
+            resultList = MESWork.GetWorkList(form["txtQueryStartDate"].ToString(), form["txtQueryEndDate"].ToString(), form["txtQueryKeyWord"].ToString(), form["txtQueryUser"].ToString(), status, type, form["txtQueryType2"].ToString(), form["txtQueryType3"].ToString(), "", "", weight, form["txtQuerySRNo"].ToString());
             switch (orderby)
             {
                 case "title":
@@ -290,7 +290,7 @@ namespace PotatoLab.Controllers
 
             ViewBag.QueryType2 = form["txtQueryType2"].ToString();
             ViewBag.QueryType3 = form["txtQueryType3"].ToString();
-            ViewBag.QuerySRNo = form["txtSRNo"].ToString();
+            ViewBag.QuerySRNo = form["txtQuerySRNo"].ToString();
 
 
 

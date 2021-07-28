@@ -259,7 +259,7 @@ namespace PotatoLab
                 if(srNo.Length > 0)
                     sb.Append(string.Format(" and SR_NO like '{0}%' ", srNo));
 
-                string sql = @"SELECT a.* 
+                string sql = @"SELECT a.*, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
@@ -284,7 +284,7 @@ namespace PotatoLab
             List<MESWork> result = new List<MESWork>();
             try
             {
-                string sql = @"SELECT a.* 
+                string sql = @"SELECT a.*, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
                                (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,

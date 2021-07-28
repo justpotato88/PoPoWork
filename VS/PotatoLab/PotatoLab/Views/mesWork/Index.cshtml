@@ -60,10 +60,10 @@
         //注意!! workData 物件成員的大小寫要跟C#物件相符!!
         $('#vWorkID').text(workData.WORK_ID);
         $('#vWorkName').text(workData.WORK_NAME);
-        $('#vWorkDetail').html(workData.WORK_DETAIL.replaceAll("\n", "<br/>") );
-        $('#vWorkNote').html(workData.WORK_NOTE.replaceAll("\n", "<br/>") );
-        $('#vITNote').html(workData.IT_NOTE.replaceAll("\n", "<br/>") );
-        $('#vBenefit').html(workData.BENEFIT.replaceAll("\n", "<br/>") );
+        $('#vWorkDetail').html(workData.WORK_DETAIL.replace("\n", "<br/>") );
+        $('#vWorkNote').html(workData.WORK_NOTE.replace("\n", "<br/>") );
+        $('#vITNote').html(workData.IT_NOTE.replace("\n", "<br/>") );
+        $('#vBenefit').html(workData.BENEFIT.replace("\n", "<br/>") );
         $('#vITOwner').text(workData.IT_OWNER_NAME + " (" + workData.IT_OWNER + ")");
         $('#vUser1').text(workData.USER1_NAME + " (" + workData.USER1 + ")");
         $('#vUser2').text(workData.USER2_NAME + " (" + workData.USER2 + ")");
@@ -236,9 +236,9 @@
             <td style="font-size: 80%; border-bottom: 2px dotted #CCC;">
                 <table style="padding:0;margin:0;">
                     <tr>
-                        <td><input type="text" value="@ViewBag.QueryType1" style="width:80px; height: 25px !important;" id="txtQueryType1" name="txtQueryType1" /></td>
-                        <td style="padding-left:5px;">Type3</td>
                         <td><input type="text" value="@ViewBag.QueryType2" style="width:80px; height: 25px !important;" id="txtQueryType2" name="txtQueryType2" /></td>
+                        <td style="padding-left:5px;">Type3</td>
+                        <td><input type="text" value="@ViewBag.QueryType3" style="width:80px; height: 25px !important;" id="txtQueryType3" name="txtQueryType3" /></td>
                         <td style="padding-left:5px;">SR_NO</td>
                         <td><input type="text" value="@ViewBag.QuerySRNo" style="width:60px; height: 25px !important;" id="txtQuerySRNo" name="txtQuerySRNo" /></td>
                     </tr>
