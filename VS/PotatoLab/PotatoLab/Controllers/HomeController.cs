@@ -20,7 +20,6 @@ namespace PotatoLab.Controllers
 
         public IActionResult Index()
         {
-            PotatoLab.MESWork.DapperMapping();
             return View();
         }
 

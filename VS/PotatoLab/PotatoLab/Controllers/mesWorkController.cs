@@ -12,6 +12,7 @@ using X.PagedList;
 using Microsoft.AspNetCore.Hosting;
 //-------------------------
 using System.Text;
+using System.IO;
 
 namespace PotatoLab.Controllers
 {
@@ -33,8 +34,6 @@ namespace PotatoLab.Controllers
         // GET: mesWorkController
         public ActionResult Index(int page=1, string orderby = "due", string sort="asc")
         {
-            
-
             int currentPage = page < 1 ? 1 : page;
             var resultList = MESWork.GetUrgentWorkList(7).OrderBy(m => m.DUE_DATE).ToList();
 
@@ -79,10 +78,22 @@ namespace PotatoLab.Controllers
         [HttpPost]
         public ActionResult Index(IFormCollection form)
         {
+            //存檔
             if (form["actionMode"].ToString() == "EDIT")
             {
-                if (Edit(form) == false)
-                    ViewBag.ErrorMessage = "儲存失敗!!";
+                string result = "";
+                if (Edit(form, out result) == false)
+                    ViewBag.ResultMessage = result;
+            }
+            else if (form["actionMode"].ToString() == "CKEDIT")
+            {
+                string workID = form["ckeditorWorkID"].ToString();
+                string gg = form["myCKEditorContain"].ToString();
+                string path = _hostingEnvironment.WebRootPath + "\\my_ckeditor_files\\" + workID + ".txt";
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, false))
+                {
+                    sw.Write(gg);
+                }
             }
 
 
@@ -310,7 +321,6 @@ namespace PotatoLab.Controllers
             ViewBag.QuerySRNo = form["txtQuerySRNo"].ToString();
 
 
-
             //分頁
             int currentPage = page < 1 ? 1 : page;
             ViewBag.PageList = resultList.ToPagedList(currentPage, 3);
@@ -325,11 +335,11 @@ namespace PotatoLab.Controllers
             return View();
         }
 
-        // GET: mesWorkController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //// GET: mesWorkController/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
 
         //// GET: mesWorkController/Create
         //public ActionResult Create()
@@ -359,10 +369,12 @@ namespace PotatoLab.Controllers
         //}
         //public ActionResult Edit(string txtWorkID, IFormCollection collection)
         // POST: mesWorkController/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Edit(IFormCollection form)
+        public bool Edit(IFormCollection form, out string result)
         {
+            result = "";
             try
             {
                 MESWork tmpWork = new MESWork();
@@ -400,17 +412,16 @@ namespace PotatoLab.Controllers
                 string resultMsg = "";
                 if (tmpWork.SaveToDB(out resultMsg) == false)
                 {
-                    ViewBag.Message = resultMsg;
+                    result = resultMsg;
+                    return false;
                 }
-
-                ViewBag.QueryStart = tmpWork.ISSUE_DATE;
-                ViewBag.QueryEnd = tmpWork.ISSUE_DATE;
-
-                return true;
+                else
+                    return true;
                 //return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
+                result = ex.Message;
                 return false;
                 //return RedirectToAction(nameof(Index));
             }
@@ -439,49 +450,49 @@ namespace PotatoLab.Controllers
 
         public string GetWorkData(string workID)
         {
-            //PotatoLab.MESWork tmpWork = PotatoLab.MESWork.GetWorkData(workID);
-            //string jsonString = JsonSerializer.Serialize(tmpWork);
-            //return jsonString;
-
-            PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WORK_ID = workID;
-            tmpWork.WORK_NAME = "hk4g4";
-            tmpWork.WORK_DETAIL = "WORKDETAIL";
-            tmpWork.WORK_NOTE = "WORKDETAILsss1";
-            tmpWork.IT_NOTE = "WORKDEssTAILsss2";
-            tmpWork.BENEFIT = "BENFIT";
-
-            tmpWork.IT_OWNER = "C2043";
-            tmpWork.IT_OWNER_NAME = "C2043";
-            tmpWork.USER1 = "C12112";
-            tmpWork.USER1_NAME = "C12112";
-            tmpWork.USER2 = "C12113";
-            tmpWork.USER2_NAME = "C12113";
-
-            tmpWork.TYPE1 = "課程認證";
-            tmpWork.TYPE2 = "T2";
-            tmpWork.TYPE3 = "T3";
-            tmpWork.WEIGHT = 1;
-
-            tmpWork.STATUS = "Wait-Assign";
-            tmpWork.SR_NO = "sr_no";
-            tmpWork.SR_TITLE = "SRTITLE";
-            tmpWork.SR_LINK = "http://";
-
-            tmpWork.FAC = "ASE07";
-            tmpWork.OPER = "3800";
-            tmpWork.CUST3 = "MVL";
-
-            tmpWork.ISSUE_DATE = "2019-01-01";
-            tmpWork.START_DATE = "2019-01-02";
-            tmpWork.END_DATE = "2019-01-03";
-            tmpWork.DUE_DATE = "2019-01-04";
-            tmpWork.CLOSE_DATE = "2019-01-05";
-
-
+            PotatoLab.MESWork tmpWork = PotatoLab.MESWork.GetWorkData(workID);
             string jsonString = JsonSerializer.Serialize(tmpWork);
-
             return jsonString;
+
+            //PotatoLab.MESWork tmpWork = new MESWork();
+            //tmpWork.WORK_ID = workID;
+            //tmpWork.WORK_NAME = "hk4g4";
+            //tmpWork.WORK_DETAIL = "WORKDETAIL";
+            //tmpWork.WORK_NOTE = "WORKDETAILsss1";
+            //tmpWork.IT_NOTE = "WORKDEssTAILsss2";
+            //tmpWork.BENEFIT = "BENFIT";
+
+            //tmpWork.IT_OWNER = "C2043";
+            //tmpWork.IT_OWNER_NAME = "C2043";
+            //tmpWork.USER1 = "C12112";
+            //tmpWork.USER1_NAME = "C12112";
+            //tmpWork.USER2 = "C12113";
+            //tmpWork.USER2_NAME = "C12113";
+
+            //tmpWork.TYPE1 = "課程認證";
+            //tmpWork.TYPE2 = "T2";
+            //tmpWork.TYPE3 = "T3";
+            //tmpWork.WEIGHT = 1;
+
+            //tmpWork.STATUS = "Wait-Assign";
+            //tmpWork.SR_NO = "sr_no";
+            //tmpWork.SR_TITLE = "SRTITLE";
+            //tmpWork.SR_LINK = "http://";
+
+            //tmpWork.FAC = "ASE07";
+            //tmpWork.OPER = "3800";
+            //tmpWork.CUST3 = "MVL";
+
+            //tmpWork.ISSUE_DATE = "2019-01-01";
+            //tmpWork.START_DATE = "2019-01-02";
+            //tmpWork.END_DATE = "2019-01-03";
+            //tmpWork.DUE_DATE = "2019-01-04";
+            //tmpWork.CLOSE_DATE = "2019-01-05";
+
+
+            //string jsonString = JsonSerializer.Serialize(tmpWork);
+
+            //return jsonString;
 
             //Date = DateTime.Parse("2019-08-01"),
             //反序略化
@@ -491,140 +502,35 @@ namespace PotatoLab.Controllers
              */
         }
 
+        [HttpPost]
+        public string GetWorkHtml(string workID) 
+        {
+            string result = "";
+            string path = _hostingEnvironment.WebRootPath + "\\my_ckeditor_files\\" + workID + ".txt";
+            try
+            {
+                if(System.IO.File.Exists(path)==false)
+                    return "";
+                System.IO.FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    result = sr.ReadToEnd();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("讀取失敗：({1})：{0}", ex.Message, path);
+            }
+
+            //System.IO.StreamReader sr = new System.IO.StreamReader(path, )
+            //return "AAAAA<br>CCCCC" + workID;
+        }
+
         public string DeleteWork(string workID)
         {
             //return RedirectToAction(nameof(Index));
             return "{\"Result\":\"OK" + workID + "\"}";
-        }
-
-        private List<PotatoLab.MESWork> GetSampleData()
-        {
-            List<PotatoLab.MESWork> xx = new List<MESWork>();
-            PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WORK_ID = "001";
-            tmpWork.WORK_NAME = "hk4g4";
-            tmpWork.WORK_DETAIL = "WORKDETAIL";
-            tmpWork.BENEFIT = "BENFIT";
-
-            tmpWork.IT_OWNER = "C2043";
-            tmpWork.USER1 = "C12112";
-            tmpWork.USER2 = "C12113";
-
-            tmpWork.TYPE1 = "課程認證";
-            tmpWork.TYPE2 = "T2";
-            tmpWork.TYPE3 = "T3";
-            tmpWork.WEIGHT = 1;
-
-            tmpWork.STATUS = "Wait-Assign";
-            tmpWork.SR_NO = "sr_no";
-            tmpWork.SR_TITLE = "SRTITLE";
-            tmpWork.SR_LINK = "http://";
-
-            tmpWork.FAC = "ASE07";
-            tmpWork.OPER = "3800";
-            tmpWork.CUST3 = "MVL";
-
-            tmpWork.ISSUE_DATE = "2019-01-01";
-            tmpWork.START_DATE = "2019-01-02";
-            tmpWork.END_DATE = "2019-01-03";
-            tmpWork.DUE_DATE = "2019-01-04";
-            tmpWork.CLOSE_DATE = "2019-01-05";
-            xx.Add(tmpWork);
-            //----------------------------------
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "002";
-            tmpWork.WORK_NAME = "BBBBBBB";
-            tmpWork.SR_NO = "sr_002";
-            xx.Add(tmpWork);
-            //----------------------------------
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "003";
-            tmpWork.WORK_NAME = "CCCCCC";
-            tmpWork.SR_NO = "sr_003";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "004";
-            tmpWork.WORK_NAME = "DDDDDD";
-            tmpWork.SR_NO = "sr_004";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "005";
-            tmpWork.WORK_NAME = "EEEEEEE";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "006";
-            tmpWork.WORK_NAME = "FFFFFF";
-            xx.Add(tmpWork);
-
-            return xx;
-        }
-
-        private List<PotatoLab.MESWork> GetSampleData(string startDate, string endDate, string key, string userID, string status, string type)
-        {
-            List<PotatoLab.MESWork> xx = new List<MESWork>();
-            PotatoLab.MESWork tmpWork = new MESWork();
-            tmpWork.WORK_ID = "001";
-            tmpWork.WORK_NAME = "hk4g4";
-            tmpWork.WORK_DETAIL = "WORKDETAIL";
-            tmpWork.BENEFIT = "BENFIT";
-
-            tmpWork.IT_OWNER = "C2043";
-            tmpWork.USER1 = "C12112";
-            tmpWork.USER2 = "C12113";
-
-            tmpWork.TYPE1 = "課程認證";
-            tmpWork.TYPE2 = "T2";
-            tmpWork.TYPE3 = "T3";
-            tmpWork.WEIGHT = 1;
-
-            tmpWork.STATUS = "Wait-Assign";
-            tmpWork.SR_NO = "sr_no";
-            tmpWork.SR_TITLE = "SRTITLE";
-            tmpWork.SR_LINK = "http://";
-
-            tmpWork.FAC = "ASE07";
-            tmpWork.OPER = "3800";
-            tmpWork.CUST3 = "MVL";
-
-            tmpWork.ISSUE_DATE = "2019-01-01";
-            tmpWork.START_DATE = "2019-01-02";
-            tmpWork.END_DATE = "2019-01-03";
-            tmpWork.DUE_DATE = "2019-01-04";
-            tmpWork.CLOSE_DATE = "2019-01-05";
-            xx.Add(tmpWork);
-            //----------------------------------
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "002";
-            tmpWork.WORK_NAME = "BBBBBBB";
-            tmpWork.SR_NO = "sr_002";
-            xx.Add(tmpWork);
-            //----------------------------------
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "003";
-            tmpWork.WORK_NAME = "CCCCCC";
-            tmpWork.SR_NO = "sr_003";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "004";
-            tmpWork.WORK_NAME = "DDDDDD";
-            tmpWork.SR_NO = "sr_004";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "005";
-            tmpWork.WORK_NAME = "EEEEEEE";
-            xx.Add(tmpWork);
-
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "006";
-            tmpWork.WORK_NAME = "FFFFFF";
-            xx.Add(tmpWork);
-
-            return xx;
         }
 
         /// <summary>

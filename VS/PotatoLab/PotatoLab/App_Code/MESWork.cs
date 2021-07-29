@@ -17,7 +17,7 @@ namespace PotatoLab
         //--
 
         //const string constr = "Data Source=(local);Initial Catalog=PoPoDB;Integrated Security=true";
-        const string constr = @"server=.\SQLEXPRESS01;Integrated Security=SSPI;database=PoPoDB;";
+        //const string constr = @"server=.\SQLEXPRESS01;Integrated Security=SSPI;database=PoPoDB;";
 
         public string WORK_ID { get; set; }
         public string WORK_NAME { get; set; }
@@ -172,69 +172,52 @@ namespace PotatoLab
         }
 
         #region 靜態 Function -----------------------------------------------------------------
-        
-        public static bool UpdateStatus(string workID, out string result, string status, string startDate, string endDate, string closeDate, string dueDate)
-        {
-            result = "OK";
-            return true;
-        }
 
-        //Note 可以放會議紀錄之類的 itNote 放 SQL
-        public static bool UpdateWorkInfo(string workID, out string result, string workName, string workDetail, string workNote, string itNote)
-        {
-            result = "OK";
-            return true;
-        }
-
-        public static bool UpdateCIMNote(string workID, out string result, string noteText)
-        {
-            result = "OK";
-            return true;
-        }
-
-        public static string ReadTextFile(string filePath)
-        {
-            return "XXXXX";
-        }
-        public static bool SaveTextFile(out string result, string filePath, string saveHtml)
-        {
-            result = "OK";
-            return true;
-        }
         #endregion ----------------------------------------------------------------------------
 
-        public static List<MESWork> DapperMapping()
-        {
-            List<MESWork> result = new List<MESWork>();
-            try
-            {
+        //public static List<MESWork> DapperMapping()
+        //{
+        //    List<MESWork> result = new List<MESWork>();
+        //    try
+        //    {
                 
-                using (IDbConnection db = new SqlConnection(constr))
-                {
-                    db.Execute("SELECT ID FROM dbo.TEST_TABLE");
-                    result = db.Query<MESWork>("SELECT ID FROM dbo.TEST_TABLE").ToList();
-                }
-            }
-            catch(Exception ex) {
-                Console.WriteLine(ex.Message);
-            }
-            return result;
-        }
+        //        using (IDbConnection db = new SqlConnection(constr))
+        //        {
+        //            db.Execute("SELECT ID FROM dbo.TEST_TABLE");
+        //            result = db.Query<MESWork>("SELECT ID FROM dbo.TEST_TABLE").ToList();
+        //        }
+        //    }
+        //    catch(Exception ex) {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return result;
+        //}
 
         public static MESWork GetWorkData(string workID)
         {
+            //===================================================
+            return GetSampleData()[0];
+            //===================================================
+
             List<MESWork> result = new List<MESWork>();
             try
             {
                 using (IDbConnection db = DB.PDB.GetConnection())
                 {
+                    string sql = string.Format(@"SELECT a.*, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.IT_OWNER) as IT_OWNER_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER1) as USER1_NAME, 
+                               (select max(substr(EMAIL, 1, instr(EMAIL,'@')-1)) from fwpdb.hris_hrbank where EMPNO=a.USER2) as USER2_NAME,
+                               round(to_date(nvl(DUE_DATE, to_char(sysdate+1,'yyyy-mm-dd')), 'yyyy-mm-dd')-sysdate) as REMAIN_DAY
+                               FROM fwpdb.MES_WORK_LIST a where WORK_ID='{0}'", workID);
                     //db.Execute("SELECT ID FROM fwpdb.MES_WORK_LIST");
-                    result = db.Query<MESWork>("SELECT * FROM fwpdb.MES_WORK_LIST where WORK_ID='" + workID + "'").ToList();
+                    result = db.Query<MESWork>(sql).ToList();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new Exception(string.Format("Function『MESWork.GetWorkData({1})』Fail：{0}", ex.Message, workID));
+                //Console.WriteLine(ex.Message);
             }
             if (result.Count > 0)
                 return result[0];
@@ -245,7 +228,10 @@ namespace PotatoLab
         //public static List<MESWork> DapperMapping(string startDate, string endDate, string key, string userID, string status, string type)
         public static List<MESWork> GetWorkList(string startDate, string endDate, string key, string userID, string status, string type1, string type2, string type3, string oper, string cust3, int minWeight, string srNo, bool showSR)
         {
+            //===================================================
             return GetSampleData();
+            //===================================================
+
             List<MESWork> result = new List<MESWork>();
             try
             {
@@ -293,14 +279,18 @@ namespace PotatoLab
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new Exception(string.Format("Function『MESWork.GetWorkList(...)』Fail：{0}", ex.Message));
+                //Console.WriteLine(ex.Message);
             }
             return result;
         }
 
         public static List<MESWork> GetUrgentWorkList(int remindDay)
         {
+            //===================================================
             return GetSampleData();
+            //===================================================
+
             List<MESWork> result = new List<MESWork>();
             try
             {
@@ -322,10 +312,12 @@ namespace PotatoLab
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new Exception(string.Format("Function『MESWork.GetUrgentWorkList({1})』Fail：{0}", ex.Message, remindDay));
+                //Console.WriteLine(ex.Message);
             }
             return result;
         }
+
         public static List<MESWork> GetSampleData()
         {
             #region Test -------------------------------
