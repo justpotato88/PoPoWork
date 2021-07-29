@@ -71,6 +71,8 @@ namespace PotatoLab.Controllers
 
             ViewBag.QueryWeight = 2;
 
+            ViewBag.InPost = "N";
+
             return View();
         }
 
@@ -318,6 +320,7 @@ namespace PotatoLab.Controllers
             ViewBag.Sort = sort;
             ViewBag.PageIndex = page;
 
+            ViewBag.InPost = "Y";
 
             return View();
         }
