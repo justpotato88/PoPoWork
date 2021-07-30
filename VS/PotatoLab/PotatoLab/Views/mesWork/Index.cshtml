@@ -335,8 +335,8 @@
                 <!-- 列表 Grid Table Start -->
                 <table class="table1">
                     <tr>
-                        <th>-</th>
                         <th onclick="sortWork('issue');" style="cursor: pointer;">Issue</th>
+                        <th>Modify</th>
                         <th onclick="sortWork('due');" style="cursor: pointer;">Due</th>
                         <th onclick="sortWork('it');" style="cursor: pointer;">IT</th>
                         <th onclick="sortWork('title');" style="min-width: 260px; cursor: pointer;">Work Item</th>
@@ -357,13 +357,20 @@
 
                     @foreach (MESWork item in ViewBag.PageList)
                     {
-                        <tr>
+
+                        var selectedStyle = "";
+                        if (ViewBag.LastEditID == item.WORK_ID)
+                        {
+                            selectedStyle = "background-color:#FFEE00;";
+                        }
+
+                        <tr style="@selectedStyle">
+                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ISSUE_DATE_SHORT)</td>
                             <td style="white-space: nowrap;">
                                 <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px;" value="EDIT" onclick="showEdit('@item.WORK_ID'); " />
-                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px; " value="HTML" onclick="showCKEdit('@item.WORK_ID'); " />    
+                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px; " value="HTML" onclick="showCKEdit('@item.WORK_ID'); " />
                             </td>
-                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ISSUE_DATE)</td>
-                            <td style="white-space: nowrap;color:#990000;">@Html.DisplayFor(modelItem2 => item.DUE_DATE)</td>
+                            <td style="white-space: nowrap;color:#990000;">@Html.DisplayFor(modelItem2 => item.DUE_DATE_SHORT)</td>
                             <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.IT_OWNER_NAME)</td>
                             <td onclick="showView('@item.WORK_ID');" style="cursor: pointer; color:#005599;"><b style="font-size: 100% !important;">@Html.DisplayFor(modelItem2 => item.WORK_NAME)</b></td>
                             <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.STATUS)</td>
@@ -398,7 +405,7 @@
 
 <!-- 編輯畫面 Start -->
 <div id="editPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; ">
         <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
 
             <div id="showLoadingForEdit">Loading...</div>
@@ -507,6 +514,20 @@
                         <th style="padding:5px;">WorkDetail</th>
                         <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
                     </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">客戶</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:200px;" id="txtCust3" name="txtCust3" placeholder="客三碼" /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
+                                    <td><input type="text" value="" style="width:100px;" id="txtOper" name="txtOper" /></td>
+                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
+                                    <td><input type="text" value="" style="width:100px;" id="txtFac" name="txtFac" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                     <tr>
                         <th style="padding:5px;">WorkNote</th>
                         <td style="padding-top:5px;"><textarea id="txtWorkNote" name="txtWorkNote" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
@@ -574,21 +595,6 @@
                         <th style="padding:5px;">Benefit</th>
                         <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" style="width: 60vw; min-width: 500px; white-space: normal !important;" cols="100" rows="5"></textarea></td>
                     </tr>
-                    <tr onkeypress="return event.keyCode != 13;">
-                        <th style="padding:5px;">客戶</th>
-                        <td>
-                            <table style="padding:0;margin:0;">
-                                <tr>
-                                    <td><input type="text" value="" style="width:200px;" id="txtCust3" name="txtCust3" placeholder="客三碼" /></td>
-                                    <th style="white-space: nowrap; padding-left: 10px;">站點</th>
-                                    <td><input type="text" value="" style="width:100px;" id="txtOper" name="txtOper" /></td>
-                                    <th style="white-space: nowrap; padding-left:10px;">廠別</th>
-                                    <td><input type="text" value="" style="width:100px;" id="txtFac" name="txtFac" /></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
 
                     <tr>
                         <td></td>
@@ -754,13 +760,13 @@
 <script src="/lib/ckeditor5-build-classic/webpack.config.js"></script>
 
 <div id="ckEditPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
-        <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; border: 1px #FFF solid; ">
+        <div class="modal-content" style="padding: 30px; background-color: #223344; color: #000; font-size: small; ">
             <form method="post" action="/mesWork/Index">
                 <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" />
-                <hr>
+                <div style="padding-bottom:10px;"><input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" /></div>
+                
                 <textarea id="myCKEditor" name="myCKEditorContain"></textarea>
 
 
@@ -881,10 +887,10 @@
 </div>
 <!-- 查詢畫面 Start -->
 <div id="viewPanel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="min-width: 85vw !important;">
+    <div class="modal-dialog modal-lg" style="min-width: 85vw !important; max-height: 90vh !important; overflow: auto; ">
         <div class="modal-content" style="padding:25px; background-color:#FFFFFF; color:#555555; font-size:small;">
             <span id="vWorkName" style="font-weight:bold;font-size:200%;color:#000;"></span>
-            <table border="1" style="width:100%">
+            <table border="1" style="width: 100%;">
                 <tr>
                     <td valign="top" style="background-color:#223344;color:#FFFFFF;padding:10px;width:70%;font-size:110%;">
                         <div id="vWorkContent"></div>

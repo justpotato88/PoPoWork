@@ -32,7 +32,25 @@ namespace PotatoLab
         public string SR_TITLE { get { return _srTitle ?? ""; } set { _srTitle = value; } }
         public string SR_LINK { get; set; }
         public string ISSUE_DATE { get; set; }
+        public string ISSUE_DATE_SHORT {
+            get {
+                if (ISSUE_DATE.Length > 5)
+                    return ISSUE_DATE.Substring(5);
+                else
+                    return ISSUE_DATE;
+            }
+        }
         public string DUE_DATE { get; set; }
+        public string DUE_DATE_SHORT
+        {
+            get
+            {
+                if (DUE_DATE.Length > 5)
+                    return DUE_DATE.Substring(5);
+                else
+                    return DUE_DATE;
+            }
+        }
         public string START_DATE { get; set; }
         public string END_DATE { get; set; }
         public string CLOSE_DATE { get; set; }
@@ -196,7 +214,7 @@ namespace PotatoLab
         public static MESWork GetWorkData(string workID)
         {
             //===================================================
-            return GetSampleData()[0];
+            return GetSampleData(workID);
             //===================================================
 
             List<MESWork> result = new List<MESWork>();
@@ -318,6 +336,17 @@ namespace PotatoLab
             return result;
         }
 
+
+        public static MESWork GetSampleData(string workID)
+        {
+            List<MESWork> tmpList = GetSampleData();
+            foreach(MESWork tmpWork in tmpList)
+            {
+                if (tmpWork.WORK_ID == workID)
+                    return tmpWork;
+            }
+            return new MESWork();
+        }
         public static List<MESWork> GetSampleData()
         {
             #region Test -------------------------------
@@ -358,31 +387,106 @@ namespace PotatoLab
             //----------------------------------
             tmpWork = new MESWork();
             tmpWork.WORK_ID = "002";
-            tmpWork.WORK_NAME = "BBBBBBB";
-            tmpWork.SR_NO = "sr_002";
+            tmpWork.WORK_NAME = "世界文明崩潰之後 這些國家人類生存機遇大";
+            tmpWork.WORK_DETAIL = "最新一項科學研究顯示，如果世界文明毀滅，南太平洋島國紐西蘭（新西蘭）是人類最有機會存活下來的地方，北大西洋島國英國則排名第五，而多數大陸國家則情況不看好。";
+            tmpWork.BENEFIT = "每天要三個人出手，要花1000000元";
+
+            tmpWork.IT_OWNER = "Potato";
+            tmpWork.IT_OWNER_NAME = "Potato";
+            tmpWork.USER1 = "Abcd Huang";
+            tmpWork.USER1_NAME = "Abcd Huang";
+            tmpWork.USER2 = "Jc Lee";
+            tmpWork.USER2_NAME = "Jc Lee";
+
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "PE";
+            tmpWork.TYPE3 = "RMS";
+            tmpWork.WEIGHT = 1;
+
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "SR-123456875";
+            tmpWork.SR_TITLE = "XD123-SRTITLEssssssssss";
+            tmpWork.SR_LINK = "http://";
+
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
+
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
             xx.Add(tmpWork);
             //----------------------------------
             tmpWork = new MESWork();
             tmpWork.WORK_ID = "003";
-            tmpWork.WORK_NAME = "CCCCCC";
-            tmpWork.SR_NO = "sr_003";
-            xx.Add(tmpWork);
+            tmpWork.WORK_NAME = "氣候變化：IPCC——給地球氣候寫「體檢報告」的國際權威機構";
+            tmpWork.WORK_DETAIL = "氣候變化是今日國際頭等大事之一，全球變暖帶來的各種變化日漸顯著。聯合國提出一個地球變暖的上限 — 氣溫比前工業化時代最多高1.5℃，";
+            tmpWork.BENEFIT = "每天要三個人出手，要花1000000元";
 
+            tmpWork.IT_OWNER = "Potato";
+            tmpWork.IT_OWNER_NAME = "Potato";
+            tmpWork.USER1 = "Abcd Huang";
+            tmpWork.USER1_NAME = "Abcd Huang";
+            tmpWork.USER2 = "Jc Lee";
+            tmpWork.USER2_NAME = "Jc Lee";
+
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "PE";
+            tmpWork.TYPE3 = "RMS";
+            tmpWork.WEIGHT = 1;
+
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "SR-123456875";
+            tmpWork.SR_TITLE = "XD123-SRTITLEssssssssss";
+            tmpWork.SR_LINK = "http://";
+
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
+
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
+            xx.Add(tmpWork);
+            //----------------------------------
             tmpWork = new MESWork();
             tmpWork.WORK_ID = "004";
-            tmpWork.WORK_NAME = "DDDDDD";
-            tmpWork.SR_NO = "sr_004";
-            xx.Add(tmpWork);
+            tmpWork.WORK_NAME = "健康與健身：走步鍛煉未必為人知曉的七大好處";
+            tmpWork.WORK_DETAIL = "走步是最簡單易行的一種運動方式，特別是在大多數活動受到限制的新冠疫情期間，只有外出走步相對自由。";
+            tmpWork.BENEFIT = "每天要三個人出手，要花1000000元";
 
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "005";
-            tmpWork.WORK_NAME = "EEEEEEE";
-            xx.Add(tmpWork);
+            tmpWork.IT_OWNER = "Potato";
+            tmpWork.IT_OWNER_NAME = "Potato";
+            tmpWork.USER1 = "Abcd Huang";
+            tmpWork.USER1_NAME = "Abcd Huang";
+            tmpWork.USER2 = "Jc Lee";
+            tmpWork.USER2_NAME = "Jc Lee";
 
-            tmpWork = new MESWork();
-            tmpWork.WORK_ID = "006";
-            tmpWork.WORK_NAME = "FFFFFF";
+            tmpWork.TYPE1 = "課程認證";
+            tmpWork.TYPE2 = "PE";
+            tmpWork.TYPE3 = "RMS";
+            tmpWork.WEIGHT = 1;
+
+            tmpWork.STATUS = "Wait-Assign";
+            tmpWork.SR_NO = "SR-123456875";
+            tmpWork.SR_TITLE = "XD123-SRTITLEssssssssss";
+            tmpWork.SR_LINK = "http://";
+
+            tmpWork.FAC = "ASE07";
+            tmpWork.OPER = "3800";
+            tmpWork.CUST3 = "MVL";
+
+            tmpWork.ISSUE_DATE = "2019-01-01";
+            tmpWork.START_DATE = "2019-01-02";
+            tmpWork.END_DATE = "2019-01-03";
+            tmpWork.DUE_DATE = "2019-01-04";
+            tmpWork.CLOSE_DATE = "2019-01-05";
             xx.Add(tmpWork);
+            //----------------------------------
 
             return xx;
             #endregion ---------------------------------

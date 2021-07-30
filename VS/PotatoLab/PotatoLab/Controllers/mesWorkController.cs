@@ -82,20 +82,29 @@ namespace PotatoLab.Controllers
             if (form["actionMode"].ToString() == "EDIT")
             {
                 string result = "";
-                if (Edit(form, out result) == false)
+                string workID = "";
+                if (Edit(form, out result, out workID) == false)
                     ViewBag.ResultMessage = result;
+                ViewBag.LastEditID = workID;
             }
             else if (form["actionMode"].ToString() == "CKEDIT")
             {
                 string workID = form["ckeditorWorkID"].ToString();
                 string gg = form["myCKEditorContain"].ToString();
-                string path = _hostingEnvironment.WebRootPath + "\\my_ckeditor_files\\" + workID + ".txt";
-                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, false))
+                try
                 {
-                    sw.Write(gg);
+                    string path = _hostingEnvironment.WebRootPath + "\\my_ckeditor_files\\" + workID + ".txt";
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, false))
+                    {
+                        sw.Write(gg);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    ViewBag.ResultMessage = ex.Message;
+                }
+                ViewBag.LastEditID = workID;
             }
-
 
             int page = 1;
             try { page = Convert.ToInt32(form["PageIndex"]); }
@@ -382,9 +391,10 @@ namespace PotatoLab.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Edit(IFormCollection form, out string result)
+        public bool Edit(IFormCollection form, out string result, out string workID)
         {
             result = "";
+            workID = form["txtWorkID"].ToString();
             try
             {
                 MESWork tmpWork = new MESWork();
@@ -426,7 +436,11 @@ namespace PotatoLab.Controllers
                     return false;
                 }
                 else
+                {
+                    result = "OK";
+                    workID = tmpWork.WORK_ID;
                     return true;
+                }
                 //return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)
