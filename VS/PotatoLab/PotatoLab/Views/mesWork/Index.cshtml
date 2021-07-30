@@ -80,6 +80,7 @@
         $('#qType10').prop("checked", ss);
         $('#qType11').prop("checked", ss);
         $('#qType12').prop("checked", ss);
+        $('#qType13').prop("checked", ss);
     }
     function statusSelect(ss) {
         $('#qStatus01').prop("checked", ss);
@@ -89,13 +90,17 @@
         $('#qStatus05').prop("checked", ss);
         $('#qStatus06').prop("checked", ss);
         $('#qStatus07').prop("checked", ss);
+        if(ss==false)
+            $('#qStatus08').prop("checked", ss);
     }
     //----------------------------------------
     //選取特定條件
     function queryUser(userID) {
         if (userID == "SR") {
             typeSelect(true);
-            $('#txtQuerySRNo').val('SR');
+            $('#qShowSR').prop("checked", true);
+            $('#txtQuerySRNo').val('2');
+            $('#txtQueryWeight').val('0');
             $('#txtQueryUser').val('');
             $('#txtQueryKeyWord').val('');
             $('#txtQueryType2').val('');
@@ -103,13 +108,16 @@
             $('#txtQueryWeight').val('0');
         } else if (userID == "AR") {
             typeSelect(true);
+            $('#qShowSR').prop("checked", true);
             $('#txtQuerySRNo').val('AR');
+            $('#txtQueryWeight').val('0');
             $('#txtQueryUser').val('');
             $('#txtQueryKeyWord').val('');
             $('#txtQueryType2').val('');
             $('#txtQueryType3').val('');
             $('#txtQueryWeight').val('0');
         } else if (userID == "榮團會") {
+            $('#txtQueryWeight').val('0');
             typeSelect(false);
             $('#qType01').prop("checked", true);
             $('#txtQuerySRNo').val('');
@@ -119,6 +127,7 @@
             $('#txtQueryType3').val('');
             $('#txtQueryWeight').val('0');
         } else if (userID == "Default") {
+            $('#txtQueryWeight').val('2');
             statusSelect(false);
             $('#qStatus01').prop("checked", true);
             $('#qStatus02').prop("checked", true);
@@ -136,6 +145,7 @@
             $('#qType08').prop("checked", true);
             $('#qType09').prop("checked", true);
             $('#qType10').prop("checked", true);
+            $('#qType13').prop("checked", true);
 
             $('#txtQuerySRNo').val('');
             $('#txtQueryUser').val('');
@@ -155,10 +165,11 @@
 
 <!-- ========================================================================================================================= -->
 <!-- (((主畫面))) -->
+
 @using (Html.BeginForm("Index", "mesWork", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "MyWorkList" }))
 {
     <input type="hidden" id="actionMode" name="actionMode" value="QUERY" />
-    <div class="query_block" style="max-width:1220px;">
+    <div class="query_block" style="max-width:1300px;">
         <table>
             <tr>
                 <td style="padding-right: 5px; font-size: 90%; padding-top: 4px; padding-bottom: 4px;">狀態</td>
@@ -170,6 +181,7 @@
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus05" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run"> Trail-Run</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus06" name="qStatus06" @ViewBag.QueryStatus06 value="Closed"> Closed</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus07" name="qStatus07" @ViewBag.QueryStatus07 value="Pending"> Pending</label>
+                    <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus08" name="qStatus08" @ViewBag.QueryStatus08 value="Cancel"> Cancel</label>
                     &nbsp; |<a href="#" onclick="statusSelect(true)">全選</a>|<a href="#" onclick="statusSelect(false)">取消</a>|
                 </td>
             </tr>
@@ -181,6 +193,7 @@
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType03" name="qType03" @ViewBag.QueryType03 value="程式修改"> 程式修改</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType04" name="qType04" @ViewBag.QueryType04 value="資料設定"> 資料設定</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType05" name="qType05" @ViewBag.QueryType05 value="資料提供"> 資料提供</label>
+                    <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType13" name="qType13" @ViewBag.QueryType13 value="資料修改"> 資料修改</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType06" name="qType06" @ViewBag.QueryType06 value="特別任務"> 特別任務</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType07" name="qType07" @ViewBag.QueryType07 value="課程認證"> 課程認證</label>
                     <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qType08" name="qType08" @ViewBag.QueryType08 value="異常排除"> 異常排除</label>
@@ -340,15 +353,14 @@
                         <th style="min-width:200px;">Benefit</th>
                         <th>-</th>
                         <th>ID</th>
-
                     </tr>
 
                     @foreach (MESWork item in ViewBag.PageList)
                     {
                         <tr>
-                            <td>
-                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="修改" onclick="showEdit('@item.WORK_ID'); " />
-                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="HTML" onclick="showCKEdit('@item.WORK_ID'); " />
+                            <td style="white-space: nowrap;">
+                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px;" value="EDIT" onclick="showEdit('@item.WORK_ID'); " />
+                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px; " value="HTML" onclick="showCKEdit('@item.WORK_ID'); " />    
                             </td>
                             <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ISSUE_DATE)</td>
                             <td style="white-space: nowrap;color:#990000;">@Html.DisplayFor(modelItem2 => item.DUE_DATE)</td>
@@ -378,6 +390,8 @@
     </table>
 }
 
+
+<br><br>
 <input type="file" class="multi" accept="gif|jpg" />
 <input type="file" multiple class="multi maxsize-15120 with-preview" accept="xlsx" />
 
@@ -392,6 +406,14 @@
             <form method="post" action="/mesWork/Index">
                 @Html.AntiForgeryToken()
                 <table id="editUI">
+                    <tr>
+                        <td></td>
+                        <td style="padding-bottom:10px;">
+                            <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#editPanel').modal('hide');" />
+                        </td>
+                    </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">WorkID</th>
                         <td>
@@ -461,9 +483,9 @@
                                         </select>
                                     </td>
                                     <th style="white-space: nowrap; padding-left: 10px;">Type2</th>
-                                    <td><input type="text" value="" style="width:100px; height: 25px !important;" id="txtType2" name="txtType2" placeholder="PE,EE..." /></td>
+                                    <td><input type="text" value="" style="width:80px;" id="txtType2" name="txtType2" placeholder="PE,EE..." /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">Type3</th>
-                                    <td><input type="text" value="" style="width:120px; height: 25px !important;" id="txtType3" name="txtType3" placeholder="RMS,Marking..." /></td>
+                                    <td><input type="text" value="" style="width:150px;" id="txtType3" name="txtType3" placeholder="RMS,Marking..." /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">重要性</th>
                                     <td>
                                         <select id="ddlWeight" name="ddlWeight">
@@ -479,19 +501,19 @@
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">WorkName</th>
-                        <td><input type="text" value="" style="width:600px; height:25px !important;" id="txtWorkName" name="txtWorkName" /></td>
+                        <td><input type="text" value="" style="width:60vw; min-width:500px;" id="txtWorkName" name="txtWorkName" /></td>
                     </tr>
                     <tr>
                         <th style="padding:5px;">WorkDetail</th>
-                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" cols="100" rows="5"></textarea></td>
+                        <td style="padding-top:5px;"><textarea id="txtWorkDetail" name="txtWorkDetail" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
                     </tr>
                     <tr>
                         <th style="padding:5px;">WorkNote</th>
-                        <td style="padding-top:5px;"><textarea id="txtWorkNote" name="txtWorkNote" cols="100" rows="6"></textarea></td>
+                        <td style="padding-top:5px;"><textarea id="txtWorkNote" name="txtWorkNote" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
                     </tr>
                     <tr>
                         <th style="padding:5px;">ITNote</th>
-                        <td style="padding-top:5px;"><textarea id="txtITNote" name="txtITNote" cols="100" rows="5"></textarea></td>
+                        <td style="padding-top:5px;"><textarea id="txtITNote" name="txtITNote" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
                     </tr>
 
                     <tr onkeypress="return event.keyCode != 13;">
@@ -521,13 +543,13 @@
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width:80px; height:25px !important;" id="txtDueDate" name="txtDueDate" /></td>
+                                    <td><input type="text" value="" style="width:90px;" id="txtDueDate" name="txtDueDate" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">開始</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtStartDate" name="txtStartDate" /></td>
+                                    <td><input type="text" value="" style="width:90px;" id="txtStartDate" name="txtStartDate" /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">完成</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtEndDate" name="txtEndDate" /></td>
+                                    <td><input type="text" value="" style="width:90px;" id="txtEndDate" name="txtEndDate" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">結案</th>
-                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtCloseDate" name="txtCloseDate" /></td>
+                                    <td><input type="text" value="" style="width:90px;" id="txtCloseDate" name="txtCloseDate" /></td>
                                 </tr>
                             </table>
                         </td>
@@ -537,31 +559,31 @@
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width: 150px; height: 25px !important;" id="txtSRNo" name="txtSRNo" /></td>
+                                    <td><input type="text" value="" style="width: 150px;" id="txtSRNo" name="txtSRNo" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">URL</th>
-                                    <td><input type="text" value="" style="width:400px; height: 25px !important; font-size:80%" id="txtSRLink" name="txtSRLink" /></td>
+                                    <td><input type="text" value="" style="width: 40vw; min-width: 300px; font-size: 80%" id="txtSRLink" name="txtSRLink" /></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">SR Title</th>
-                        <td><input type="text" value="" style="width: 600px; height: 25px !important;" id="txtSRTitle" name="txtSRTitle" /></td>
+                        <td><input type="text" value="" style="width: 60vw; min-width: 500px;" id="txtSRTitle" name="txtSRTitle" /></td>
                     </tr>
                     <tr>
                         <th style="padding:5px;">Benefit</th>
-                        <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" cols="100" rows="5" style="white-space: normal !important; "></textarea></td>
+                        <td style="padding-top:5px;"><textarea id="txtBenefit" name="txtBenfit" style="width: 60vw; min-width: 500px; white-space: normal !important;" cols="100" rows="5"></textarea></td>
                     </tr>
                     <tr onkeypress="return event.keyCode != 13;">
                         <th style="padding:5px;">客戶</th>
                         <td>
                             <table style="padding:0;margin:0;">
                                 <tr>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtCust3" name="txtCust3" placeholder="客三碼" /></td>
+                                    <td><input type="text" value="" style="width:200px;" id="txtCust3" name="txtCust3" placeholder="客三碼" /></td>
                                     <th style="white-space: nowrap; padding-left: 10px;">站點</th>
-                                    <td><input type="text" value="" style="width:90px; height:25px !important;" id="txtOper" name="txtOper" /></td>
+                                    <td><input type="text" value="" style="width:100px;" id="txtOper" name="txtOper" /></td>
                                     <th style="white-space: nowrap; padding-left:10px;">廠別</th>
-                                    <td><input type="text" value="" style="width:90px; height: 25px !important;" id="txtFac" name="txtFac" /></td>
+                                    <td><input type="text" value="" style="width:100px;" id="txtFac" name="txtFac" /></td>
                                 </tr>
                             </table>
                         </td>
@@ -596,12 +618,14 @@
                 <input type="checkbox" id="qStatus05_2" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run" style="display:none;">
                 <input type="checkbox" id="qStatus06_2" name="qStatus06" @ViewBag.QueryStatus06 value="Closed" style="display:none;">
                 <input type="checkbox" id="qStatus07_2" name="qStatus07" @ViewBag.QueryStatus07 value="Pending" style="display:none;">
+                <input type="checkbox" id="qStatus08_2" name="qStatus08" @ViewBag.QueryStatus08 value="Cancel" style="display:none;">
 
                 <input type="checkbox" id="qType01_2" name="qType01" @ViewBag.QueryType01 value="榮團會" style="display:none;">
                 <input type="checkbox" id="qType02_2" name="qType02" @ViewBag.QueryType02 value="議題討論" style="display:none;">
                 <input type="checkbox" id="qType03_2" name="qType03" @ViewBag.QueryType03 value="程式修改" style="display:none;">
                 <input type="checkbox" id="qType04_2" name="qType04" @ViewBag.QueryType04 value="資料設定" style="display:none;">
                 <input type="checkbox" id="qType05_2" name="qType05" @ViewBag.QueryType05 value="資料提供" style="display:none;">
+                <input type="checkbox" id="qType13_2" name="qType13" @ViewBag.QueryType13 value="資料修改" style="display:none;">
                 <input type="checkbox" id="qType06_2" name="qType06" @ViewBag.QueryType06 value="特別任務" style="display:none;">
                 <input type="checkbox" id="qType07_2" name="qType07" @ViewBag.QueryType07 value="課程認證" style="display:none;">
                 <input type="checkbox" id="qType08_2" name="qType08" @ViewBag.QueryType08 value="異常排除" style="display:none;">
@@ -609,6 +633,8 @@
                 <input type="checkbox" id="qType10_2" name="qType10" @ViewBag.QueryType10 value="支援協助" style="display:none;">
                 <input type="checkbox" id="qType11_2" name="qType11" @ViewBag.QueryType11 value="特殊業務" style="display:none;">
                 <input type="checkbox" id="qType12_2" name="qType12" @ViewBag.QueryType12 value="系統專家" style="display:none;">
+
+                <input type="checkbox" id="qShowSR_2" name="qShowSR" @ViewBag.QueryShowSR value="ShowSR" style="display:none;">
 
                 <input type="hidden" id="pageIndex_2" name="pageIndex" value="@ViewBag.PageIndex" />
                 <input type="hidden" id="orderBy_2" name="orderBy" value="@ViewBag.OrderBy" />
@@ -725,16 +751,19 @@
 <!-- 編輯畫面 End -->
 <!-- CK Editor 編輯畫面 Start -->
 <script src="/lib/ckeditor5-build-classic/ckeditor.js"></script>
-<script src="/lib/ckeditor5-build-classic/base64uploadadapter.js"></script>
+<script src="/lib/ckeditor5-build-classic/webpack.config.js"></script>
 
 <div id="ckEditPanel" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="min-width: 90vw !important;">
         <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
             <form method="post" action="/mesWork/Index">
-                <textarea id="myCKEditor" name="myCKEditorContain"></textarea>
                 <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" />
+                <hr>
+                <textarea id="myCKEditor" name="myCKEditorContain"></textarea>
+
+
 
                 <input type="hidden" id="ckeditorWorkID" name="ckeditorWorkID" value="" />
                 <input type="hidden" id="actionMode_3" name="actionMode" value="CKEDIT" />
@@ -755,12 +784,14 @@
                 <input type="checkbox" id="qStatus05_3" name="qStatus05" @ViewBag.QueryStatus05 value="Trail-Run" style="display:none;">
                 <input type="checkbox" id="qStatus06_3" name="qStatus06" @ViewBag.QueryStatus06 value="Closed" style="display:none;">
                 <input type="checkbox" id="qStatus07_3" name="qStatus07" @ViewBag.QueryStatus07 value="Pending" style="display:none;">
+                <input type="checkbox" id="qStatus08_3" name="qStatus08" @ViewBag.QueryStatus08 value="Cancel" style="display:none;">
 
                 <input type="checkbox" id="qType01_3" name="qType01" @ViewBag.QueryType01 value="榮團會" style="display:none;">
                 <input type="checkbox" id="qType02_3" name="qType02" @ViewBag.QueryType02 value="議題討論" style="display:none;">
                 <input type="checkbox" id="qType03_3" name="qType03" @ViewBag.QueryType03 value="程式修改" style="display:none;">
                 <input type="checkbox" id="qType04_3" name="qType04" @ViewBag.QueryType04 value="資料設定" style="display:none;">
                 <input type="checkbox" id="qType05_3" name="qType05" @ViewBag.QueryType05 value="資料提供" style="display:none;">
+                <input type="checkbox" id="qType13_3" name="qType13" @ViewBag.QueryType13 value="資料修改" style="display:none;">
                 <input type="checkbox" id="qType06_3" name="qType06" @ViewBag.QueryType06 value="特別任務" style="display:none;">
                 <input type="checkbox" id="qType07_3" name="qType07" @ViewBag.QueryType07 value="課程認證" style="display:none;">
                 <input type="checkbox" id="qType08_3" name="qType08" @ViewBag.QueryType08 value="異常排除" style="display:none;">
@@ -769,18 +800,56 @@
                 <input type="checkbox" id="qType11_3" name="qType11" @ViewBag.QueryType11 value="特殊業務" style="display:none;">
                 <input type="checkbox" id="qType12_3" name="qType12" @ViewBag.QueryType12 value="系統專家" style="display:none;">
 
+                <input type="checkbox" id="qShowSR_2" name="qShowSR" @ViewBag.QueryShowSR value="ShowSR" style="display:none;">
+
                 <input type="hidden" id="pageIndex_3" name="pageIndex" value="@ViewBag.PageIndex" />
                 <input type="hidden" id="orderBy_3" name="orderBy" value="@ViewBag.OrderBy" />
                 <input type="hidden" id="sort_3" name="sort" value="@ViewBag.Sort" />
             </form>
             <script>
-                //var config = {
-                //    plugins: [Base64UploadAdapter]
-                //};
+                var ckConfig = {
 
+                    toolbar: {
+                        items: [
+                            '|',
+                            'italic',
+                            'bold',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            '|',
+                            'outdent',
+                            'indent',
+                            '|',
+                            'imageUpload',
+                            'blockQuote',
+                            'insertTable',
+                            'mediaEmbed',
+                            'undo',
+                            'redo'
+                        ]
+                    },
+                    language: 'en',
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells'
+                        ]
+                    },
+                    licenseKey: ''
+                };
                 var myEditor1;
                 ClassicEditor
-                    .create(document.querySelector('#myCKEditor'))
+                    .create(document.querySelector('#myCKEditor'), ckConfig)
                     .then(editor => {
                         myEditor1 = editor;
                         console.log(editor);
@@ -934,7 +1003,7 @@
 <script>
     $("#txtUser1").autocomplete({
         source: function (request, response) {
-            jQuery.get("mesWork/GetMatchUser", {
+            jQuery.post("mesWork/GetMatchUser", {
                 query: request.term
             }, function (data) {
                 var data2 = JSON.parse(data);
@@ -955,7 +1024,7 @@
     });
     $("#txtUser2").autocomplete({
         source: function (request, response) {
-            jQuery.get("mesWork/GetMatchUser", {
+            jQuery.post("mesWork/GetMatchUser", {
                 query: request.term
             }, function (data) {
 
@@ -984,7 +1053,7 @@
     });
     $("#txtCust3").autocomplete({
         source: function (request, response) {
-            jQuery.get("mesWork/GetMatchCust", {
+            jQuery.post("mesWork/GetMatchCust", {
                 query: request.term
             }, function (data) {
                 var data2 = JSON.parse(data);
@@ -1002,7 +1071,7 @@
     //
     $("#txtQueryUser").autocomplete({
         source: function (request, response) {
-            jQuery.get("mesWork/GetMatchUser", {
+            jQuery.post("mesWork/GetMatchUser", {
                 query: request.term
             }, function (data) {
                 var data2 = JSON.parse(data);
@@ -1018,11 +1087,12 @@
         minLength: 2
     });
     //----------------
-    var type2_src = ["PE", "EE", "QA", "IT", "LSI", "MFG", "CIM", "TEST", "SOX"];
+    var type2_src = ["PE", "EE", "QA", "IT", "LSI", "MFG", "CIM", "TEST", "SOX", "PC", "CE"];
     $("#txtType2").autocomplete({
         source: type2_src
     });
-    var type3_src = ["Marking", "RMS", "Automation", "Repair", "VM", "Packing", "aEDC", "Carrier", "Tooling"];
+    var type3_src = ["Marking", "a-Track", "Q-Time", "Yield", "AOI", "Shipping", "Transation", "Repair", "DCOP",
+        "ALR", "OS_5070", "Dispatch", "FW設定", "RMS", "Process Mapping", "Automation", "VM", "Packing", "Lanel", "aEDC", "Carrier", "Tooling"];
     $("#txtType3").autocomplete({
         source: type3_src
     });

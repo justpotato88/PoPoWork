@@ -142,6 +142,11 @@ namespace PotatoLab.Controllers
                 ViewBag.QueryStatus07 = "checked";
                 status += form["qStatus07"].ToString() + ",";
             }
+            if (form["qStatus08"].ToString().Length > 0)
+            {
+                ViewBag.QueryStatus08 = "checked";
+                status += form["qStatus08"].ToString() + ",";
+            }
             status = status.TrimEnd(',');
             //---------------------------------------
             if (form["qType01"].ToString().Length > 0)
@@ -204,6 +209,11 @@ namespace PotatoLab.Controllers
                 ViewBag.QueryType12 = "checked";
                 type += form["qType12"].ToString() + ",";
             }
+            if (form["qType13"].ToString().Length > 0)
+            {
+                ViewBag.QueryType13 = "checked";
+                type += form["qType13"].ToString() + ",";
+            }
             type = type.TrimEnd(',');
             //-------------------------------
             bool showSR = false;
@@ -217,7 +227,7 @@ namespace PotatoLab.Controllers
             int weight = 2;
             try
             {
-                Convert.ToInt32(form["txtQueryWeight"]);
+                weight = Convert.ToInt32(form["txtQueryWeight"]);
             }
             catch { }
             var resultList = new List<MESWork>();
@@ -533,11 +543,7 @@ namespace PotatoLab.Controllers
             return "{\"Result\":\"OK" + workID + "\"}";
         }
 
-        /// <summary>
-        /// 取得
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        [HttpPost]
         public string GetMatchUser(string query)
         {
             //return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
@@ -565,6 +571,7 @@ namespace PotatoLab.Controllers
             return sb.ToString();
         }
 
+        [HttpPost]
         public string GetMatchCust(string query)
         {
             //return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
