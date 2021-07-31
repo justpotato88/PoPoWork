@@ -600,8 +600,10 @@ namespace PotatoLab.Controllers
                 sb.Append("{");
                 sb.Append("\"label\":\"");
                 sb.Append(tmpCust[i].Cust3);
-                sb.Append("(");
+                sb.Append("：");
                 sb.Append(tmpCust[i].CustName);
+                sb.Append(" (");
+                sb.Append(tmpCust[i].Cust2);
                 sb.Append(")");
                 sb.Append("\",");
                 sb.Append("\"value\":\"");

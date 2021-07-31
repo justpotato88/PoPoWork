@@ -62,14 +62,26 @@ namespace PotatoLab
                     select * from (
                         select 
                                 FORECAST_CUST_GRP as Cust3, 
-                                LISTAGG(CUST_GROUP, ',') WITHIN GROUP (ORDER BY CUST_GROUP) as CustName,
+                                max(CUST_GROUP) as CustName,
                                 LISTAGG(CUST_CODE, ',') WITHIN GROUP (ORDER BY CUST_CODE) as Cust2
                         from fwpdb.ase_cust_file 
                         where CUST_GROUP is not null
                         and (upper(CUST_GROUP) like '{0}%' or FORECAST_CUST_GRP like '{0}%' or CUST_CODE like '{0}%')
-                    
+                        group by FORECAST_CUST_GRP
                         order by Cust3
                     ) where rownum < 15", queryKey);
+                    //string sql = string.Format(@"
+                    //select * from (
+                    //    select 
+                    //            FORECAST_CUST_GRP as Cust3, 
+                    //            LISTAGG(CUST_GROUP, ',') WITHIN GROUP (ORDER BY CUST_GROUP) as CustName,
+                    //            LISTAGG(CUST_CODE, ',') WITHIN GROUP (ORDER BY CUST_CODE) as Cust2
+                    //    from fwpdb.ase_cust_file 
+                    //    where CUST_GROUP is not null
+                    //    and (upper(CUST_GROUP) like '{0}%' or FORECAST_CUST_GRP like '{0}%' or CUST_CODE like '{0}%')
+
+                    //    order by Cust3
+                    //) where rownum < 15", queryKey);
 
                     //string sql = string.Format(@"
                     //select * from (

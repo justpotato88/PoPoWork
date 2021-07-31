@@ -1030,23 +1030,18 @@
     });
     $("#txtUser2").autocomplete({
         source: function (request, response) {
-            jQuery.post("mesWork/GetMatchUser", {
-                query: request.term
-            }, function (data) {
+            $.ajax({
+                url: "/mesWork/GetMatchUser",
+                type: "POST",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                    //response($.map(data, function (item) {
+                    //    return { label: item.Name, value: item.Name };
+                    //}))
 
-                //response(workData);
-                //alert(data);
-                var data2 = JSON.parse(data);
-                //alert(data2);
-                response(data2);
-                //response($.map(data2, function (item) { // 此處是將返回資料轉換為 JSON物件
-                //    //alert(item.label);
-                //    return {
-                //        label: item.label, // 下拉項顯示內容
-                //        value: item.value  // 下拉項對應數值
-                //        //另外可以自定義其它引數
-                //    }
-                //}));
+                }
             });
         },
         select: function (event, ui) {
