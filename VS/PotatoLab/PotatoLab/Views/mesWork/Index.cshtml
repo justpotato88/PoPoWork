@@ -98,6 +98,11 @@
     function queryUser(userID) {
         if (userID == "SR") {
             typeSelect(true);
+
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+
             $('#qShowSR').prop("checked", true);
             $('#txtQuerySRNo').val('2');
             $('#txtQueryWeight').val('0');
@@ -119,6 +124,11 @@
         } else if (userID == "榮團會") {
             $('#txtQueryWeight').val('0');
             typeSelect(false);
+            
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+            
             $('#qType01').prop("checked", true);
             $('#txtQuerySRNo').val('');
             $('#txtQueryUser').val('');
@@ -155,6 +165,11 @@
 
             $('#txtQueryWeight').val('2');
         } else {
+
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+
             $('#txtQueryUser').val(userID);
             $('#pageIndex').val(1);
         }
@@ -763,10 +778,12 @@
     <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; border: 1px #FFF solid; ">
         <div class="modal-content" style="padding: 30px; background-color: #223344; color: #000; font-size: small; ">
             <form method="post" action="/mesWork/Index">
-                <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <div style="padding-bottom:10px;"><input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" /></div>
-                
+                <div style="padding-bottom:10px;">
+                    <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" />
+                </div>
+
                 <textarea id="myCKEditor" name="myCKEditorContain"></textarea>
 
 
@@ -1007,13 +1024,29 @@
     }
 </style>
 <script>
+    //-------------------------------------
+    //獲取防偽標記
+    //var token = $('@Html.AntiForgeryToken()').val();
+    //var headers = {};
+    //防偽標記放入headers
+    //也可以將防偽標記放入data
+    //headers["__RequestVerificationToken"] = token;
+    //-------------------------------------
+
     $("#txtUser1").autocomplete({
         source: function (request, response) {
-            jQuery.post("mesWork/GetMatchUser", {
-                query: request.term
-            }, function (data) {
-                var data2 = JSON.parse(data);
-                response(data2);
+            $.ajax({
+                url: "/mesWork/GetMatchUser",
+                type: "POST",
+                cache: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("requestverificationtoken", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: { Prefix: request.term },
+                success: function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                }
             });
         },
         select: function (event, ui) {
@@ -1033,6 +1066,10 @@
             $.ajax({
                 url: "/mesWork/GetMatchUser",
                 type: "POST",
+                cache: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("requestverificationtoken", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
                 data: { Prefix: request.term },
                 success: function (data) {
                     var data2 = JSON.parse(data);
@@ -1040,7 +1077,6 @@
                     //response($.map(data, function (item) {
                     //    return { label: item.Name, value: item.Name };
                     //}))
-
                 }
             });
         },
@@ -1054,11 +1090,18 @@
     });
     $("#txtCust3").autocomplete({
         source: function (request, response) {
-            jQuery.post("mesWork/GetMatchCust", {
-                query: request.term
-            }, function (data) {
-                var data2 = JSON.parse(data);
-                response(data2);
+            $.ajax({
+                url: "/mesWork/GetMatchCust",
+                type: "POST",
+                cache: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("requestverificationtoken", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: { Prefix: request.term },
+                success: function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                }
             });
         },
         select: function (event, ui) {
@@ -1072,11 +1115,18 @@
     //
     $("#txtQueryUser").autocomplete({
         source: function (request, response) {
-            jQuery.post("mesWork/GetMatchUser", {
-                query: request.term
-            }, function (data) {
-                var data2 = JSON.parse(data);
-                response(data2);
+            $.ajax({
+                url: "/mesWork/GetMatchUser",
+                type: "POST",
+                cache: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("requestverificationtoken", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: { Prefix: request.term },
+                success: function (data) {
+                    var data2 = JSON.parse(data);
+                    response(data2);
+                }
             });
         },
         select: function (event, ui) {

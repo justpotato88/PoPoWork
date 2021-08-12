@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 //-------------------------
 using System.Text;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PotatoLab.Controllers
 {
@@ -32,7 +33,7 @@ namespace PotatoLab.Controllers
         #endregion -----------------------------------------------
 
         // GET: mesWorkController
-        public ActionResult Index(int page=1, string orderby = "due", string sort="asc")
+        public ActionResult Index(int page=1, string orderby = "due", string sort="desc")
         {
             int currentPage = page < 1 ? 1 : page;
             var resultList = MESWork.GetUrgentWorkList(7).OrderBy(m => m.DUE_DATE).ToList();
@@ -558,6 +559,7 @@ namespace PotatoLab.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public string GetMatchUser(string query)
         {
             //return "[{\"label\":\"黃群凱 (Potato Huang)\",\"value\":\"C2043\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
@@ -586,6 +588,7 @@ namespace PotatoLab.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public string GetMatchCust(string query)
         {
             //return "[{\"label\":\"MVL\",\"value\":\"MVL\"},{\"label\":\"略皮略皮\",\"value\":\"2\"}]";
@@ -614,5 +617,7 @@ namespace PotatoLab.Controllers
             sb.Append("]");
             return sb.ToString();
         }
+
     }
 }
+
