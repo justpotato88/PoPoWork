@@ -106,6 +106,15 @@ namespace PotatoLab.Controllers
                 }
                 ViewBag.LastEditID = workID;
             }
+            else if (form["deleteWorkID"].ToString() != "")
+            {
+                string delWorkID = form["deleteWorkID"].ToString();
+                string delResult = "";
+                if (MESWork.DeleteWork(delWorkID, out delResult) == true)
+                    ViewBag.ResultMessage = string.Format("已刪除({0})!!", delWorkID);
+                else
+                    ViewBag.ResultMessage = string.Format("刪除失敗({0})!!", delResult);
+            }
 
             int page = 1;
             try { page = Convert.ToInt32(form["PageIndex"]); }

@@ -191,6 +191,21 @@ namespace PotatoLab
 
         #region 靜態 Function -----------------------------------------------------------------
 
+        public static bool DeleteWork(string workID, out string result)
+        {
+            try {
+                string sql = string.Format("delete from fwpdb.MES_WORK_LIST where WORK_ID='{0}'", workID);
+                DB.PDB.ExecuteNonQuery(sql);
+                result = "OK";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                return false;
+            }
+        }
+
         #endregion ----------------------------------------------------------------------------
 
         //public static List<MESWork> DapperMapping()
@@ -198,7 +213,7 @@ namespace PotatoLab
         //    List<MESWork> result = new List<MESWork>();
         //    try
         //    {
-                
+
         //        using (IDbConnection db = new SqlConnection(constr))
         //        {
         //            db.Execute("SELECT ID FROM dbo.TEST_TABLE");

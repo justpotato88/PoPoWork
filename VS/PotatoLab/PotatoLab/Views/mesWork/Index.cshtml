@@ -52,7 +52,10 @@
 
     //=====((刪除))=====
     function deleteWork(workId) {
-
+        if (confirm('確定刪除嗎？')) {
+            $('#deleteWorkID').val(workId);
+            $('#MyWorkList').submit();
+        }
     }
     @*function deleteWork(workId) {
         CallServerFunction("/mesWork/DeleteWork?workID=" + workId, null, deleteWorkComplete);
@@ -298,6 +301,9 @@
                 <input type="hidden" id="pageIndex" name="pageIndex" value="@ViewBag.PageIndex" />
                 <input type="hidden" id="orderBy" name="orderBy" value="@ViewBag.OrderBy" />
                 <input type="hidden" id="sort" name="sort" value="@ViewBag.Sort" />
+
+                <input type="hidden" id="deleteWorkID" name="deleteWorkID" value="" />
+
                 @Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
                 <script type="text/javascript">
                     //處理分頁
@@ -772,7 +778,6 @@
 <!-- 編輯畫面 End -->
 <!-- CK Editor 編輯畫面 Start -->
 <script src="/lib/ckeditor5-build-classic/ckeditor.js"></script>
-<script src="/lib/ckeditor5-build-classic/webpack.config.js"></script>
 
 <div id="ckEditPanel" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; border: 1px #FFF solid; ">
@@ -835,19 +840,24 @@
                     toolbar: {
                         items: [
                             '|',
-                            'italic',
                             'bold',
+                            'italic',
                             'link',
-                            'bulletedList',
-                            'numberedList',
                             '|',
-                            'outdent',
-                            'indent',
+                            'fontBackgroundColor',
+                            'fontColor',
+                            'fontFamily',
+                            'fontSize',
+                            'underline',
+                            'alignment',
                             '|',
-                            'imageUpload',
                             'blockQuote',
                             'insertTable',
-                            'mediaEmbed',
+                            'horizontalLine',
+                            'highlight',
+                            'htmlEmbed',
+                            'findAndReplace',
+                            '|',
                             'undo',
                             'redo'
                         ]
