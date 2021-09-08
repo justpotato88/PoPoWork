@@ -1,0 +1,638 @@
+﻿<!--for X.PagedList Start-->
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    var pagedList = (IPagedList)ViewBag.PageList;
+
+}
+<link href="~/lib/x.paged-list/PagedList.css" rel="stylesheet" type="text/css" />
+
+<link href="~/css/popoStyle.css" rel="stylesheet" type="text/css" />
+<script src="~/js/popoLib.js" type="text/javascript"></script>
+
+
+<link href="~/lib/magicsearch/jquery.magicsearch.css" rel="stylesheet" type="text/css" />
+<script src="~/lib/magicsearch/jquery-2.2.3.min.js" type="text/javascript"></script>
+<script src="~/lib/magicsearch/jquery.magicsearch.js" type="text/javascript"></script>
+
+
+<link rel="stylesheet" href="~/lib//jquery-ui-1.12.1/jquery-ui.css">
+<script src="~/lib//jquery-ui-1.12.1/jquery-ui.js"></script>
+
+<!--for X.PagedList Edn-->
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+<script>
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
+    function getTodayDate() {
+        var fullDate = new Date();
+        var yyyy = fullDate.getFullYear();
+        var MM = (fullDate.getMonth() + 1) >= 10 ? (fullDate.getMonth() + 1) : ("0" + (fullDate.getMonth() + 1));
+        var dd = fullDate.getDate() < 10 ? ("0" + fullDate.getDate()) : fullDate.getDate();
+        var today = yyyy + "-" + MM + "-" + dd;
+        return today;
+    }
+    function getDefaultDueDate() {
+        var fullDate = new Date();
+        fullDate.setDate(fullDate.getDate() + 7);
+        var yyyy = fullDate.getFullYear();
+        var MM = (fullDate.getMonth() + 1) >= 10 ? (fullDate.getMonth() + 1) : ("0" + (fullDate.getMonth() + 1));
+        var dd = fullDate.getDate() < 10 ? ("0" + fullDate.getDate()) : fullDate.getDate();
+        var today = yyyy + "-" + MM + "-" + dd;
+        return today;
+    }
+
+
+    //=====((刪除))=====
+    function deleteWork(workId) {
+        if (confirm('確定刪除嗎？')) {
+            $('#deleteWorkID').val(workId);
+            $('#MyWorkList').submit();
+        }
+    }
+
+
+    //----------------------------------------
+    //選取特定條件
+    function queryUser(userID) {
+        if (userID == "SR") {
+            typeSelect(true);
+
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+
+            $('#qShowSR').prop("checked", true);
+            $('#txtQuerySRNo').val('2');
+            $('#txtQueryWeight').val('0');
+            $('#txtQueryUser').val('');
+            $('#txtQueryKeyWord').val('');
+            $('#txtQueryType2').val('');
+            $('#txtQueryType3').val('');
+            $('#txtQueryWeight').val('0');
+        } else if (userID == "AR") {
+            typeSelect(true);
+            $('#qShowSR').prop("checked", true);
+            $('#txtQuerySRNo').val('AR');
+            $('#txtQueryWeight').val('0');
+            $('#txtQueryUser').val('');
+            $('#txtQueryKeyWord').val('');
+            $('#txtQueryType2').val('');
+            $('#txtQueryType3').val('');
+            $('#txtQueryWeight').val('0');
+        } else if (userID == "榮團會") {
+            $('#txtQueryWeight').val('0');
+            typeSelect(false);
+
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+
+            $('#qType01').prop("checked", true);
+            $('#txtQuerySRNo').val('');
+            $('#txtQueryUser').val('');
+            $('#txtQueryKeyWord').val('');
+            $('#txtQueryType2').val('');
+            $('#txtQueryType3').val('');
+            $('#txtQueryWeight').val('0');
+        } else if (userID == "Default") {
+            $('#txtQueryWeight').val('2');
+            statusSelect(false);
+            $('#qStatus01').prop("checked", true);
+            $('#qStatus02').prop("checked", true);
+            $('#qStatus03').prop("checked", true);
+            $('#qStatus04').prop("checked", true);
+            $('#qStatus05').prop("checked", true);
+            typeSelect(false);
+            $('#qType01').prop("checked", true);
+            $('#qType02').prop("checked", true);
+            $('#qType03').prop("checked", true);
+            $('#qType04').prop("checked", true);
+            $('#qType05').prop("checked", true);
+            $('#qType06').prop("checked", true);
+            $('#qType07').prop("checked", true);
+            $('#qType08').prop("checked", true);
+            $('#qType09').prop("checked", true);
+            $('#qType10').prop("checked", true);
+            $('#qType13').prop("checked", true);
+
+            $('#txtQuerySRNo').val('');
+            $('#txtQueryUser').val('');
+            $('#txtQueryKeyWord').val('');
+            $('#txtQueryType2').val('');
+            $('#txtQueryType3').val('');
+
+            $('#txtQueryWeight').val('2');
+        } else {
+
+            $('#pageIndex').val('1');
+            $('#orderBy').val('issue');
+            $('#sort').val('desc');
+
+            $('#txtQueryUser').val(userID);
+            $('#pageIndex').val(1);
+        }
+        $('#MyWorkList').submit();
+    }
+</script>
+
+
+<!-- ========================================================================================================================= -->
+<!-- (((主畫面))) -->
+
+@using (Html.BeginForm("Index", "mesMemo", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "MyWorkList" }))
+{
+    <input type="hidden" id="actionMode" name="actionMode" value="QUERY" />
+    <div class="query_block" style="max-width:1300px;">
+        <table>
+            <tr>
+                <td style="padding-right: 5px; font-size: 90%; padding-top: 4px; padding-bottom: 4px;">狀態</td>
+                <td style="font-size: 90%; border-bottom: 1px dotted #CCC; padding-top: 4px; padding-bottom: 4px;">
+                    <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus01" name="qStatus01" @ViewBag.QueryStatus01 value="Wait"> Wait</label>
+                    <label style="margin-right:4px;"><input type="checkbox" class="largerCheckbox" id="qStatus02" name="qStatus02" @ViewBag.QueryStatus02 value="Close"> Close</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-right: 5px; font-size: 80%; padding-top: 4px; padding-bottom: 4px;">
+                    時間
+                </td>
+                <td style="font-size: 80%; border-bottom: 0px dotted #CCC; padding-top: 4px; padding-bottom: 4px;">
+                    <table style="padding:0;margin:0;">
+                        <tr>
+                            <td><input type="text" value="@ViewBag.QueryStart" style="width:80px; height: 25px !important;" id="txtQueryStartDate" name="txtQueryStartDate" /></td>
+                            <td>~</td>
+                            <td><input type="text" value="@ViewBag.QueryEnd" style="width:80px; height: 25px !important;" id="txtQueryEndDate" name="txtQueryEndDate" /></td>
+                            <td style="padding-left:5px;">關鍵字</td>
+                            <td><input type="text" value="@ViewBag.QueryKeyWord" style="width:120px; height: 25px !important;" id="txtQueryKeyWord" name="txtQueryKeyWord" /></td>
+                            <td style="padding-left:20px;"><input type="button" id="btnQuery" class="btn btn-success" style="width:120px; font-weight:bold;" value="Query" onclick="query();" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    @if (ViewBag.ResultMessage != "")
+    {
+        <div style="font-size:200%;color:red;font-weight:bold;background-color:#FFFFEE; margin:10px;">@ViewBag.ResultMessage</div>
+    }
+
+
+    <table>
+        <tr>
+            <td style="width:140px;">
+                <!-- Create Buttom -->
+                <input type="button" class="btn btn-warning" style=" font-weight: bold;" value="Create" onclick="showEdit(''); " />
+            </td>
+            <td>
+                <!-- X.PagedList -->
+                <!-- ========================================================================================================================= -->
+                <!--for X.PagedList Start -->
+                <input type="hidden" id="pageIndex" name="pageIndex" value="@ViewBag.PageIndex" />
+                <input type="hidden" id="orderBy" name="orderBy" value="@ViewBag.OrderBy" />
+                <input type="hidden" id="sort" name="sort" value="@ViewBag.Sort" />
+
+                <input type="hidden" id="deleteWorkID" name="deleteWorkID" value="" />
+
+                @Html.PagedListPager(pagedList, page => Url.Action("Index", new { page }), X.PagedList.Web.Common.PagedListRenderOptions.Classic)
+                <script type="text/javascript">
+                    //處理分頁
+                    $('.pagination>li>a[href]').each(function (i, item) {
+                        var cIdx = $(item).attr('href').indexOf('?page=') + 6;
+                        var page = $(item).attr('href').substr(cIdx);
+                        $(item).attr('href', '#').click(function () { postPage(page); });
+                    });
+                    function postPage(page) {
+                        //$("[name='pageIndex']").val(page);
+                        $('#pageIndex').val(page);
+                        $('#MyWorkList').submit();
+                    };
+                    //=====((排序))=====
+                    function sortWork(column) {
+
+                        if ($('#sort').val() == "asc")
+                            $('#sort').val('desc');
+                        else
+                            $('#sort').val('asc');
+
+                        $('#orderBy').val(column);
+                        $('#MyWorkList').submit();
+                    }
+                    //=====((Query Buttom))=====
+                    function query(page) {
+                        $('#MyWorkList').submit();
+                    };
+                </script>
+                <!-- ========================================================================================================================= -->
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <!-- ========================================================================================================================= -->
+                <!-- 列表 Grid Table Start -->
+                <table class="table1">
+                    <tr>
+                        <th onclick="sortWork('issue');" style="cursor: pointer;">Issue</th>
+                        <th>Modify</th>
+                        <th onclick="sortWork('due');" style="cursor: pointer;">Due</th>
+                        <th onclick="sortWork('type2');" style="cursor: pointer;">Type</th>
+                        <th onclick="sortWork('title');" style="min-width: 260px; cursor: pointer;">Work Name</th>
+                        <th onclick="sortWork('note');" style="cursor: pointer;">Note</th>
+                        <th onclick="sortWork('status');" style="cursor: pointer;">Status</th>
+                    </tr>
+
+                    @foreach (MESWork item in ViewBag.PageList)
+                    {
+
+                        var selectedStyle = "";
+                        if (ViewBag.LastEditID == item.WORK_ID)
+                        {
+                            selectedStyle = "background-color:#FFEE00;";
+                        }
+
+                        <tr style="@selectedStyle">
+                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.ISSUE_DATE_SHORT)</td>
+                            <td style="white-space: nowrap;">
+                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px;" value="EDIT" onclick="showEdit('@item.WORK_ID'); " />
+                                <input type="button" class="btn btn-primary" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px; width: 40px; padding-left: 2px; padding-right: 2px; " value="HTML" onclick="showCKEdit('@item.WORK_ID'); " />
+                            </td>
+                            <td style="white-space: nowrap;color:#990000;">@Html.DisplayFor(modelItem2 => item.DUE_DATE_SHORT)</td>
+                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.TYPE2)</td>
+                            <td onclick="showView('@item.WORK_ID');" style="cursor: pointer; color:#005599;"><b style="font-size: 100% !important;">@Html.DisplayFor(modelItem2 => item.WORK_NAME)</b></td>
+                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.WORK_NOTE)</td>
+                            <td style="white-space: nowrap;">@Html.DisplayFor(modelItem2 => item.STATUS)</td>
+                            <td><input type="button" class="btn btn-danger" style="font-size: x-small; padding-top: 1px; padding-bottom: 1px;" value="刪除" onclick="deleteWork('@item.WORK_ID'); " /></td>
+                            <td style="font-size: xx-small !important;">@Html.DisplayFor(modelItem2 => item.WORK_ID)</td>
+                        </tr>
+                    }
+
+                </table>
+                <!-- 列表 Grid Table End -->
+                <!-- ========================================================================================================================= -->
+            </td>
+        </tr>
+    </table>
+}
+
+
+<br>
+
+<!-- 編輯畫面 Start -->
+<div id="editPanel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; ">
+        <div class="modal-content" style="padding:30px; background-color:#223344; color:#99DDFF; font-size:small;">
+
+            <div id="showLoadingForEdit">Loading...</div>
+            <!-- onkeypress="return event.keyCode != 13;" 這行的目的是不要讓 Enter 鍵觸發 Submit  -->
+            <form method="post" action="/mesMemo/Index">
+                @Html.AntiForgeryToken()
+                <table id="editUI">
+                    <tr>
+                        <td></td>
+                        <td style="padding-bottom:10px;">
+                            <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#editPanel').modal('hide');" />
+                        </td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">WorkID</th>
+                        <td>
+                            <table style="padding:0;margin:0;">
+                                <tr>
+                                    <td><input type="text" value="" style="width:200px; height:25px !important;" id="txtWorkID" name="txtWorkID" readonly /></td>
+                                    <th style="white-space: nowrap; padding-left: 10px;">Issue</th>
+                                    <td><input type="text" value="" style="width:80px; height: 25px !important;" id="txtIssueDate" name="txtIssueDate" /></td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">Type</th>
+                        <td>
+
+                            <select id="ddlType" name="ddlType">
+                                <option value="會議">會議</option>
+                                <option value="工作">工作</option>
+                                <option value="其它">其它</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">Status</th>
+                        <td>
+
+                            <select id="ddlStatus" name="ddlStatus">
+                                <option value="Wait">Wait</option>
+                                <option value="Close">Close</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">WorkName</th>
+                        <td><input type="text" value="" style="width:60vw; min-width:500px;" id="txtWorkName" name="txtWorkName" /></td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">WorkNote</th>
+                        <td style="padding-top:5px;"><textarea id="txtWorkNote" name="txtWorkNote" style="width: 60vw; min-width: 500px;" cols="100" rows="6"></textarea></td>
+                    </tr>
+                    <tr onkeypress="return event.keyCode != 13;">
+                        <th style="padding:5px;">Due Date</th>
+                        <td>
+                            <input type="text" value="" style="width:90px;" id="txtDueDate" name="txtDueDate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="padding-top:10px;">
+                            <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#editPanel').modal('hide');" />
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="actionMode_2" name="actionMode" value="EDIT" />
+
+
+                <input type="hidden" id="txtQueryStartDate_2" name="txtQueryStartDate" value="@ViewBag.QueryStart" />
+                <input type="hidden" id="txtQueryEndDate_2" name="txtQueryEndDate" value="@ViewBag.QueryEnd" />
+                <input type="hidden" id="txtQueryKeyWord_2" name="txtQueryKeyWord" value="@ViewBag.QueryKeyWord" />
+
+                <input type="checkbox" id="qStatus01_2" name="qStatus01" @ViewBag.QueryStatus01 value="Survey" style="display:none;">
+                <input type="checkbox" id="qStatus02_2" name="qStatus02" @ViewBag.QueryStatus02 value="Wait-Assign" style="display:none;">
+
+                <input type="checkbox" id="qType01_2" name="qType01" @ViewBag.QueryType01 value="會議" style="display:none;">
+                <input type="checkbox" id="qType02_2" name="qType02" @ViewBag.QueryType02 value="工作" style="display:none;">
+                <input type="checkbox" id="qType03_2" name="qType03" @ViewBag.QueryType03 value="其它" style="display:none;">
+
+                <input type="hidden" id="pageIndex_2" name="pageIndex" value="@ViewBag.PageIndex" />
+                <input type="hidden" id="orderBy_2" name="orderBy" value="@ViewBag.OrderBy" />
+                <input type="hidden" id="sort_2" name="sort" value="@ViewBag.Sort" />
+
+            </form>
+            <script>
+                //=====((開啟編輯畫面))=====
+                function showEdit(workId) {
+                    //alert(workId);
+                    $('#showLoadingForEdit').show();
+
+                    if (workId != "") {
+
+                        //===修改===先藏起來等載完資料再顯示
+                        $('#editUI').hide();
+                        CallServerFunction("/mesMemo/GetWorkData?workID=" + workId, null, loadEditDataComplete);
+                    }
+                    else {
+                        //===新增===清空TextBox
+
+                        var Today = new Date();
+                        var todayStr = getTodayDate();
+
+                        $('#txtWorkID').val('');
+                        $('#txtWorkName').val('');
+                        $('#txtWorkNote').val('');
+
+                        $('#ddlType2').val('其它');
+
+                        $('#ddlStatus').val('Wait');
+
+                        $('#txtIssueDate').val(todayStr);
+                        $('#txtDueDate').val(getDefaultDueDate());
+
+                        //顯示
+                        $('#showLoadingForEdit').hide();
+                        $('#editUI').show();
+                    }
+
+                    $('#editPanel').modal('show');
+                }
+                //=====((載入資料))=====
+                function loadEditDataComplete(jsonStr) {
+                    //alert(workData);
+                    //alert(workData.WorkName);   //注意大小寫有差
+
+                    var workData = JSON.parse(jsonStr);
+                    //注意!! workData 物件成員的大小寫要跟C#物件相符!!
+                    $('#txtWorkID').val(workData.WORK_ID);
+                    $('#txtWorkName').val(workData.WORK_NAME);
+                    $('#txtWorkNote').val(workData.WORK_NOTE);
+
+                    $('#txtType2').val(workData.TYPE2);
+
+                    $('#ddlStatus').val(workData.STATUS);
+
+                    $('#txtIssueDate').val(workData.ISSUE_DATE);
+                    $('#txtDueDate').val(workData.DUE_DATE);
+
+                    $('#showLoadingForEdit').hide();
+                    $('#editUI').show();
+                }
+            </script>
+        </div>
+    </div>
+</div>
+<!-- 編輯畫面 End -->
+<!-- CK Editor 編輯畫面 Start -->
+<script src="/lib/ckeditor5-build-classic/ckeditor.js"></script>
+
+<div id="ckEditPanel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="min-width: 90vw !important; max-height: 90vh !important; overflow: auto; border: 1px #FFF solid; ">
+        <div class="modal-content" style="padding: 30px; background-color: #223344; color: #000; font-size: small; ">
+            <form method="post" action="/mesMemo/Index">
+                <div style="padding-bottom:10px;">
+                    <input type="submit" value="Save" style="font-weight:bolder; width:150px; font-size:180%; padding:2px;" class="btn btn-warning" />
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <input type="button" value="Cancel" class="btn btn-secondary" onclick="$('#ckEditPanel').modal('hide');" />
+                </div>
+
+                <textarea id="myCKEditor" name="myCKEditorContain"></textarea>
+
+                <input type="hidden" id="ckeditorWorkID" name="ckeditorWorkID" value="" />
+                <input type="hidden" id="actionMode_3" name="actionMode" value="CKEDIT" />
+
+                <input type="hidden" id="txtQueryStartDate_3" name="txtQueryStartDate" value="@ViewBag.QueryStart" />
+                <input type="hidden" id="txtQueryEndDate_3" name="txtQueryEndDate" value="@ViewBag.QueryEnd" />
+                <input type="hidden" id="txtQueryKeyWord_3" name="txtQueryKeyWord" value="@ViewBag.QueryKeyWord" />
+
+                <input type="checkbox" id="qStatus01_3" name="qStatus01" @ViewBag.QueryStatus01 value="Survey" style="display:none;">
+                <input type="checkbox" id="qStatus02_3" name="qStatus02" @ViewBag.QueryStatus02 value="Wait-Assign" style="display:none;">
+
+                <input type="checkbox" id="qType01_3" name="qType01" @ViewBag.QueryType01 value="會議" style="display:none;">
+                <input type="checkbox" id="qType02_3" name="qType02" @ViewBag.QueryType02 value="工作" style="display:none;">
+                <input type="checkbox" id="qType03_3" name="qType03" @ViewBag.QueryType03 value="其它" style="display:none;">
+
+
+                <input type="hidden" id="pageIndex_3" name="pageIndex" value="@ViewBag.PageIndex" />
+                <input type="hidden" id="orderBy_3" name="orderBy" value="@ViewBag.OrderBy" />
+                <input type="hidden" id="sort_3" name="sort" value="@ViewBag.Sort" />
+            </form>
+            <script>
+                var ckConfig = {
+
+                    toolbar: {
+                        items: [
+                            '|',
+                            'bold',
+                            'italic',
+                            'link',
+                            '|',
+                            'fontBackgroundColor',
+                            'fontColor',
+                            'fontFamily',
+                            'fontSize',
+                            'underline',
+                            'alignment',
+                            '|',
+                            'blockQuote',
+                            'insertTable',
+                            'horizontalLine',
+                            'highlight',
+                            'htmlEmbed',
+                            'findAndReplace',
+                            '|',
+                            'undo',
+                            'redo'
+                        ]
+                    },
+                    language: 'en',
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells'
+                        ]
+                    },
+                    licenseKey: ''
+                };
+                var myEditor1;
+                ClassicEditor
+                    .create(document.querySelector('#myCKEditor'), ckConfig)
+                    .then(editor => {
+                        myEditor1 = editor;
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+                //=====((開啟 CK Editor 編輯畫面))=====
+                function showCKEdit(workId) {
+                    if (workId != "") {
+                        $('#ckeditorWorkID').val(workId);
+                        CallServerFunction("/mesMemo/GetWorkHtml?workID=" + workId, null, loadCKEditDataComplete);
+                    }
+                    else {
+                        myEditor1.setData("");
+                    }
+                    $('#ckEditPanel').modal('show');
+                }
+                function loadCKEditDataComplete(jsonStr) {
+                    //$('#myCKEditor').html("XXXXXXXXSSSS");//這樣寫無效
+                    myEditor1.setData(jsonStr);
+                }
+
+
+            </script>
+        </div>
+    </div>
+</div>
+<!-- 查詢畫面 Start -->
+<div id="viewPanel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="min-width: 85vw !important; max-height: 90vh !important; overflow: auto; ">
+        <div class="modal-content" style="padding:25px; background-color:#FFFFFF; color:#555555; font-size:small;">
+            <span id="vWorkName" style="font-weight:bold;font-size:200%;color:#000;"></span>
+            <table border="1" style="width: 100%;">
+                <tr>
+                    <td valign="top" style="background-color:#223344;color:#FFFFFF;padding:10px;width:70%;font-size:110%;">
+                        <div id="vWorkContent"></div>
+                        <div id="vWorkID"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="background-color:#F0F0F0;padding:10px;">
+                        <div id="vHtmlContain"></div>
+                    </td>
+                </tr>
+            </table>
+            <script>
+                //=====((開啟檢視畫面))=====
+                function showView(workId) {
+
+                    CallServerFunction("/mesMemo/GetWorkData?workID=" + workId, null, loadViewDataComplete);
+                    CallServerFunction("/mesMemo/GetWorkHtml?workID=" + workId, null, loadViewHtmlComplete);
+
+                    $('#viewPanel').modal('show');
+                }
+                function loadViewHtmlComplete(jsonStr) {
+                    $('#vHtmlContain').html(jsonStr);
+                }
+                function loadViewDataComplete(jsonStr) {
+
+                    var workData = JSON.parse(jsonStr);
+                    //注意!! workData 物件成員的大小寫要跟C#物件相符!!
+                    $('#vWorkID').text(workData.WORK_ID);
+                    $('#vWorkName').text(workData.WORK_NAME);
+
+                    var htmlContent = "";
+                    if (workData.WORK_NOTE != "") {
+                        htmlContent += "<div style=\"border-bottom: 2px #5f5f5f dotted; padding-bottom: 8px; padding-top: 4px;\">" + replaceAll(workData.WORK_NOTE, "\n", "<br/>") + "</div>";
+                    }
+                    $('#vWorkContent').html(htmlContent);
+
+
+                    //$('#vIssueDate').text(workData.ISSUE_DATE);
+                    //$('#vCloseDate').text(workData.CLOSE_DATE);
+
+                }
+
+            </script>
+        </div>
+    </div>
+</div>
+<!-- 查詢畫面 End -->
+<!-- =====((For Inition))=================================================================================== -->
+<!--卷軸自動向下捲-->
+<script>
+    if('@ViewBag.InPost'=='Y')
+    {
+        //$('html, body').scrollTop(800);
+        $('html, body').scrollTop($('#btnQuery').offset().top);
+    }
+</script>
+<!--AutoComplete -->
+<style>
+    /*AutoComplete 必加不然看不到下拉項目*/
+    .ui-autocomplete {
+        z-index: 9999 !important;
+    }
+</style>
+
+<!-- 日曆元件 -->
+<script>
+    $.datepicker.setDefaults($.datepicker.regional[""]);
+    $("#txtDueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtIssueDate").datepicker({ dateFormat: 'yy-mm-dd' });
+
+    $("#txtQueryStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#txtQueryEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
+</script>
+
+
+
+
+

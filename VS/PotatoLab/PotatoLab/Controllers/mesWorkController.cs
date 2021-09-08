@@ -334,7 +334,7 @@ namespace PotatoLab.Controllers
                         resultList = resultList.OrderByDescending(m => m.CUST3).ToList();
                     break;
                 default:
-                    resultList = resultList.OrderBy(m => m.WORK_ID).ToList();
+                    resultList = resultList.OrderByDescending(m => m.ISSUE_DATE).ToList();
                     break;
             }
 
